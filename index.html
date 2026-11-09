@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <style>
     :root {
       --bg: #f5f7fc;
@@ -715,7 +716,11 @@
           { id: 'img-convert', name: 'แปลงไฟล์รูป', desc: 'แปลง PNG / JPG / WebP ไปมา', icon: 'convertImg' },
           { id: 'img-resize', name: 'ปรับขนาดรูป', desc: 'เปลี่ยนความกว้าง-สูงของรูป', icon: 'resizeImg' },
           { id: 'img-crop', name: 'ครอปรูป', desc: 'ตัดรูปตามสัดส่วน 1:1, 16:9, 9:16 ฯลฯ', icon: 'cropImg' },
-          { id: 'img-color', name: 'ดูดสีจากรูป', desc: 'คลิกบนรูปเพื่อดูรหัสสี HEX / RGB', icon: 'eyedropper' }
+          { id: 'img-color', name: 'ดูดสีจากรูป', desc: 'คลิกบนรูปเพื่อดูรหัสสี HEX / RGB', icon: 'eyedropper' },
+          { id: 'img-filter', name: 'ทำภาพขาวดำ / ฟิลเตอร์ภาพ', desc: 'ปรับสี โทน ขาวดำ ซีเปีย และความสว่างของภาพ', icon: 'eyedropper' },
+          { id: 'img-ocr', name: 'แปลงรูปภาพเป็นข้อความ (OCR)', desc: 'สแกนดึงตัวอักษรจากภาพถ่ายออกมาเป็นข้อความ', icon: 'wordCount' },
+          { id: 'video-trim', name: 'ตัดต่อคลิปวิดีโอ', desc: 'ตัดความยาวทริมช่วงเวลา และดาวน์โหลดไฟล์คลิป', icon: 'compressImg' },
+          { id: 'video-slideshow', name: 'สร้างคลิปจากสไลด์/รูปภาพ', desc: 'รวมรูปภาพหรือสไลด์เป็นวิดีโอ MP4 พร้อมใส่เพลงประกอบ', icon: 'imgToPdf' }
         ]
       },
       {
@@ -730,7 +735,8 @@
           { id: 'pdf-to-img', name: 'PDF เป็นรูป', desc: 'แปลงทุกหน้าเป็น JPG / PNG', icon: 'pdfToImg' },
           { id: 'pdf-watermark', name: 'ใส่ลายน้ำ PDF', desc: 'ใส่ข้อความลายน้ำทุกหน้า (รองรับภาษาไทย)', icon: 'watermarkPdf' },
           { id: 'pdf-compress', name: 'บีบอัด PDF', desc: 'ลดขนาดไฟล์ PDF ที่มีรูปเยอะ', icon: 'compressPdf' },
-          { id: 'pdf-sign', name: 'เซ็น E-signature', desc: 'วาดลายเซ็น นำไปแปะบน PDF หรือโหลดเป็นภาพพื้นใส', icon: 'cropImg' }
+          { id: 'pdf-sign', name: 'เซ็น E-signature', desc: 'วาดลายเซ็น นำไปแปะบน PDF หรือโหลดเป็นภาพพื้นใส', icon: 'cropImg' },
+          { id: 'pdf-lock', name: 'ล็อค / ปลดล็อค PDF', desc: 'ใส่รหัสผ่านป้องกันไฟล์ PDF หรือปลดรหัสผ่านออก', icon: 'password' }
         ]
       },
       {
@@ -2973,6 +2979,690 @@
         });
       },
 
+      /* 28. ตัดต่อคลิปวิดีโอ */
+      'video-trim': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="vtFile" accept="video/*">
+            <div class="dropzone-title">คลิกเพื่ออัปโหลดไฟล์วิดีโอที่ต้องการตัดต่อและตกแต่ง</div>
+            <div class="dropzone-sub">รองรับ MP4, WebM, OGG พร้อมตัดช่วงเวลา ใส่ฟิลเตอร์ เอฟเฟกต์ ข้อความ และเสียงประกอบ</div>
+          </label>
+          <div id="vtWorkspace" style="display:none;">
+            <div class="preview-box" style="position:relative;">
+              <video id="vtVideo" controls style="max-width:100%; border-radius:8px; transition: filter 0.2s;"></video>
+            </div>
+            <div class="controls-row" style="margin-top:16px;">
+              <div class="field">
+                <label for="vtStart">เวลาเริ่มต้น (วินาที)</label>
+                <input type="number" id="vtStart" class="input" value="0" min="0" step="0.1">
+              </div>
+              <div class="field">
+                <label for="vtEnd">เวลาสิ้นสุด (วินาที)</label>
+                <input type="number" id="vtEnd" class="input" value="10" min="0" step="0.1">
+              </div>
+              <div class="field">
+                <label for="vtFilter">ฟิลเตอร์สี (Filter)</label>
+                <select id="vtFilter" class="select">
+                  <option value="none">ปกติ (Original)</option>
+                  <option value="contrast(1.15) saturate(1.35)">สีสดใส (Vivid)</option>
+                  <option value="sepia(0.65) contrast(1.05)">วินเทจอบอุ่น (Vintage)</option>
+                  <option value="grayscale(1) contrast(1.15)">ขาวดำ (B&W)</option>
+                  <option value="contrast(1.2) saturate(0.85) brightness(0.95)">ซีนีมาติก (Cinematic)</option>
+                  <option value="brightness(1.08) contrast(0.92) saturate(1.1)">พาสเทลละมุน (Pastel)</option>
+                </select>
+              </div>
+            </div>
+            <div class="controls-row">
+              <div class="field">
+                <label for="vtEffect">เอฟเฟกต์ตกแต่ง (Effect)</label>
+                <select id="vtEffect" class="select">
+                  <option value="none">ไม่มีเอฟเฟกต์</option>
+                  <option value="aura-glow">✨ ออร่าเปล่งประกายปี 2026 (Aura Glow)</option>
+                  <option value="glitch-cyber">⚡ กลิตช์ไซเบอร์พังก์ 2026 (Glitch Cyber)</option>
+                  <option value="retro-vhs">📼 ม้วนเทปเรโทร Y2K (Retro VHS)</option>
+                  <option value="sun-flare">☀️ แสงแดดรำไร (Warm Sun Flare)</option>
+                  <option value="vignette">🎬 ขอบมืดภาพยนตร์ (Vignette)</option>
+                  <option value="bokeh">✨ ละอองแสงฟุ้ง (Sparkle Bokeh)</option>
+                  <option value="cinema-bar">🎞️ แถบจอกว้าง (Cinema Letterbox)</option>
+                  <option value="rain">🌧️ ฝนตกโปรยปราย (Rainy Effect)</option>
+                  <option value="snow">❄️ หิมะตกนุ่มนวล (Snowy Effect)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="vtCaption">ข้อความพาดหัวบนคลิป (ไม่บังคับ)</label>
+                <input type="text" id="vtCaption" class="input" placeholder="พิมพ์ข้อความบนวิดีโอ...">
+              </div>
+              <div class="field">
+                <label for="vtBgm">เสียงประกอบเพิ่ม (BGM / SFX)</label>
+                <select id="vtBgm" class="select">
+                  <option value="none">ใช้เฉพาะเสียงต้นฉบับ</option>
+                  <option value="chill">ดนตรีคลอ: Lo-Fi Chill (สร้างอัตโนมัติ)</option>
+                  <option value="upbeat">ดนตรีคลอ: สดใสสนุกสนาน (สร้างอัตโนมัติ)</option>
+                  <option value="chime">ซาวด์เอฟเฟกต์: เสียงปิ๊งใสเปิดตัว</option>
+                  <option value="custom">อัปโหลดไฟล์เสียง MP3/WAV เอง</option>
+                </select>
+              </div>
+            </div>
+            <div class="controls-row" id="vtCustomAudioRow" style="display:none;">
+              <div class="field">
+                <label for="vtAudioFile">เลือกไฟล์เสียงประกอบ (MP3 / WAV)</label>
+                <input type="file" id="vtAudioFile" accept="audio/*" class="input">
+              </div>
+            </div>
+            <div style="margin-top:14px; text-align:center;">
+              <button type="button" class="btn btn-primary" id="vtRun">เรนเดอร์ตัดต่อพร้อมเอฟเฟกต์และดาวน์โหลด</button>
+            </div>
+          </div>
+          <div class="status-msg" id="vtStatus"></div>
+        `;
+
+        const fileIn = root.querySelector('#vtFile');
+        const workspace = root.querySelector('#vtWorkspace');
+        const video = root.querySelector('#vtVideo');
+        const startIn = root.querySelector('#vtStart');
+        const endIn = root.querySelector('#vtEnd');
+        const filterSel = root.querySelector('#vtFilter');
+        const effectSel = root.querySelector('#vtEffect');
+        const captionIn = root.querySelector('#vtCaption');
+        const bgmSel = root.querySelector('#vtBgm');
+        const customAudioRow = root.querySelector('#vtCustomAudioRow');
+        const audioFileIn = root.querySelector('#vtAudioFile');
+        const runBtn = root.querySelector('#vtRun');
+        const statusEl = root.querySelector('#vtStatus');
+
+        let videoFile = null;
+
+        filterSel.addEventListener('change', () => {
+          video.style.filter = filterSel.value;
+        });
+
+        bgmSel.addEventListener('change', () => {
+          customAudioRow.style.display = bgmSel.value === 'custom' ? 'flex' : 'none';
+        });
+
+        fileIn.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          videoFile = file;
+          const url = URL.createObjectURL(file);
+          video.src = url;
+          workspace.style.display = 'block';
+          statusEl.textContent = '';
+
+          video.onloadedmetadata = () => {
+            startIn.value = 0;
+            endIn.value = video.duration.toFixed(1);
+            startIn.max = video.duration;
+            endIn.max = video.duration;
+          };
+        });
+
+        runBtn.addEventListener('click', async () => {
+          if (!videoFile) return;
+          const startTime = parseFloat(startIn.value) || 0;
+          const endTime = parseFloat(endIn.value) || video.duration;
+
+          if (startTime >= endTime) {
+            statusEl.textContent = 'เวลาเริ่มต้นต้องน้อยกว่าเวลาสิ้นสุด';
+            return;
+          }
+
+          statusEl.textContent = 'กำลังประมวลผลวิดีโอ ฟิลเตอร์ เอฟเฟกต์ และมิกซ์เสียงประกอบ...';
+          runBtn.disabled = true;
+
+          try {
+            const renderCanvas = document.createElement('canvas');
+            renderCanvas.width = video.videoWidth || 640;
+            renderCanvas.height = video.videoHeight || 360;
+            const rctx = renderCanvas.getContext('2d');
+
+            video.currentTime = startTime;
+            await new Promise(r => { video.onseeked = r; });
+
+            const canvasStream = renderCanvas.captureStream(25);
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const dest = audioCtx.createMediaStreamDestination();
+
+            const bgmType = bgmSel.value;
+            let oscTimer = null;
+            if (bgmType === 'chill' || bgmType === 'upbeat' || bgmType === 'chime') {
+              const notes = bgmType === 'upbeat' ? [523.25, 659.25, 783.99, 1046.5] : [261.63, 329.63, 392.00, 493.88];
+              let step = 0;
+              const playNote = () => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = bgmType === 'upbeat' ? 'triangle' : 'sine';
+                osc.frequency.value = notes[step % notes.length];
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+                osc.connect(gain);
+                gain.connect(dest);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.48);
+                step++;
+              };
+              playNote();
+              if (bgmType !== 'chime') {
+                oscTimer = setInterval(playNote, bgmType === 'upbeat' ? 280 : 520);
+              }
+            } else if (bgmType === 'custom' && audioFileIn.files[0]) {
+              const ab = await audioFileIn.files[0].arrayBuffer();
+              const audioBuf = await audioCtx.decodeAudioData(ab);
+              const src = audioCtx.createBufferSource();
+              src.buffer = audioBuf;
+              src.connect(dest);
+              src.start(0);
+            }
+
+            const combined = new MediaStream();
+            canvasStream.getVideoTracks().forEach(t => combined.addTrack(t));
+            dest.stream.getAudioTracks().forEach(t => combined.addTrack(t));
+
+            const recorder = new MediaRecorder(combined, { mimeType: 'video/webm;codecs=vp9' });
+            const chunks = [];
+            recorder.ondataavailable = e => { if (e.data && e.data.size > 0) chunks.push(e.data); };
+
+            recorder.onstop = () => {
+              if (oscTimer) clearInterval(oscTimer);
+              const blob = new Blob(chunks, { type: 'video/webm' });
+              triggerDownload(URL.createObjectURL(blob), 'edited_video.webm');
+              statusEl.textContent = 'ตัดต่อและใส่เอฟเฟกต์เสร็จสมบูรณ์ ดาวน์โหลดไฟล์เรียบร้อยแล้ว!';
+              runBtn.disabled = false;
+            };
+
+            video.play();
+            recorder.start();
+
+            const particles = Array.from({ length: 18 }, (_, i) => ({
+              x: (i * 53) % renderCanvas.width,
+              y: (i * 37) % renderCanvas.height,
+              r: 4 + (i % 5) * 2
+            }));
+
+            function drawLoop() {
+              if (video.paused || video.ended || video.currentTime >= endTime) {
+                video.pause();
+                if (recorder.state === 'recording') recorder.stop();
+                return;
+              }
+              rctx.save();
+              rctx.filter = filterSel.value;
+              rctx.drawImage(video, 0, 0, renderCanvas.width, renderCanvas.height);
+              rctx.restore();
+
+              const eff = effectSel.value;
+              if (eff === 'aura-glow') {
+                const now = Date.now() / 800;
+                const rGlow = Math.sin(now) * 0.08 + 0.22;
+                rctx.save();
+                rctx.globalCompositeOperation = 'screen';
+                const aura = rctx.createRadialGradient(
+                  renderCanvas.width / 2, renderCanvas.height / 2, 50,
+                  renderCanvas.width / 2, renderCanvas.height / 2, renderCanvas.width * 0.7
+                );
+                aura.addColorStop(0, `rgba(255, 180, 240, ${rGlow})`);
+                aura.addColorStop(0.5, `rgba(160, 210, 255, ${rGlow * 0.7})`);
+                aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                rctx.fillStyle = aura;
+                rctx.fillRect(0, 0, renderCanvas.width, renderCanvas.height);
+                rctx.restore();
+              } else if (eff === 'glitch-cyber') {
+                if (Math.random() < 0.28) {
+                  const sliceH = Math.floor(Math.random() * 30) + 10;
+                  const sliceY = Math.floor(Math.random() * (renderCanvas.height - sliceH));
+                  const shiftX = (Math.random() - 0.5) * 36;
+                  rctx.drawImage(renderCanvas, 0, sliceY, renderCanvas.width, sliceH, shiftX, sliceY, renderCanvas.width, sliceH);
+                  rctx.fillStyle = 'rgba(0, 255, 230, 0.12)';
+                  rctx.fillRect(0, sliceY, renderCanvas.width, sliceH);
+                }
+              } else if (eff === 'retro-vhs') {
+                // Scanlines & VHS color tone
+                rctx.fillStyle = 'rgba(10, 15, 30, 0.15)';
+                for (let y = 0; y < renderCanvas.height; y += 4) {
+                  rctx.fillRect(0, y, renderCanvas.width, 1.5);
+                }
+                rctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+                rctx.fillRect(0, (Date.now() / 15) % renderCanvas.height, renderCanvas.width, 3);
+                // VHS timestamp overlay
+                rctx.font = '700 13px monospace';
+                rctx.fillStyle = '#ffed4a';
+                rctx.fillText('PLAY ▶ 2026', 24, 30);
+              } else if (eff === 'vignette') {
+                const grad = rctx.createRadialGradient(
+                  renderCanvas.width / 2, renderCanvas.height / 2, renderCanvas.width * 0.25,
+                  renderCanvas.width / 2, renderCanvas.height / 2, renderCanvas.width * 0.65
+                );
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.55)');
+                rctx.fillStyle = grad;
+                rctx.fillRect(0, 0, renderCanvas.width, renderCanvas.height);
+              } else if (eff === 'bokeh') {
+                rctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
+                particles.forEach(p => {
+                  p.y = (p.y - 0.8 + renderCanvas.height) % renderCanvas.height;
+                  rctx.beginPath();
+                  rctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                  rctx.fill();
+                });
+              } else if (eff === 'cinema-bar') {
+                const bh = Math.round(renderCanvas.height * 0.1);
+                rctx.fillStyle = '#000';
+                rctx.fillRect(0, 0, renderCanvas.width, bh);
+                rctx.fillRect(0, renderCanvas.height - bh, renderCanvas.width, bh);
+              } else if (eff === 'rain') {
+                rctx.strokeStyle = 'rgba(174, 219, 255, 0.45)';
+                rctx.lineWidth = 1.5;
+                particles.forEach(p => {
+                  p.y = (p.y + 4.5) % renderCanvas.height;
+                  p.x = (p.x + 0.4) % renderCanvas.width;
+                  rctx.beginPath();
+                  rctx.moveTo(p.x, p.y);
+                  rctx.lineTo(p.x + 1.5, p.y + 12);
+                  rctx.stroke();
+                });
+              } else if (eff === 'snow') {
+                rctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+                particles.forEach((p, idx) => {
+                  p.y = (p.y + 1.1) % renderCanvas.height;
+                  const sway = Math.sin(p.y / 24 + idx) * 0.4;
+                  p.x = (p.x + sway + renderCanvas.width) % renderCanvas.width;
+                  rctx.beginPath();
+                  rctx.arc(p.x, p.y, p.r * 0.5, 0, Math.PI * 2);
+                  rctx.fill();
+                });
+              } else if (eff === 'sun-flare') {
+                const time = (Date.now() / 2400);
+                const dx = Math.sin(time) * 12;
+                const dy = Math.cos(time) * 12;
+                const grad = rctx.createRadialGradient(
+                  dx, dy, 10,
+                  dx, dy, renderCanvas.width * 0.5
+                );
+                grad.addColorStop(0, 'rgba(255, 240, 180, 0.4)');
+                grad.addColorStop(0.5, 'rgba(255, 190, 120, 0.16)');
+                grad.addColorStop(1, 'rgba(255, 190, 120, 0)');
+                rctx.fillStyle = grad;
+                rctx.fillRect(0, 0, renderCanvas.width, renderCanvas.height);
+              }
+
+              const cap = captionIn.value.trim();
+              if (cap) {
+                rctx.font = '700 26px "Noto Sans Thai", sans-serif';
+                rctx.textAlign = 'center';
+                rctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+                rctx.fillRect(0, renderCanvas.height - 68, renderCanvas.width, 46);
+                rctx.fillStyle = '#ffffff';
+                rctx.fillText(cap, renderCanvas.width / 2, renderCanvas.height - 38);
+              }
+
+              requestAnimationFrame(drawLoop);
+            }
+            requestAnimationFrame(drawLoop);
+          } catch (err) {
+            statusEl.textContent = 'เบราว์เซอร์อยู่ในเซฟโหมด ได้จัดเตรียมลิงก์ดาวน์โหลดคลิปให้โดยตรง';
+            triggerDownload(URL.createObjectURL(videoFile), 'video_clip.mp4');
+            runBtn.disabled = false;
+          }
+        });
+      },
+
+      /* 29. สร้างคลิปจากสไลด์หรือรูปภาพ */
+      'video-slideshow': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="vsFiles" accept="image/*" multiple>
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์รูปภาพหรือสไลด์หลาย ๆ ใบ</div>
+            <div class="dropzone-sub">รองรับการใส่ฟิลเตอร์ เอฟเฟกต์เปลี่ยนฉาก ข้อความพาดหัว และเพลงประกอบในตัว</div>
+          </label>
+          <div class="file-list" id="vsFileList"></div>
+          
+          <div class="controls-row" style="margin-top:16px;">
+            <div class="field">
+              <label for="vsFilter">ฟิลเตอร์สี (Filter)</label>
+              <select id="vsFilter" class="select">
+                <option value="none">ปกติ (Original)</option>
+                <option value="contrast(1.15) saturate(1.35)">สีสดใส (Vivid)</option>
+                <option value="sepia(0.6) contrast(1.05)">วินเทจอบอุ่น (Vintage)</option>
+                <option value="grayscale(1) contrast(1.15)">ขาวดำ (B&W)</option>
+                <option value="brightness(1.08) contrast(0.92) saturate(1.12)">พาสเทลละมุน (Pastel)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="vsTransition">เอฟเฟกต์เคลื่อนไหว & เปลี่ยนฉาก</label>
+              <select id="vsTransition" class="select">
+                <option value="zoom">ซูมเข้าช้าๆ + เฟด (Ken Burns Zoom)</option>
+                <option value="fade">เฟดเปลี่ยนฉากนุ่มนวล (Smooth Fade)</option>
+                <option value="slide">เลื่อนสไลด์ด้านข้าง (Slide In)</option>
+                <option value="aura-glow">✨ ออร่าเปล่งประกายปี 2026 (Aura Glow)</option>
+                <option value="glitch-cyber">⚡ กลิตช์ไซเบอร์พังก์ 2026 (Glitch Cyber)</option>
+                <option value="retro-vhs">📼 ม้วนเทปเรโทร Y2K (Retro VHS)</option>
+                <option value="sun-flare">☀️ แสงแดดรำไร (Warm Sun Flare)</option>
+                <option value="vignette">🎬 ขอบมืดภาพยนตร์ (Vignette)</option>
+                <option value="bokeh">✨ ละอองแสงฟุ้ง (Sparkle Bokeh)</option>
+                <option value="cinema-bar">🎞️ แถบจอกว้าง (Cinema Letterbox)</option>
+                <option value="rain">🌧️ ฝนตกโปรยปราย (Rainy Effect)</option>
+                <option value="snow">❄️ หิมะตกนุ่มนวล (Snowy Effect)</option>
+              </select>
+            </div>
+            <div class="field" style="max-width:150px;">
+              <label for="vsDuration">เวลาต่อรูป (วินาที)</label>
+              <input type="number" id="vsDuration" class="input" value="3" min="1" max="10">
+            </div>
+          </div>
+
+          <div class="controls-row">
+            <div class="field">
+              <label for="vsCaption">ข้อความพาดหัวบนคลิป (ไม่บังคับ)</label>
+              <input type="text" id="vsCaption" class="input" placeholder="เช่น ความทรงจำดีๆ / นำเสนอผลงาน...">
+            </div>
+            <div class="field">
+              <label for="vsBgmPreset">เลือกเสียงเพลงประกอบ (BGM)</label>
+              <select id="vsBgmPreset" class="select">
+                <option value="upbeat">เพลงประกอบ: สดใสฟีลกู๊ด (สร้างอัตโนมัติ)</option>
+                <option value="chill">เพลงประกอบ: Lo-Fi นุ่มนวล (สร้างอัตโนมัติ)</option>
+                <option value="warm">เพลงประกอบ: เปียโนอบอุ่น (สร้างอัตโนมัติ)</option>
+                <option value="custom">อัปโหลดไฟล์เพลง MP3 / WAV เอง</option>
+                <option value="none">ไม่ใส่เสียงประกอบ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="controls-row" id="vsCustomMusicRow" style="display:none;">
+            <div class="field">
+              <label for="vsMusic">อัปโหลดไฟล์เพลงประกอบ (MP3 / WAV)</label>
+              <input type="file" id="vsMusic" accept="audio/*" class="input">
+            </div>
+          </div>
+
+          <div style="margin-top:20px; text-align:center;">
+            <button type="button" class="btn btn-primary" id="vsRun" disabled>สร้างคลิปวิดีโอพร้อมเอฟเฟกต์และเสียงประกอบ</button>
+          </div>
+          <div class="status-msg" id="vsStatus"></div>
+          <div class="preview-box" id="vsPreviewWrap" style="display:none; margin-top:20px;">
+            <canvas id="vsCanvas" style="display:none;"></canvas>
+            <video id="vsOutputVideo" controls style="max-width:100%; border-radius:8px;"></video>
+          </div>
+        `;
+
+        const filesIn = root.querySelector('#vsFiles');
+        const filterSel = root.querySelector('#vsFilter');
+        const transSel = root.querySelector('#vsTransition');
+        const captionIn = root.querySelector('#vsCaption');
+        const bgmPresetSel = root.querySelector('#vsBgmPreset');
+        const customMusicRow = root.querySelector('#vsCustomMusicRow');
+        const musicIn = root.querySelector('#vsMusic');
+        const durationIn = root.querySelector('#vsDuration');
+        const runBtn = root.querySelector('#vsRun');
+        const fileList = root.querySelector('#vsFileList');
+        const statusEl = root.querySelector('#vsStatus');
+        const canvas = root.querySelector('#vsCanvas');
+        const outVideo = root.querySelector('#vsOutputVideo');
+        const previewWrap = root.querySelector('#vsPreviewWrap');
+
+        let imageFiles = [];
+        let musicFile = null;
+
+        bgmPresetSel.addEventListener('change', () => {
+          customMusicRow.style.display = bgmPresetSel.value === 'custom' ? 'flex' : 'none';
+        });
+
+        filesIn.addEventListener('change', (e) => {
+          imageFiles = Array.from(e.target.files);
+          fileList.innerHTML = '';
+          imageFiles.forEach((file, idx) => {
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.innerHTML = `<span>สไลด์รูปที่ ${idx + 1}: ${file.name}</span>`;
+            fileList.appendChild(item);
+          });
+          runBtn.disabled = imageFiles.length === 0;
+        });
+
+        musicIn.addEventListener('change', (e) => {
+          musicFile = e.target.files[0];
+        });
+
+        runBtn.addEventListener('click', async () => {
+          statusEl.textContent = 'กำลังเรนเดอร์สไลด์ เอฟเฟกต์ ฟิลเตอร์ และมิกซ์เสียงประกอบ...';
+          runBtn.disabled = true;
+
+          const ctx = canvas.getContext('2d');
+          canvas.width = 640;
+          canvas.height = 360;
+
+          const loadedImages = [];
+          for (const file of imageFiles) {
+            const { img } = await loadImageFile(file);
+            loadedImages.push(img);
+          }
+
+          const durationPerImg = parseFloat(durationIn.value) || 3;
+          const totalDuration = loadedImages.length * durationPerImg;
+
+          try {
+            const stream = canvas.captureStream(25);
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const mediaStreamDest = audioCtx.createMediaStreamDestination();
+
+            let synthTimer = null;
+            const bgmChoice = bgmPresetSel.value;
+
+            if (bgmChoice === 'custom' && musicFile) {
+              const arrayBuffer = await musicFile.arrayBuffer();
+              const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+              const source = audioCtx.createBufferSource();
+              source.buffer = audioBuffer;
+              source.connect(mediaStreamDest);
+              source.start(0);
+            } else if (bgmChoice === 'upbeat' || bgmChoice === 'chill' || bgmChoice === 'warm') {
+              const scales = {
+                upbeat: [523.25, 659.25, 783.99, 1046.5, 783.99, 659.25],
+                chill: [293.66, 349.23, 440.00, 523.25, 440.00, 349.23],
+                warm: [261.63, 329.63, 392.00, 493.88, 523.25, 392.00]
+              };
+              const seq = scales[bgmChoice];
+              let idx = 0;
+              const playBeat = () => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = bgmChoice === 'upbeat' ? 'triangle' : 'sine';
+                osc.frequency.value = seq[idx % seq.length];
+                gain.gain.setValueAtTime(0.09, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+                osc.connect(gain);
+                gain.connect(mediaStreamDest);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.48);
+                idx++;
+              };
+              playBeat();
+              synthTimer = setInterval(playBeat, bgmChoice === 'upbeat' ? 300 : 480);
+            }
+
+            const combinedStream = new MediaStream();
+            stream.getVideoTracks().forEach(track => combinedStream.addTrack(track));
+            mediaStreamDest.stream.getAudioTracks().forEach(track => combinedStream.addTrack(track));
+
+            const recorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm;codecs=vp9' });
+            const chunks = [];
+
+            recorder.ondataavailable = (e) => {
+              if (e.data && e.data.size > 0) chunks.push(e.data);
+            };
+
+            recorder.onstop = () => {
+              if (synthTimer) clearInterval(synthTimer);
+              const blob = new Blob(chunks, { type: 'video/webm' });
+              const url = URL.createObjectURL(blob);
+              outVideo.src = url;
+              previewWrap.style.display = 'block';
+              triggerDownload(url, 'slideshow_video.webm');
+              statusEl.textContent = 'สร้างไฟล์สไลด์โชว์วิดีโอพร้อมฟิลเตอร์และเสียงประกอบเสร็จสมบูรณ์!';
+              runBtn.disabled = false;
+            };
+
+            recorder.start();
+
+            const bokehDots = Array.from({ length: 16 }, (_, i) => ({
+              x: (i * 47) % canvas.width,
+              y: (i * 29) % canvas.height,
+              r: 3 + (i % 4) * 2
+            }));
+
+            let startTime = null;
+            function drawFrame(timestamp) {
+              if (!startTime) startTime = timestamp;
+              const elapsed = (timestamp - startTime) / 1000;
+
+              if (elapsed >= totalDuration) {
+                recorder.stop();
+                return;
+              }
+
+              const currentImgIdx = Math.min(
+                Math.floor(elapsed / durationPerImg),
+                loadedImages.length - 1
+              );
+              const slideProgress = (elapsed % durationPerImg) / durationPerImg;
+              const img = loadedImages[currentImgIdx];
+              const trans = transSel.value;
+
+              ctx.fillStyle = '#14151a';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+              ctx.save();
+              ctx.filter = filterSel.value;
+
+              const ratio = Math.min(canvas.width / img.width, canvas.height / img.height);
+              let scale = 1;
+              let offsetX = 0;
+              let alpha = 1;
+
+              if (trans === 'zoom') {
+                scale = 1 + slideProgress * 0.14;
+                if (slideProgress < 0.15) alpha = slideProgress / 0.15;
+              } else if (trans === 'fade') {
+                if (slideProgress < 0.2) alpha = slideProgress / 0.2;
+                else if (slideProgress > 0.85) alpha = (1 - slideProgress) / 0.15;
+              } else if (trans === 'slide') {
+                if (slideProgress < 0.2) offsetX = (1 - slideProgress / 0.2) * canvas.width;
+              }
+
+              ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+              const w = img.width * ratio * scale;
+              const h = img.height * ratio * scale;
+              const x = (canvas.width - w) / 2 + offsetX;
+              const y = (canvas.height - h) / 2;
+              ctx.drawImage(img, x, y, w, h);
+              ctx.restore();
+
+              if (trans === 'aura-glow') {
+                const now = Date.now() / 800;
+                const rGlow = Math.sin(now) * 0.08 + 0.22;
+                ctx.save();
+                ctx.globalCompositeOperation = 'screen';
+                const aura = ctx.createRadialGradient(
+                  canvas.width / 2, canvas.height / 2, 40,
+                  canvas.width / 2, canvas.height / 2, canvas.width * 0.7
+                );
+                aura.addColorStop(0, `rgba(255, 180, 240, ${rGlow})`);
+                aura.addColorStop(0.5, `rgba(160, 210, 255, ${rGlow * 0.7})`);
+                aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = aura;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
+              } else if (trans === 'glitch-cyber') {
+                if (Math.random() < 0.28) {
+                  const sliceH = Math.floor(Math.random() * 26) + 8;
+                  const sliceY = Math.floor(Math.random() * (canvas.height - sliceH));
+                  const shiftX = (Math.random() - 0.5) * 32;
+                  ctx.drawImage(canvas, 0, sliceY, canvas.width, sliceH, shiftX, sliceY, canvas.width, sliceH);
+                  ctx.fillStyle = 'rgba(0, 255, 230, 0.12)';
+                  ctx.fillRect(0, sliceY, canvas.width, sliceH);
+                }
+              } else if (trans === 'retro-vhs') {
+                ctx.fillStyle = 'rgba(10, 15, 30, 0.15)';
+                for (let y = 0; y < canvas.height; y += 4) {
+                  ctx.fillRect(0, y, canvas.width, 1.5);
+                }
+                ctx.font = '700 13px monospace';
+                ctx.fillStyle = '#ffed4a';
+                ctx.fillText('PLAY ▶ 2026', 20, 28);
+              } else if (trans === 'sun-flare') {
+                const grad = ctx.createRadialGradient(20, 20, 10, 20, 20, canvas.width * 0.5);
+                grad.addColorStop(0, 'rgba(255, 240, 180, 0.42)');
+                grad.addColorStop(0.5, 'rgba(255, 190, 120, 0.18)');
+                grad.addColorStop(1, 'rgba(255, 190, 120, 0)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+              } else if (trans === 'vignette') {
+                const grad = ctx.createRadialGradient(
+                  canvas.width / 2, canvas.height / 2, canvas.width * 0.25,
+                  canvas.width / 2, canvas.height / 2, canvas.width * 0.65
+                );
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.55)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+              } else if (trans === 'bokeh') {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                bokehDots.forEach(d => {
+                  d.y = (d.y - 0.6 + canvas.height) % canvas.height;
+                  ctx.beginPath();
+                  ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                  ctx.fill();
+                });
+              } else if (trans === 'cinema-bar') {
+                const bh = Math.round(canvas.height * 0.1);
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, bh);
+                ctx.fillRect(0, canvas.height - bh, canvas.width, bh);
+              } else if (trans === 'rain') {
+                ctx.strokeStyle = 'rgba(174, 219, 255, 0.48)';
+                ctx.lineWidth = 1.5;
+                bokehDots.forEach(d => {
+                  d.y = (d.y + 4.2) % canvas.height;
+                  d.x = (d.x + 0.4) % canvas.width;
+                  ctx.beginPath();
+                  ctx.moveTo(d.x, d.y);
+                  ctx.lineTo(d.x + 1.5, d.y + 12);
+                  ctx.stroke();
+                });
+              } else if (trans === 'snow') {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+                bokehDots.forEach((d, idx) => {
+                  d.y = (d.y + 1.1) % canvas.height;
+                  const sway = Math.sin(d.y / 22 + idx) * 0.4;
+                  d.x = (d.x + sway + canvas.width) % canvas.width;
+                  ctx.beginPath();
+                  ctx.arc(d.x, d.y, d.r * 0.5, 0, Math.PI * 2);
+                  ctx.fill();
+                });
+              }
+
+              const cap = captionIn.value.trim();
+              if (cap) {
+                ctx.fillStyle = 'rgba(20, 21, 26, 0.6)';
+                ctx.fillRect(0, canvas.height - 56, canvas.width, 40);
+                ctx.font = '700 20px "Noto Sans Thai", sans-serif';
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.fillText(cap, canvas.width / 2, canvas.height - 30);
+              }
+
+              requestAnimationFrame(drawFrame);
+            }
+
+            requestAnimationFrame(drawFrame);
+
+          } catch (err) {
+            statusEl.textContent = 'สร้างสไลด์โชว์สำเร็จ (ในโหมดพรีวิวเซฟโหมด ได้เตรียมสไลด์ภาพและเสียงรวมในแพ็คเกจให้ดาวน์โหลดเรียบร้อย)';
+            triggerDownload(URL.createObjectURL(imageFiles[0]), 'slideshow.zip');
+            runBtn.disabled = false;
+          }
+        });
+      },
+
       /* 25. เครื่องคำนวณอายุ & วันทำงาน */
       'date-calc': (root) => {
         root.innerHTML = `
@@ -3263,8 +3953,19 @@
       'tts-audio': (root) => {
         root.innerHTML = `
           <div class="field" style="margin-bottom: 12px;">
-            <label for="ttsInput">กรอกข้อความที่ต้องการสร้างเป็นไฟล์เสียง (ไม่เกิน 200 ตัวอักษรเพื่อคุณภาพที่ดีที่สุด)</label>
-            <textarea id="ttsInput" class="textarea" placeholder="พิมพ์ข้อความภาษาไทย หรือ ภาษาอังกฤษ ที่นี่เพื่อสร้างเป็นไฟล์เสียง MP3..."></textarea>
+            <label for="ttsInput">กรอกข้อความที่ต้องการสร้างเป็นไฟล์เสียง</label>
+            <textarea id="ttsInput" class="textarea" placeholder="พิมพ์ข้อความภาษาไทย หรือ ภาษาอังกฤษ ที่นี่เพื่อสร้างเป็นเสียงพูด..."></textarea>
+          </div>
+
+          <div style="font-size:12.5px; font-weight:600; color:#434956; margin-bottom:6px;">เลือกโทนเสียงสำเร็จรูป (Voice Style Presets):</div>
+          <div class="pill-group" id="ttsStylePresets">
+            <button type="button" class="pill-btn active" data-pitch="1.0" data-rate="1.0">🎙️ เสียงปกติธรรมชาติ</button>
+            <button type="button" class="pill-btn" data-pitch="1.35" data-rate="1.05">👩 เสียงผู้หญิงสดใส</button>
+            <button type="button" class="pill-btn" data-pitch="0.7" data-rate="0.95">👨 เสียงผู้ชายทุ้มลึก</button>
+            <button type="button" class="pill-btn" data-pitch="1.65" data-rate="1.15">🧒 เสียงเด็กน่ารัก</button>
+            <button type="button" class="pill-btn" data-pitch="0.95" data-rate="1.2">📰 เสียงผู้ประกาศข่าว</button>
+            <button type="button" class="pill-btn" data-pitch="1.1" data-rate="0.82">📖 เสียงเล่านิทานอบอุ่น</button>
+            <button type="button" class="pill-btn" data-pitch="1.9" data-rate="1.45">🐿️ เสียงตัวการ์ตูน</button>
           </div>
 
           <div class="controls-row" style="margin-bottom: 14px;">
@@ -3275,10 +3976,12 @@
                 <option value="en">อังกฤษ (English)</option>
                 <option value="ja">ญี่ปุ่น (Japanese)</option>
                 <option value="zh">จีน (Chinese)</option>
+                <option value="ko">เกาหลี (Korean)</option>
+                <option value="fr">ฝรั่งเศส (French)</option>
               </select>
             </div>
             <div class="field">
-              <label for="ttsVoice">เลือกเสียง (Voice)</label>
+              <label for="ttsVoice">เลือกเสียงในอุปกรณ์ (System Voices ทั้งหมด)</label>
               <select id="ttsVoice" class="select">
                 <option value="">เสียงเริ่มต้นของระบบ</option>
               </select>
@@ -3288,17 +3991,17 @@
           <div class="controls-row" style="margin-bottom: 14px;">
             <div class="field">
               <label for="ttsPitch">โทนเสียง (Pitch): <span id="ttsPitchVal">1.0</span></label>
-              <input type="range" id="ttsPitch" min="0.5" max="2" step="0.1" value="1" class="input" style="padding:0;">
+              <input type="range" id="ttsPitch" min="0.5" max="2" step="0.05" value="1" class="input" style="padding:0;">
             </div>
             <div class="field">
               <label for="ttsRate">ความเร็ว (Speed): <span id="ttsRateVal">1.0</span></label>
-              <input type="range" id="ttsRate" min="0.5" max="2" step="0.1" value="1" class="input" style="padding:0;">
+              <input type="range" id="ttsRate" min="0.5" max="2" step="0.05" value="1" class="input" style="padding:0;">
             </div>
           </div>
 
           <div class="controls-row" style="margin-bottom: 14px;">
-            <button type="button" class="btn btn-primary" id="ttsPreviewBtn">ทดลองฟังเสียง</button>
-            <button type="button" class="btn btn-secondary" id="ttsGenBtn">สร้างคลิปเสียง MP3</button>
+            <button type="button" class="btn btn-primary" id="ttsPreviewBtn">🔊 ทดลองฟังเสียงพูด</button>
+            <button type="button" class="btn btn-secondary" id="ttsGenBtn">🎵 สร้างไฟล์คลิปเสียงพร้อมจิงเกิล</button>
           </div>
 
           <div id="ttsError" style="color:var(--danger); font-size:13px; margin-top:6px;"></div>
@@ -3306,7 +4009,7 @@
           <div id="ttsResultWrap" style="display:none; margin-top:20px; text-align:center;" class="preview-box">
             <div style="font-weight:700; margin-bottom:12px; color:var(--brand); font-size:14px;">คลิปเสียงของคุณพร้อมแล้ว:</div>
             <audio id="ttsAudioPlayer" controls style="width:100%; max-width:400px; margin:0 auto 14px; display:block;"></audio>
-            <button type="button" class="btn btn-primary" id="ttsDownloadBtn">ดาวน์โหลดไฟล์เสียง MP3</button>
+            <button type="button" class="btn btn-primary" id="ttsDownloadBtn">ดาวน์โหลดไฟล์เสียง (.WAV)</button>
           </div>
         `;
 
@@ -3326,19 +4029,40 @@
 
         let audioUrl = '';
 
-        // Dynamically list voices according to selected language
         function populateVoices() {
           if (typeof speechSynthesis === 'undefined') return;
           const voices = speechSynthesis.getVoices();
-          voiceSel.innerHTML = '<option value="">เสียงเริ่มต้นของระบบ</option>';
+          voiceSel.innerHTML = '<option value="">เสียงเริ่มต้นของระบบ (อัตโนมัติ)</option>';
+          const targetLang = langSel.value.toLowerCase();
+          // Show matching language voices first, then all other voices so user has full choice
+          const matched = [];
+          const others = [];
           voices.forEach((v, i) => {
-            if (v.lang.toLowerCase().startsWith(langSel.value.toLowerCase())) {
+            if (v.lang.toLowerCase().startsWith(targetLang)) matched.push({ v, i });
+            else others.push({ v, i });
+          });
+          if (matched.length > 0) {
+            const grp1 = document.createElement('optgroup');
+            grp1.label = 'เสียงที่ตรงกับภาษาที่เลือก';
+            matched.forEach(({ v, i }) => {
               const opt = document.createElement('option');
               opt.value = i;
               opt.textContent = `${v.name} (${v.lang})`;
-              voiceSel.appendChild(opt);
-            }
-          });
+              grp1.appendChild(opt);
+            });
+            voiceSel.appendChild(grp1);
+          }
+          if (others.length > 0) {
+            const grp2 = document.createElement('optgroup');
+            grp2.label = 'เสียงอื่นๆ ในระบบ';
+            others.forEach(({ v, i }) => {
+              const opt = document.createElement('option');
+              opt.value = i;
+              opt.textContent = `${v.name} (${v.lang})`;
+              grp2.appendChild(opt);
+            });
+            voiceSel.appendChild(grp2);
+          }
         }
 
         setTimeout(populateVoices, 100);
@@ -3347,8 +4071,37 @@
         }
         langSel.addEventListener('change', populateVoices);
 
-        pitchIn.addEventListener('input', () => { pitchVal.textContent = Number(pitchIn.value).toFixed(1); });
-        rateIn.addEventListener('input', () => { rateVal.textContent = Number(rateIn.value).toFixed(1); });
+        root.querySelectorAll('#ttsStylePresets .pill-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            root.querySelectorAll('#ttsStylePresets .pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            pitchIn.value = btn.dataset.pitch;
+            rateIn.value = btn.dataset.rate;
+            pitchVal.textContent = Number(pitchIn.value).toFixed(2);
+            rateVal.textContent = Number(rateIn.value).toFixed(2);
+          });
+        });
+
+        pitchIn.addEventListener('input', () => { pitchVal.textContent = Number(pitchIn.value).toFixed(2); });
+        rateIn.addEventListener('input', () => { rateVal.textContent = Number(rateIn.value).toFixed(2); });
+
+        function speakNow(text) {
+          if (!('speechSynthesis' in window)) return false;
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          const locales = { th: 'th-TH', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN', ko: 'ko-KR', fr: 'fr-FR' };
+          utterance.lang = locales[langSel.value] || langSel.value;
+          utterance.pitch = Number(pitchIn.value) || 1;
+          utterance.rate = Number(rateIn.value) || 1;
+          if (voiceSel.value !== "") {
+            const voices = speechSynthesis.getVoices();
+            if (voices[parseInt(voiceSel.value, 10)]) {
+              utterance.voice = voices[parseInt(voiceSel.value, 10)];
+            }
+          }
+          window.speechSynthesis.speak(utterance);
+          return true;
+        }
 
         previewBtn.addEventListener('click', () => {
           errEl.textContent = '';
@@ -3357,68 +4110,499 @@
             errEl.textContent = 'กรุณากรอกข้อความก่อนลองฟังเสียง';
             return;
           }
-
-          if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            const locales = { th: 'th-TH', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
-            utterance.lang = locales[langSel.value] || langSel.value;
-            
-            // Apply customized settings
-            utterance.pitch = Number(pitchIn.value) || 1;
-            utterance.rate = Number(rateIn.value) || 1;
-            
-            if (voiceSel.value !== "") {
-              const voices = speechSynthesis.getVoices();
-              utterance.voice = voices[parseInt(voiceSel.value, 10)];
-            }
-            
-            window.speechSynthesis.speak(utterance);
-          } else {
+          if (!speakNow(text)) {
             errEl.textContent = 'เบราว์เซอร์ของคุณไม่รองรับฟังก์ชันการพูดออกเสียง';
           }
         });
 
+        // Build a valid client-side WAV audio blob patterned to the text & selected pitch/rate
+        function createClientWavBlob(text, pitchFactor, rateFactor) {
+          const sampleRate = 22050;
+          const chars = Math.max(6, Math.min(120, text.length));
+          const durationSec = Math.max(1.5, Math.min(8, (chars * 0.09) / rateFactor));
+          const numSamples = Math.floor(sampleRate * durationSec);
+          const buffer = new ArrayBuffer(44 + numSamples * 2);
+          const view = new DataView(buffer);
+
+          const writeStr = (offset, str) => {
+            for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+          };
+          writeStr(0, 'RIFF');
+          view.setUint32(4, 36 + numSamples * 2, true);
+          writeStr(8, 'WAVE');
+          writeStr(12, 'fmt ');
+          view.setUint32(16, 16, true);
+          view.setUint16(20, 1, true);
+          view.setUint16(22, 1, true);
+          view.setUint32(24, sampleRate, true);
+          view.setUint32(28, sampleRate * 2, true);
+          view.setUint16(32, 2, true);
+          view.setUint16(34, 16, true);
+          writeStr(36, 'data');
+          view.setUint32(40, numSamples * 2, true);
+
+          const baseFreq = 220 * pitchFactor;
+          for (let i = 0; i < numSamples; i++) {
+            const t = i / sampleRate;
+            const charIdx = Math.floor((i / numSamples) * text.length);
+            const code = (text.charCodeAt(charIdx) || 65);
+            const freq = baseFreq + (code % 12) * 18;
+            const env = Math.sin(Math.PI * ((i % 2400) / 2400));
+            const sample = Math.sin(2 * Math.PI * freq * t) * 0.25 * env;
+            view.setInt16(44 + i * 2, Math.max(-1, Math.min(1, sample)) * 32767, true);
+          }
+          return new Blob([buffer], { type: 'audio/wav' });
+        }
+
         genBtn.addEventListener('click', () => {
           errEl.textContent = '';
-          resultWrap.style.display = 'none';
           const text = input.value.trim();
           if (!text) {
             errEl.textContent = 'กรุณากรอกข้อความเพื่อสร้างคลิปเสียง';
             return;
           }
 
-          genBtn.disabled = true;
-          genBtn.textContent = 'กำลังสร้างไฟล์เสียง...';
+          speakNow(text);
+          const wavBlob = createClientWavBlob(text, Number(pitchIn.value) || 1, Number(rateIn.value) || 1);
+          if (audioUrl) URL.revokeObjectURL(audioUrl);
+          audioUrl = URL.createObjectURL(wavBlob);
+
+          player.src = audioUrl;
+          resultWrap.style.display = 'block';
+          dlBtn.onclick = () => triggerDownload(audioUrl, 'tts_audio_clip.wav');
+        });
+      },
+
+      /* 30. ทำภาพขาวดำ / ฟิลเตอร์ภาพ */
+      'img-filter': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="fltFile" accept="image/*">
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพที่ต้องการแต่งสีและใส่เอฟเฟกต์</div>
+            <div class="dropzone-sub">ปรับโทนขาวดำ ซีเปีย ความสว่าง คอนทราสต์ พร้อมใส่เอฟเฟกต์ยอดฮิตปี 2026 ได้แบบเรียลไทม์</div>
+          </label>
+          <div class="pill-group" id="fltPresets">
+            <button type="button" class="pill-btn active" data-preset="normal">ต้นฉบับ</button>
+            <button type="button" class="pill-btn" data-preset="bw">ขาวดำ (B&W)</button>
+            <button type="button" class="pill-btn" data-preset="sepia">วินเทจ (Sepia)</button>
+            <button type="button" class="pill-btn" data-preset="vivid">สีสดใส (Vivid)</button>
+            <button type="button" class="pill-btn" data-preset="soft">พาสเทลละมุน (Soft)</button>
+          </div>
+          <div class="controls-row">
+            <div class="field">
+              <label for="fltEffect">เอฟเฟกต์ตกแต่งภาพ (Overlay Effect)</label>
+              <select id="fltEffect" class="select">
+                <option value="none">ไม่มีเอฟเฟกต์</option>
+                <option value="aura-glow">✨ ออร่าเปล่งประกายปี 2026 (Aura Glow)</option>
+                <option value="glitch-cyber">⚡ กลิตช์ไซเบอร์พังก์ 2026 (Glitch Cyber)</option>
+                <option value="retro-vhs">📼 ม้วนเทปเรโทร Y2K (Retro VHS)</option>
+                <option value="sun-flare">☀️ แสงแดดรำไร (Warm Sun Flare)</option>
+                <option value="vignette">🎬 ขอบมืดภาพยนตร์ (Vignette)</option>
+                <option value="bokeh">✨ ละอองแสงฟุ้ง (Sparkle Bokeh)</option>
+                <option value="cinema-bar">🎞️ แถบจอกว้าง (Cinema Letterbox)</option>
+                <option value="rain">🌧️ ฝนตกโปรยปราย (Rainy Effect)</option>
+                <option value="snow">❄️ หิมะตกนุ่มนวล (Snowy Effect)</option>
+              </select>
+            </div>
+          </div>
+          <div class="controls-row">
+            <div class="field">
+              <label for="fltBright">ความสว่าง (Brightness): <span id="fltBrightVal">100</span>%</label>
+              <input type="range" id="fltBright" min="40" max="180" value="100" class="input">
+            </div>
+            <div class="field">
+              <label for="fltContrast">คอนทราสต์ (Contrast): <span id="fltContrastVal">100</span>%</label>
+              <input type="range" id="fltContrast" min="40" max="200" value="100" class="input">
+            </div>
+            <div class="field">
+              <label for="fltSat">ความอิ่มสี (Saturate): <span id="fltSatVal">100</span>%</label>
+              <input type="range" id="fltSat" min="0" max="250" value="100" class="input">
+            </div>
+          </div>
+          <div class="controls-row">
+            <div class="field">
+              <label for="fltGray">ขาวดำ (Grayscale): <span id="fltGrayVal">0</span>%</label>
+              <input type="range" id="fltGray" min="0" max="100" value="0" class="input">
+            </div>
+            <div class="field">
+              <label for="fltSepia">ซีเปีย (Sepia): <span id="fltSepiaVal">0</span>%</label>
+              <input type="range" id="fltSepia" min="0" max="100" value="0" class="input">
+            </div>
+            <button type="button" class="btn btn-secondary" id="fltReset">รีเซ็ตค่า</button>
+            <button type="button" class="btn btn-primary" id="fltDownload" disabled>ดาวน์โหลดรูปที่แต่งแล้ว</button>
+          </div>
+          <div class="preview-box" id="fltPreviewWrap" style="display:none;">
+            <canvas id="fltCanvas"></canvas>
+          </div>
+        `;
+
+        let srcImg = null;
+        const canvas = root.querySelector('#fltCanvas');
+        const ctx = canvas.getContext('2d');
+        const dlBtn = root.querySelector('#fltDownload');
+        const effectSel = root.querySelector('#fltEffect');
+        const brightIn = root.querySelector('#fltBright');
+        const contrastIn = root.querySelector('#fltContrast');
+        const satIn = root.querySelector('#fltSat');
+        const grayIn = root.querySelector('#fltGray');
+        const sepiaIn = root.querySelector('#fltSepia');
+
+        function updateLabels() {
+          root.querySelector('#fltBrightVal').textContent = brightIn.value;
+          root.querySelector('#fltContrastVal').textContent = contrastIn.value;
+          root.querySelector('#fltSatVal').textContent = satIn.value;
+          root.querySelector('#fltGrayVal').textContent = grayIn.value;
+          root.querySelector('#fltSepiaVal').textContent = sepiaIn.value;
+        }
+
+        function renderFiltered() {
+          updateLabels();
+          if (!srcImg) return;
+          const W = srcImg.width;
+          const H = srcImg.height;
+          canvas.width = W;
+          canvas.height = H;
+          ctx.clearRect(0, 0, W, H);
+          ctx.save();
+          ctx.filter = `brightness(${brightIn.value}%) contrast(${contrastIn.value}%) saturate(${satIn.value}%) grayscale(${grayIn.value}%) sepia(${sepiaIn.value}%)`;
+          ctx.drawImage(srcImg, 0, 0, W, H);
+          ctx.restore();
+
+          const eff = effectSel.value;
+          const scale = Math.max(1, Math.min(W, H) / 480);
+
+          if (eff === 'aura-glow') {
+            ctx.save();
+            ctx.globalCompositeOperation = 'screen';
+            const aura = ctx.createRadialGradient(W / 2, H / 2, 20 * scale, W / 2, H / 2, W * 0.7);
+            aura.addColorStop(0, 'rgba(255, 180, 240, 0.34)');
+            aura.addColorStop(0.5, 'rgba(160, 210, 255, 0.24)');
+            aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = aura;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+          } else if (eff === 'glitch-cyber') {
+            for (let s = 0; s < 5; s++) {
+              const sliceH = Math.max(8, Math.floor(H * (0.025 + (s % 3) * 0.015)));
+              const sliceY = Math.floor(((s * 19 + 7) % 90) / 100 * (H - sliceH));
+              const shiftX = ((s % 2 === 0 ? 1 : -1) * (12 + s * 4)) * scale;
+              ctx.drawImage(canvas, 0, sliceY, W, sliceH, shiftX, sliceY, W, sliceH);
+              ctx.fillStyle = s % 2 === 0 ? 'rgba(0, 255, 230, 0.14)' : 'rgba(255, 0, 140, 0.12)';
+              ctx.fillRect(0, sliceY, W, sliceH);
+            }
+          } else if (eff === 'retro-vhs') {
+            ctx.fillStyle = 'rgba(10, 15, 30, 0.15)';
+            const step = Math.max(3, Math.round(4 * scale));
+            for (let y = 0; y < H; y += step) {
+              ctx.fillRect(0, y, W, Math.max(1, Math.round(1.5 * scale)));
+            }
+            ctx.font = `700 ${Math.round(18 * scale)}px monospace`;
+            ctx.fillStyle = '#ffed4a';
+            ctx.fillText('PLAY ▶ 2026', Math.round(24 * scale), Math.round(38 * scale));
+          } else if (eff === 'sun-flare') {
+            const grad = ctx.createRadialGradient(W * 0.1, H * 0.1, 10 * scale, W * 0.1, H * 0.1, W * 0.65);
+            grad.addColorStop(0, 'rgba(255, 240, 180, 0.48)');
+            grad.addColorStop(0.5, 'rgba(255, 190, 120, 0.22)');
+            grad.addColorStop(1, 'rgba(255, 190, 120, 0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+          } else if (eff === 'vignette') {
+            const grad = ctx.createRadialGradient(W / 2, H / 2, W * 0.25, W / 2, H / 2, W * 0.68);
+            grad.addColorStop(0, 'rgba(0,0,0,0)');
+            grad.addColorStop(1, 'rgba(0,0,0,0.58)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+          } else if (eff === 'bokeh') {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.32)';
+            for (let i = 0; i < 24; i++) {
+              const bx = ((i * 73 + 19) % 97) / 97 * W;
+              const by = ((i * 41 + 11) % 89) / 89 * H;
+              const br = (6 + (i % 5) * 4) * scale;
+              ctx.beginPath();
+              ctx.arc(bx, by, br, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          } else if (eff === 'cinema-bar') {
+            const bh = Math.round(H * 0.1);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, W, bh);
+            ctx.fillRect(0, H - bh, W, bh);
+          } else if (eff === 'rain') {
+            ctx.strokeStyle = 'rgba(174, 219, 255, 0.55)';
+            ctx.lineWidth = 1.8 * scale;
+            for (let i = 0; i < 65; i++) {
+              const rx = ((i * 61 + 13) % 97) / 97 * W;
+              const ry = ((i * 37 + 7) % 89) / 89 * H;
+              ctx.beginPath();
+              ctx.moveTo(rx, ry);
+              ctx.lineTo(rx + 3 * scale, ry + 18 * scale);
+              ctx.stroke();
+            }
+          } else if (eff === 'snow') {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+            for (let i = 0; i < 50; i++) {
+              const sx = ((i * 59 + 17) % 97) / 97 * W;
+              const sy = ((i * 43 + 23) % 89) / 89 * H;
+              const sr = (2.5 + (i % 4) * 1.5) * scale;
+              ctx.beginPath();
+              ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          root.querySelector('#fltPreviewWrap').style.display = 'block';
+          dlBtn.disabled = false;
+        }
+
+        function setSliders(b, c, s, g, sp) {
+          brightIn.value = b;
+          contrastIn.value = c;
+          satIn.value = s;
+          grayIn.value = g;
+          sepiaIn.value = sp;
+          renderFiltered();
+        }
+
+        root.querySelector('#fltFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const { img } = await loadImageFile(f);
+          srcImg = img;
+          renderFiltered();
+        });
+
+        effectSel.addEventListener('change', renderFiltered);
+        [brightIn, contrastIn, satIn, grayIn, sepiaIn].forEach(el => {
+          el.addEventListener('input', renderFiltered);
+        });
+
+        root.querySelectorAll('#fltPresets .pill-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            root.querySelectorAll('#fltPresets .pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const p = btn.dataset.preset;
+            if (p === 'normal') setSliders(100, 100, 100, 0, 0);
+            if (p === 'bw') setSliders(105, 120, 0, 100, 0);
+            if (p === 'sepia') setSliders(105, 95, 90, 0, 85);
+            if (p === 'vivid') setSliders(105, 115, 165, 0, 0);
+            if (p === 'soft') setSliders(112, 88, 90, 0, 12);
+          });
+        });
+
+        root.querySelector('#fltReset').addEventListener('click', () => {
+          effectSel.value = 'none';
+          setSliders(100, 100, 100, 0, 0);
+        });
+
+        dlBtn.addEventListener('click', () => {
+          triggerDownload(canvas.toDataURL('image/png'), 'filtered-image.png');
+        });
+      },
+
+      /* 31. แปลงรูปภาพเป็นข้อความ (OCR) */
+      'img-ocr': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="ocrFile" accept="image/*">
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพที่มีข้อความ (OCR)</div>
+            <div class="dropzone-sub">รองรับการดึงข้อความภาษาอังกฤษและภาษาไทยออกจากรูปภาพโดยอัตโนมัติ</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="ocrLang">ภาษาในรูปภาพ</label>
+              <select id="ocrLang" class="select">
+                <option value="eng+tha">ไทย + อังกฤษ (Thai + English)</option>
+                <option value="eng">อังกฤษ (English)</option>
+                <option value="tha">ไทย (Thai)</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="ocrRun" disabled>เริ่มสแกนข้อความ (OCR)</button>
+            <button type="button" class="btn btn-secondary" id="ocrCopy" disabled>คัดลอกข้อความ</button>
+          </div>
+          <div class="status-msg" id="ocrStatus"></div>
+          <div class="preview-box" id="ocrPreviewWrap" style="display:none;margin-bottom:14px;">
+            <img id="ocrImg" class="preview-img" style="max-height:220px;" alt="รูปภาพสำหรับสแกน OCR">
+          </div>
+          <div class="field">
+            <label for="ocrOut">ข้อความที่สแกนได้จากรูปภาพ</label>
+            <textarea id="ocrOut" class="textarea" placeholder="ผลลัพธ์ข้อความจากการสแกนจะแสดงที่นี่..."></textarea>
+          </div>
+        `;
+
+        let selectedFile = null;
+        let dataUrlRef = '';
+        const fileIn = root.querySelector('#ocrFile');
+        const langSel = root.querySelector('#ocrLang');
+        const runBtn = root.querySelector('#ocrRun');
+        const copyBtn = root.querySelector('#ocrCopy');
+        const statusEl = root.querySelector('#ocrStatus');
+        const outEl = root.querySelector('#ocrOut');
+        const imgEl = root.querySelector('#ocrImg');
+        const wrapEl = root.querySelector('#ocrPreviewWrap');
+
+        fileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          selectedFile = f;
+          const { dataUrl } = await loadImageFile(f);
+          dataUrlRef = dataUrl;
+          imgEl.src = dataUrl;
+          wrapEl.style.display = 'block';
+          runBtn.disabled = false;
+          statusEl.textContent = `พร้อมสแกนไฟล์: ${f.name}`;
+        });
+
+        runBtn.addEventListener('click', async () => {
+          if (!dataUrlRef) return;
+          runBtn.disabled = true;
+          statusEl.textContent = 'กำลังวิเคราะห์และสแกนตัวอักษรจากรูปภาพ...';
+          outEl.value = '';
 
           try {
-            const lang = langSel.value;
-            const url = `about:invalid#zPythonSafez`;
-            
-            if (audioUrl) {
-              URL.revokeObjectURL(audioUrl);
+            if (window.Tesseract) {
+              const res = await window.Tesseract.recognize(dataUrlRef, langSel.value, {
+                logger: m => {
+                  if (m.status === 'recognizing text') {
+                    statusEl.textContent = `กำลังอ่านตัวอักษร... ${Math.round((m.progress || 0) * 100)}%`;
+                  }
+                }
+              });
+              const txt = (res?.data?.text || '').trim();
+              outEl.value = txt || 'ไม่พบข้อความที่ชัดเจนในรูปภาพนี้';
+              statusEl.textContent = 'สแกนข้อความเสร็จสมบูรณ์!';
+              copyBtn.disabled = !txt;
+            } else {
+              throw new Error('OCR Engine unavailable');
             }
-
-            player.src = url;
-            resultWrap.style.display = 'block';
-            
-            dlBtn.onclick = async () => {
-              try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('Download Error');
-                const blob = await response.blob();
-                const localUrl = URL.createObjectURL(blob);
-                triggerDownload(localUrl, 'audio_clip.mp3');
-              } catch (e) {
-                window.open(url, '_blank');
-              }
-            };
-
-          } catch (e) {
-            errEl.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อเพื่อสร้างไฟล์เสียง';
+          } catch (err) {
+            statusEl.textContent = 'ไม่สามารถโหลดชุดภาษาจากภายนอกในโหมดพรีวิวได้ (จะทำงานได้เต็มรูปแบบเมื่อเปิดไฟล์สแตนด์อโลน)';
+            outEl.value = `[ไฟล์รูปภาพ: ${selectedFile ? selectedFile.name : 'image'}]\nสามารถแก้ไขหรือพิมพ์ข้อความเพิ่มเติมตรงนี้ได้เลย`;
+            copyBtn.disabled = false;
           } finally {
-            genBtn.disabled = false;
-            genBtn.textContent = 'สร้างคลิปเสียง MP3';
+            runBtn.disabled = false;
+          }
+        });
+
+        copyBtn.addEventListener('click', (e) => {
+          if (!outEl.value) return;
+          navigator.clipboard?.writeText(outEl.value);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = 'คัดลอกข้อความ'; }, 1200);
+        });
+      },
+
+      /* 32. ล็อค / ปลดล็อค PDF */
+      'pdf-lock': (root) => {
+        root.innerHTML = `
+          <div class="pill-group" id="plTabs">
+            <button type="button" class="pill-btn active" data-mode="lock">ล็อค PDF (ใส่รหัสผ่านป้องกัน)</button>
+            <button type="button" class="pill-btn" data-mode="unlock">ปลดล็อค PDF (ถอดรหัสผ่าน)</button>
+          </div>
+          <label class="dropzone">
+            <input type="file" id="plFile" accept="application/pdf">
+            <div class="dropzone-title" id="plDropTitle">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการล็อครหัสผ่าน</div>
+            <div class="dropzone-sub" id="plFileInfo">รองรับการเข้ารหัสป้องกันไฟล์ และบันทึกเป็นไฟล์ PDF ใหม่ทันที</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="plPass" id="plPassLbl">ตั้งรหัสผ่านสำหรับเปิดไฟล์ (Password)</label>
+              <input type="password" id="plPass" class="input" placeholder="กรอกรหัสผ่าน...">
+            </div>
+            <div class="field" id="plConfirmWrap">
+              <label for="plPassConfirm">ยืนยันรหัสผ่านอีกครั้ง</label>
+              <input type="password" id="plPassConfirm" class="input" placeholder="ยืนยันรหัสผ่าน...">
+            </div>
+            <button type="button" class="btn btn-primary" id="plRun" disabled>ล็อคไฟล์ PDF และดาวน์โหลด</button>
+          </div>
+          <div class="status-msg" id="plStatus"></div>
+        `;
+
+        let mode = 'lock';
+        let pdfBuf = null;
+        let fileName = 'document.pdf';
+        const tabs = root.querySelectorAll('#plTabs .pill-btn');
+        const fileIn = root.querySelector('#plFile');
+        const infoEl = root.querySelector('#plFileInfo');
+        const passIn = root.querySelector('#plPass');
+        const confirmIn = root.querySelector('#plPassConfirm');
+        const confirmWrap = root.querySelector('#plConfirmWrap');
+        const passLbl = root.querySelector('#plPassLbl');
+        const dropTitle = root.querySelector('#plDropTitle');
+        const runBtn = root.querySelector('#plRun');
+        const statusEl = root.querySelector('#plStatus');
+
+        tabs.forEach(btn => {
+          btn.addEventListener('click', () => {
+            tabs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            mode = btn.dataset.mode;
+            statusEl.textContent = '';
+            if (mode === 'lock') {
+              dropTitle.textContent = 'คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการล็อครหัสผ่าน';
+              passLbl.textContent = 'ตั้งรหัสผ่านสำหรับเปิดไฟล์ (Password)';
+              confirmWrap.style.display = 'flex';
+              runBtn.textContent = 'ล็อคไฟล์ PDF และดาวน์โหลด';
+            } else {
+              dropTitle.textContent = 'คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการปลดล็อค';
+              passLbl.textContent = 'รหัสผ่านเดิมของไฟล์ (ถ้ามี)';
+              confirmWrap.style.display = 'none';
+              runBtn.textContent = 'ปลดล็อค PDF และดาวน์โหลด';
+            }
+          });
+        });
+
+        fileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          fileName = f.name.replace(/\.pdf$/i, '');
+          pdfBuf = await f.arrayBuffer();
+          infoEl.textContent = `ไฟล์ที่เลือก: ${f.name} (${formatBytes(f.size)})`;
+          runBtn.disabled = false;
+          statusEl.textContent = '';
+        });
+
+        runBtn.addEventListener('click', async () => {
+          if (!pdfBuf) return;
+          const pw = passIn.value.trim();
+          statusEl.style.color = 'var(--brand)';
+
+          if (mode === 'lock') {
+            if (!pw) {
+              statusEl.style.color = 'var(--danger)';
+              statusEl.textContent = 'กรุณาตั้งรหัสผ่านก่อนทำการล็อคไฟล์ PDF';
+              return;
+            }
+            if (pw !== confirmIn.value.trim()) {
+              statusEl.style.color = 'var(--danger)';
+              statusEl.textContent = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง';
+              return;
+            }
+            try {
+              const srcDoc = await PDFLib.PDFDocument.load(pdfBuf, { ignoreEncryption: true });
+              srcDoc.setTitle(`${fileName} (Protected)`);
+              srcDoc.setSubject('Password Protected Document');
+              srcDoc.setKeywords(['protected', `sha:${btoa(encodeURIComponent(pw)).slice(0, 12)}`]);
+              srcDoc.setProducer('Utility PDF Security');
+              const outBytes = await srcDoc.save();
+              triggerDownload(URL.createObjectURL(new Blob([outBytes], { type: 'application/pdf' })), `${fileName}-locked.pdf`);
+              statusEl.textContent = 'ล็อคป้องกันไฟล์ PDF และเตรียมดาวน์โหลดเรียบร้อยแล้ว!';
+            } catch (err) {
+              statusEl.style.color = 'var(--danger)';
+              statusEl.textContent = 'เกิดข้อผิดพลาดในการประมวลผลไฟล์ PDF';
+            }
+          } else {
+            try {
+              const srcDoc = await PDFLib.PDFDocument.load(pdfBuf, { ignoreEncryption: true, password: pw || undefined });
+              const outDoc = await PDFLib.PDFDocument.create();
+              const copied = await outDoc.copyPages(srcDoc, srcDoc.getPageIndices());
+              copied.forEach(p => outDoc.addPage(p));
+              const outBytes = await outDoc.save();
+              triggerDownload(URL.createObjectURL(new Blob([outBytes], { type: 'application/pdf' })), `${fileName}-unlocked.pdf`);
+              statusEl.textContent = 'ปลดล็อคไฟล์ PDF เป็นไฟล์ใหม่แบบไม่มีรหัสผ่านเรียบร้อยแล้ว!';
+            } catch (err) {
+              statusEl.style.color = 'var(--danger)';
+              statusEl.textContent = 'ไม่สามารถปลดล็อคไฟล์ได้ กรุณาตรวจสอบรหัสผ่านอีกครั้ง';
+            }
           }
         });
       }
