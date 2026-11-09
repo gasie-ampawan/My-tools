@@ -12,20 +12,20 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <style>
     :root {
-      --bg: #fafafa;
+      --bg: #f5f7fc;
       --surface: #ffffff;
-      --border: #eceef2;
-      --border-hover: #d5d9e2;
-      --ink: #1e2024;
-      --muted: #7c8494;
-      --brand: #5848e5;
-      --brand-soft: #eef0ff;
+      --border: #e8ecf7;
+      --border-hover: #cbd3ea;
+      --ink: #222530;
+      --muted: #727c94;
+      --brand: #7966eb;
+      --brand-soft: #f0eeff;
       --brand-ink: #ffffff;
-      --danger: #e5484d;
-      --success: #12a594;
-      --radius: 14px;
-      --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.03);
-      --shadow-md: 0 6px 18px rgba(16, 24, 40, 0.06);
+      --danger: #ff6b6b;
+      --success: #3ecf8e;
+      --radius: 16px;
+      --shadow-sm: 0 2px 6px rgba(121, 102, 235, 0.03);
+      --shadow-md: 0 10px 24px rgba(121, 102, 235, 0.07);
       --font: 'Noto Sans Thai', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
@@ -670,6 +670,10 @@
         <div id="wsBody"></div>
       </div>
     </section>
+
+    <footer style="text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 500;">
+      APW.Gasie &copy; 2026 • Utility — เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว
+    </footer>
   </main>
 
   <script>
@@ -745,7 +749,9 @@
           { id: 'number-gen', name: 'สุ่มตัวเลข', desc: 'สุ่มเลข 2 หลัก, 3 หลัก, 6 หลัก หรือกำหนดช่วงเอง', icon: 'numberGen' },
           { id: 'json-csv', name: 'แปลง JSON เป็นตาราง/CSV', desc: 'แปลงรูปแบบข้อมูล JSON เป็นตารางสวยๆ และโหลดไฟล์ CSV', icon: 'convertImg' },
           { id: 'base64-tool', name: 'ตัวแปลง Base64', desc: 'เข้ารหัสและถอดรหัสข้อความ / รูปภาพเป็น Base64', icon: 'shortLink' },
-          { id: 'date-calc', name: 'เครื่องคำนวณอายุ & วันทำงาน', desc: 'คำนวณอายุ วันสิ้นสุดสัญญา หรือนับจำนวนวันทำงาน', icon: 'wordCount' }
+          { id: 'date-calc', name: 'เครื่องคำนวณอายุ & วันทำงาน', desc: 'คำนวณอายุ วันสิ้นสุดสัญญา หรือนับจำนวนวันทำงาน', icon: 'wordCount' },
+          { id: 'translator-tool', name: 'โปรแกรมแปลภาษา', desc: 'แปลภาษาระหว่าง ไทย, อังกฤษ, ญี่ปุ่น, จีน และฟังเสียงพูดได้', icon: 'wordCount' },
+          { id: 'tts-audio', name: 'สร้างคลิปเสียงจาก Text', desc: 'พิมพ์ข้อความแล้วสร้างไฟล์เสียงออดิโอ พร้อมดาวน์โหลดไฟล์ MP3', icon: 'wordCount' }
         ]
       }
     ];
@@ -3119,6 +3125,301 @@
           workDaysVal.textContent = workDays;
           weekendVal.textContent = weekendDays;
           workRes.style.display = 'grid';
+        });
+      },
+
+      /* 26. โปรแกรมแปลภาษา */
+      'translator-tool': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field">
+              <label for="tlFrom">แปลจากภาษา (From)</label>
+              <select id="tlFrom" class="select">
+                <option value="en">อังกฤษ (English)</option>
+                <option value="th" selected>ไทย (Thai)</option>
+                <option value="ja">ญี่ปุ่น (Japanese)</option>
+                <option value="zh">จีน (Chinese)</option>
+              </select>
+            </div>
+            <div class="field" style="max-width: 60px; justify-content: center; align-items: center; align-self: flex-end; padding-bottom: 8px;">
+              <button type="button" class="btn btn-secondary" id="tlSwap" style="padding: 10px; font-weight: bold; border-radius: 50%;" title="สลับภาษา">⇄</button>
+            </div>
+            <div class="field">
+              <label for="tlTo">เป็นภาษา (To)</label>
+              <select id="tlTo" class="select">
+                <option value="en" selected>อังกฤษ (English)</option>
+                <option value="th">ไทย (Thai)</option>
+                <option value="ja">ญี่ปุ่น (Japanese)</option>
+                <option value="zh">จีน (Chinese)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field" style="margin-bottom: 12px;">
+            <label for="tlInput">กรอกข้อความที่ต้องการแปล</label>
+            <textarea id="tlInput" class="textarea" placeholder="พิมพ์ข้อความที่ต้องการแปลที่นี่..."></textarea>
+          </div>
+
+          <div class="controls-row">
+            <button type="button" class="btn btn-primary" id="tlRun">แปลภาษา</button>
+            <button type="button" class="btn btn-secondary" id="tlSpeakInput" style="display:none;" title="ฟังเสียงพูดข้อความต้นฉบับ">🔊 ฟังเสียงต้นฉบับ</button>
+          </div>
+
+          <div id="tlError" style="color:var(--danger); font-size:13px; margin-top:6px;"></div>
+
+          <div class="field" style="margin-top: 14px;">
+            <label for="tlOutput">ผลลัพธ์การแปล</label>
+            <textarea id="tlOutput" class="textarea" readonly placeholder="ผลการแปลจะแสดงที่นี่..."></textarea>
+          </div>
+
+          <div class="controls-row" style="margin-top: 10px; gap: 8px;">
+            <button type="button" class="btn btn-secondary" id="tlCopy">คัดลอกผลการแปล</button>
+            <button type="button" class="btn btn-secondary" id="tlSpeakOutput" style="display:none;" title="ฟังเสียงพูดผลการแปล">🔊 ฟังเสียงแปล</button>
+          </div>
+        `;
+
+        const fromSel = root.querySelector('#tlFrom');
+        const toSel = root.querySelector('#tlTo');
+        const swapBtn = root.querySelector('#tlSwap');
+        const input = root.querySelector('#tlInput');
+        const runBtn = root.querySelector('#tlRun');
+        const speakInBtn = root.querySelector('#tlSpeakInput');
+        const speakOutBtn = root.querySelector('#tlSpeakOutput');
+        const errEl = root.querySelector('#tlError');
+        const output = root.querySelector('#tlOutput');
+        const copyBtn = root.querySelector('#tlCopy');
+
+        swapBtn.addEventListener('click', () => {
+          const temp = fromSel.value;
+          fromSel.value = toSel.value;
+          toSel.value = temp;
+        });
+
+        copyBtn.addEventListener('click', (e) => {
+          if (!output.value) return;
+          navigator.clipboard?.writeText(output.value);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = 'คัดลอกผลการแปล'; }, 1200);
+        });
+
+        if ('speechSynthesis' in window) {
+          speakInBtn.style.display = 'inline-flex';
+          speakOutBtn.style.display = 'inline-flex';
+
+          function speakText(text, lang) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const locales = { th: 'th-TH', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
+            utterance.lang = locales[lang] || lang;
+            window.speechSynthesis.speak(utterance);
+          }
+
+          speakInBtn.addEventListener('click', () => {
+            if (input.value.trim()) speakText(input.value.trim(), fromSel.value);
+          });
+
+          speakOutBtn.addEventListener('click', () => {
+            if (output.value.trim()) speakText(output.value.trim(), toSel.value);
+          });
+        }
+
+        runBtn.addEventListener('click', async () => {
+          errEl.textContent = '';
+          const text = input.value.trim();
+          if (!text) {
+            errEl.textContent = 'กรุณากรอกข้อความที่ต้องการแปล';
+            return;
+          }
+
+          runBtn.disabled = true;
+          runBtn.textContent = 'กำลังแปล...';
+          output.value = 'กำลังดำเนินการแปลภาษา...';
+
+          try {
+            const fromLang = fromSel.value;
+            const toLang = toSel.value;
+            const url = `about:invalid#zPythonSafez`;
+            
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('API Response Error');
+            const resData = await response.json();
+            
+            if (resData && resData.responseData && resData.responseData.translatedText) {
+              output.value = resData.responseData.translatedText;
+            } else {
+              throw new Error('Invalid Data format');
+            }
+          } catch (e) {
+            errEl.textContent = 'การแปลผิดพลาด กรุณาลองใช้อีกครั้งในภายหลัง';
+            output.value = '';
+          } finally {
+            runBtn.disabled = false;
+            runBtn.textContent = 'แปลภาษา';
+          }
+        });
+      },
+
+      /* 27. สร้างคลิปเสียงจาก Text */
+      'tts-audio': (root) => {
+        root.innerHTML = `
+          <div class="field" style="margin-bottom: 12px;">
+            <label for="ttsInput">กรอกข้อความที่ต้องการสร้างเป็นไฟล์เสียง (ไม่เกิน 200 ตัวอักษรเพื่อคุณภาพที่ดีที่สุด)</label>
+            <textarea id="ttsInput" class="textarea" placeholder="พิมพ์ข้อความภาษาไทย หรือ ภาษาอังกฤษ ที่นี่เพื่อสร้างเป็นไฟล์เสียง MP3..."></textarea>
+          </div>
+
+          <div class="controls-row" style="margin-bottom: 14px;">
+            <div class="field">
+              <label for="ttsLang">ภาษา (Language)</label>
+              <select id="ttsLang" class="select">
+                <option value="th">ไทย (Thai)</option>
+                <option value="en">อังกฤษ (English)</option>
+                <option value="ja">ญี่ปุ่น (Japanese)</option>
+                <option value="zh">จีน (Chinese)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="ttsVoice">เลือกเสียง (Voice)</label>
+              <select id="ttsVoice" class="select">
+                <option value="">เสียงเริ่มต้นของระบบ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="controls-row" style="margin-bottom: 14px;">
+            <div class="field">
+              <label for="ttsPitch">โทนเสียง (Pitch): <span id="ttsPitchVal">1.0</span></label>
+              <input type="range" id="ttsPitch" min="0.5" max="2" step="0.1" value="1" class="input" style="padding:0;">
+            </div>
+            <div class="field">
+              <label for="ttsRate">ความเร็ว (Speed): <span id="ttsRateVal">1.0</span></label>
+              <input type="range" id="ttsRate" min="0.5" max="2" step="0.1" value="1" class="input" style="padding:0;">
+            </div>
+          </div>
+
+          <div class="controls-row" style="margin-bottom: 14px;">
+            <button type="button" class="btn btn-primary" id="ttsPreviewBtn">ทดลองฟังเสียง</button>
+            <button type="button" class="btn btn-secondary" id="ttsGenBtn">สร้างคลิปเสียง MP3</button>
+          </div>
+
+          <div id="ttsError" style="color:var(--danger); font-size:13px; margin-top:6px;"></div>
+
+          <div id="ttsResultWrap" style="display:none; margin-top:20px; text-align:center;" class="preview-box">
+            <div style="font-weight:700; margin-bottom:12px; color:var(--brand); font-size:14px;">คลิปเสียงของคุณพร้อมแล้ว:</div>
+            <audio id="ttsAudioPlayer" controls style="width:100%; max-width:400px; margin:0 auto 14px; display:block;"></audio>
+            <button type="button" class="btn btn-primary" id="ttsDownloadBtn">ดาวน์โหลดไฟล์เสียง MP3</button>
+          </div>
+        `;
+
+        const input = root.querySelector('#ttsInput');
+        const langSel = root.querySelector('#ttsLang');
+        const voiceSel = root.querySelector('#ttsVoice');
+        const pitchIn = root.querySelector('#ttsPitch');
+        const pitchVal = root.querySelector('#ttsPitchVal');
+        const rateIn = root.querySelector('#ttsRate');
+        const rateVal = root.querySelector('#ttsRateVal');
+        const previewBtn = root.querySelector('#ttsPreviewBtn');
+        const genBtn = root.querySelector('#ttsGenBtn');
+        const errEl = root.querySelector('#ttsError');
+        const resultWrap = root.querySelector('#ttsResultWrap');
+        const player = root.querySelector('#ttsAudioPlayer');
+        const dlBtn = root.querySelector('#ttsDownloadBtn');
+
+        let audioUrl = '';
+
+        // Dynamically list voices according to selected language
+        function populateVoices() {
+          if (typeof speechSynthesis === 'undefined') return;
+          const voices = speechSynthesis.getVoices();
+          voiceSel.innerHTML = '<option value="">เสียงเริ่มต้นของระบบ</option>';
+          voices.forEach((v, i) => {
+            if (v.lang.toLowerCase().startsWith(langSel.value.toLowerCase())) {
+              const opt = document.createElement('option');
+              opt.value = i;
+              opt.textContent = `${v.name} (${v.lang})`;
+              voiceSel.appendChild(opt);
+            }
+          });
+        }
+
+        setTimeout(populateVoices, 100);
+        if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+          speechSynthesis.onvoiceschanged = populateVoices;
+        }
+        langSel.addEventListener('change', populateVoices);
+
+        pitchIn.addEventListener('input', () => { pitchVal.textContent = Number(pitchIn.value).toFixed(1); });
+        rateIn.addEventListener('input', () => { rateVal.textContent = Number(rateIn.value).toFixed(1); });
+
+        previewBtn.addEventListener('click', () => {
+          errEl.textContent = '';
+          const text = input.value.trim();
+          if (!text) {
+            errEl.textContent = 'กรุณากรอกข้อความก่อนลองฟังเสียง';
+            return;
+          }
+
+          if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const locales = { th: 'th-TH', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
+            utterance.lang = locales[langSel.value] || langSel.value;
+            
+            // Apply customized settings
+            utterance.pitch = Number(pitchIn.value) || 1;
+            utterance.rate = Number(rateIn.value) || 1;
+            
+            if (voiceSel.value !== "") {
+              const voices = speechSynthesis.getVoices();
+              utterance.voice = voices[parseInt(voiceSel.value, 10)];
+            }
+            
+            window.speechSynthesis.speak(utterance);
+          } else {
+            errEl.textContent = 'เบราว์เซอร์ของคุณไม่รองรับฟังก์ชันการพูดออกเสียง';
+          }
+        });
+
+        genBtn.addEventListener('click', () => {
+          errEl.textContent = '';
+          resultWrap.style.display = 'none';
+          const text = input.value.trim();
+          if (!text) {
+            errEl.textContent = 'กรุณากรอกข้อความเพื่อสร้างคลิปเสียง';
+            return;
+          }
+
+          genBtn.disabled = true;
+          genBtn.textContent = 'กำลังสร้างไฟล์เสียง...';
+
+          try {
+            const lang = langSel.value;
+            const url = `about:invalid#zPythonSafez`;
+            
+            if (audioUrl) {
+              URL.revokeObjectURL(audioUrl);
+            }
+
+            player.src = url;
+            resultWrap.style.display = 'block';
+            
+            dlBtn.onclick = async () => {
+              try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Download Error');
+                const blob = await response.blob();
+                const localUrl = URL.createObjectURL(blob);
+                triggerDownload(localUrl, 'audio_clip.mp3');
+              } catch (e) {
+                window.open(url, '_blank');
+              }
+            };
+
+          } catch (e) {
+            errEl.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อเพื่อสร้างไฟล์เสียง';
+          } finally {
+            genBtn.disabled = false;
+            genBtn.textContent = 'สร้างคลิปเสียง MP3';
+          }
         });
       }
     };
