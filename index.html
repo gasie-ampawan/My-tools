@@ -1,0 +1,3131 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Utility — เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --border: #eceef2;
+      --border-hover: #d5d9e2;
+      --ink: #1e2024;
+      --muted: #7c8494;
+      --brand: #5848e5;
+      --brand-soft: #eef0ff;
+      --brand-ink: #ffffff;
+      --danger: #e5484d;
+      --success: #12a594;
+      --radius: 14px;
+      --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.03);
+      --shadow-md: 0 6px 18px rgba(16, 24, 40, 0.06);
+      --font: 'Noto Sans Thai', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Header */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .topbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      font: inherit;
+    }
+
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--brand);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-name {
+      font-weight: 700;
+      font-size: 16px;
+      color: #2c2f36;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 20px 72px;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 800;
+      color: #1f2229;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      margin: 0 auto 26px;
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .search-wrap {
+      max-width: 440px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #a0a7b5;
+      pointer-events: none;
+      display: flex;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 18px 11px 42px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font: inherit;
+      font-size: 13.5px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-input::placeholder {
+      color: #a5acb8;
+    }
+
+    .search-input:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(88, 72, 229, 0.12);
+    }
+
+    /* Category Sections */
+    .category-section {
+      margin-bottom: 28px;
+    }
+
+    .category-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #7c8494;
+      margin: 0 0 10px;
+      letter-spacing: 0.01em;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tool-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tool-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    .tool-card:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
+
+    .tool-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tool-icon svg {
+      width: 19px;
+      height: 19px;
+      stroke-width: 1.9;
+    }
+
+    .tool-meta {
+      min-width: 0;
+    }
+
+    .tool-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1f2229;
+      margin: 0 0 2px;
+      line-height: 1.35;
+    }
+
+    .tool-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Tool Workspace View */
+    .workspace {
+      display: none;
+    }
+
+    .workspace.active {
+      display: block;
+    }
+
+    .home-view.hidden {
+      display: none;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #454b57;
+      cursor: pointer;
+      margin-bottom: 18px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .back-btn:hover {
+      background: #f3f4f8;
+      border-color: var(--border-hover);
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-header h2 {
+      margin: 0 0 2px;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .panel-header p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* Common Workspace Controls */
+    .dropzone {
+      border: 2px dashed #d5d9e4;
+      border-radius: 14px;
+      padding: 28px 20px;
+      text-align: center;
+      background: #fafbfe;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      margin-bottom: 18px;
+       display: block;
+    }
+
+    .dropzone:hover {
+      border-color: var(--brand);
+      background: #f4f5ff;
+    }
+
+    .dropzone input[type="file"] {
+      display: none;
+    }
+
+    .dropzone-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #2b2f38;
+      margin-bottom: 4px;
+    }
+
+    .dropzone-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .field label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #434956;
+    }
+
+    .input, .select, .textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 9px;
+      border: 1px solid var(--border-hover);
+      background: #fff;
+      font: inherit;
+      font-size: 13.5px;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .input:focus, .select:focus, .textarea:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(88, 72, 229, 0.12);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+      text-decoration: none;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: var(--brand-ink);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #4737d1;
+    }
+
+    .btn-secondary {
+      background: #f3f4f8;
+      color: #2b2f38;
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #e8eaf2;
+    }
+
+    .btn-danger {
+      background: #fff0f0;
+      color: var(--danger);
+      border-color: #ffd6d6;
+    }
+
+    .preview-box {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: #f8f9fc;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .checkerboard {
+      background-image:
+        linear-gradient(45deg, #e6e8ef 25%, transparent 25%),
+        linear-gradient(-45deg, #e6e8ef 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #e6e8ef 75%),
+        linear-gradient(-45deg, transparent 75%, #e6e8ef 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    }
+
+    canvas, .preview-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat-card {
+      background: #f8f9fc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--brand);
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fafbfe;
+      font-size: 13px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .page-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      background: #fff;
+      text-align: center;
+      position: relative;
+    }
+
+    .page-card canvas {
+      width: 100%;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      transition: transform 0.2s;
+    }
+
+    .page-actions {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .icon-btn {
+      padding: 4px 7px;
+      font-size: 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #f8f9fc;
+      cursor: pointer;
+    }
+
+    .icon-btn:hover {
+      background: #ebedf5;
+    }
+
+    .swatch-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .color-chip {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px var(--border-hover);
+    }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .pill-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-hover);
+      background: #fff;
+      font: inherit;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+
+    .pill-btn.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    .empty-search {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--muted);
+      font-size: 14px;
+      display: none;
+    }
+
+    .status-msg {
+      font-size: 13px;
+      margin-top: 10px;
+      color: var(--brand);
+      font-weight: 500;
+    }
+  </style>
+<style data-link-removed-style>a[data-link-removed],a[href*="zPythonSafez"]:not([onclick]){pointer-events:none!important;cursor:default!important;opacity:.6}</style></head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button type="button" class="brand" id="homeLogoBtn" aria-label="กลับหน้าหลัก Utility">
+        <span class="brand-logo">U</span>
+        <span class="brand-name">Utility</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HOME DIRECTORY VIEW -->
+    <div id="homeView" class="home-view">
+      <section class="hero">
+        <h1>เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว</h1>
+        <p>ลบพื้นหลัง จัดการ PDF ทำ QR Code ย่อลิงก์ และอีกมากมาย — ไม่ต้องสมัคร ไม่มีค่าใช้จ่าย</p>
+        <div class="search-wrap">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input
+            type="search"
+            id="searchInput"
+            class="search-input"
+            placeholder="ค้นหาเครื่องมือ เช่น PDF, QR, ลบพื้นหลัง"
+            aria-label="ค้นหาเครื่องมือ"
+          >
+        </div>
+      </section>
+
+      <div class="tabs-outer" style="border-bottom: 1px solid var(--border); margin-bottom: 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px;">
+        <div class="tabs-list" id="tabsList" style="display: flex; gap: 8px;"></div>
+      </div>
+
+      <div id="categoriesContainer"></div>
+      <div id="emptySearch" class="empty-search">ไม่พบเครื่องมือที่ตรงกับคำค้นหา</div>
+    </div>
+
+    <!-- ACTIVE TOOL WORKSPACE -->
+    <section id="workspaceView" class="workspace" aria-live="polite">
+      <button type="button" class="back-btn" id="backToHomeBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        กลับหน้ารวมเครื่องมือ
+      </button>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="tool-icon" id="wsIcon"></div>
+          <div>
+            <h2 id="wsTitle"></h2>
+            <p id="wsDesc"></p>
+          </div>
+        </div>
+        <div id="wsBody"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    const ICONS = {
+      eraser: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>`,
+      compressImg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`,
+      convertImg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`,
+      resizeImg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 3 21 3 21 8"/><line x1="14" y1="10" x2="21" y2="3"/></svg>`,
+      cropImg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>`,
+      eyedropper: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"/></svg>`,
+      mergePdf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="8.5" y="14" width="7" height="7" rx="1"/><path d="M6.5 10v2a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2"/></svg>`,
+      splitPdf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>`,
+      pageNumPdf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>`,
+      organizePdf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>`,
+      rotatePdf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>`,
+      imgToPdf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="10" cy="13" r="2"/><path d="m20 17-1.5-1.5a2 2 0 0 0-2.8 0L10 21"/></svg>`,
+      pdfToImg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+      watermarkPdf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
+      compressPdf: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>`,
+      shortLink: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+      qrCode: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><path d="M21 14h-3v3"/><path d="M18 21h3v-3"/><path d="M14 21v-3"/></svg>`,
+      wordCount: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>`,
+      password: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>`,
+      randomPick: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>`,
+      numberGen: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7l-2 1"/><path d="M13 11a2 2 0 0 1 4 0c0 2-4 4-4 4h4"/></svg>`
+    };
+
+    const CATEGORIES = [
+      {
+        title: 'รูปภาพ',
+        tools: [
+          { id: 'bg-remove', name: 'ลบพื้นหลังรูป', desc: 'ตัดพื้นหลังออกอัตโนมัติ ได้ PNG พื้นใส', icon: 'eraser' },
+          { id: 'img-compress', name: 'ย่อขนาดไฟล์รูป', desc: 'บีบรูปให้ไฟล์เล็กลง ภาพยังชัด', icon: 'compressImg' },
+          { id: 'img-convert', name: 'แปลงไฟล์รูป', desc: 'แปลง PNG / JPG / WebP ไปมา', icon: 'convertImg' },
+          { id: 'img-resize', name: 'ปรับขนาดรูป', desc: 'เปลี่ยนความกว้าง-สูงของรูป', icon: 'resizeImg' },
+          { id: 'img-crop', name: 'ครอปรูป', desc: 'ตัดรูปตามสัดส่วน 1:1, 16:9, 9:16 ฯลฯ', icon: 'cropImg' },
+          { id: 'img-color', name: 'ดูดสีจากรูป', desc: 'คลิกบนรูปเพื่อดูรหัสสี HEX / RGB', icon: 'eyedropper' }
+        ]
+      },
+      {
+        title: 'PDF',
+        tools: [
+          { id: 'pdf-merge', name: 'รวม PDF', desc: 'รวมหลายไฟล์เป็นไฟล์เดียว เรียงลำดับได้', icon: 'mergePdf' },
+          { id: 'pdf-split', name: 'แยก PDF', desc: 'ดึงหน้าที่ต้องการ หรือแยกทุกหน้า', icon: 'splitPdf' },
+          { id: 'pdf-pagenum', name: 'ใส่เลขหน้า PDF', desc: 'เลือกตำแหน่ง ขนาด รูปแบบเลขหน้า', icon: 'pageNumPdf' },
+          { id: 'pdf-organize', name: 'จัดหน้า PDF', desc: 'ลบ สลับ หมุนทีละหน้า ดูภาพตัวอย่าง', icon: 'organizePdf' },
+          { id: 'pdf-rotate', name: 'หมุน PDF', desc: 'หมุนทุกหน้า 90° / 180°', icon: 'rotatePdf' },
+          { id: 'img-to-pdf', name: 'รูปเป็น PDF', desc: 'รวมรูปหลายรูปเป็นไฟล์ PDF', icon: 'imgToPdf' },
+          { id: 'pdf-to-img', name: 'PDF เป็นรูป', desc: 'แปลงทุกหน้าเป็น JPG / PNG', icon: 'pdfToImg' },
+          { id: 'pdf-watermark', name: 'ใส่ลายน้ำ PDF', desc: 'ใส่ข้อความลายน้ำทุกหน้า (รองรับภาษาไทย)', icon: 'watermarkPdf' },
+          { id: 'pdf-compress', name: 'บีบอัด PDF', desc: 'ลดขนาดไฟล์ PDF ที่มีรูปเยอะ', icon: 'compressPdf' },
+          { id: 'pdf-sign', name: 'เซ็น E-signature', desc: 'วาดลายเซ็น นำไปแปะบน PDF หรือโหลดเป็นภาพพื้นใส', icon: 'cropImg' }
+        ]
+      },
+      {
+        title: 'ลิงก์ & QR Code',
+        tools: [
+          { id: 'short-link', name: 'ย่อลิงก์', desc: 'ทำลิงก์ยาวให้สั้น จำง่าย', icon: 'shortLink' },
+          { id: 'qr-code', name: 'สร้าง QR Code', desc: 'ใส่สี ใส่โลโก้ โหลด PNG / SVG', icon: 'qrCode' }
+        ]
+      },
+      {
+        title: 'เครื่องมือเล็กๆ',
+        tools: [
+          { id: 'word-count', name: 'นับคำ / ตัวอักษร', desc: 'นับคำภาษาไทย-อังกฤษ ตัวอักษร บรรทัด', icon: 'wordCount' },
+          { id: 'password-gen', name: 'สุ่มรหัสผ่าน', desc: 'สร้างรหัสผ่านที่ปลอดภัย', icon: 'password' },
+          { id: 'random-picker', name: 'สุ่มชื่อ / จับฉลาก', desc: 'ใส่รายชื่อแล้วสุ่ม หรือแบ่งกลุ่ม', icon: 'randomPick' },
+          { id: 'number-gen', name: 'สุ่มตัวเลข', desc: 'สุ่มเลข 2 หลัก, 3 หลัก, 6 หลัก หรือกำหนดช่วงเอง', icon: 'numberGen' },
+          { id: 'json-csv', name: 'แปลง JSON เป็นตาราง/CSV', desc: 'แปลงรูปแบบข้อมูล JSON เป็นตารางสวยๆ และโหลดไฟล์ CSV', icon: 'convertImg' },
+          { id: 'base64-tool', name: 'ตัวแปลง Base64', desc: 'เข้ารหัสและถอดรหัสข้อความ / รูปภาพเป็น Base64', icon: 'shortLink' },
+          { id: 'date-calc', name: 'เครื่องคำนวณอายุ & วันทำงาน', desc: 'คำนวณอายุ วันสิ้นสุดสัญญา หรือนับจำนวนวันทำงาน', icon: 'wordCount' }
+        ]
+      }
+    ];
+
+    const categoriesContainer = document.getElementById('categoriesContainer');
+    const searchInput = document.getElementById('searchInput');
+    const emptySearch = document.getElementById('emptySearch');
+    const homeView = document.getElementById('homeView');
+    const workspaceView = document.getElementById('workspaceView');
+    const wsIcon = document.getElementById('wsIcon');
+    const wsTitle = document.getElementById('wsTitle');
+    const wsDesc = document.getElementById('wsDesc');
+    const wsBody = document.getElementById('wsBody');
+    const tabsList = document.getElementById('tabsList');
+
+    let activeTab = 'all';
+
+    function renderTabs() {
+      tabsList.innerHTML = '';
+      const tabs = [
+        { id: 'all', title: 'ทั้งหมด' },
+        ...CATEGORIES.map(cat => ({ id: cat.title, title: cat.title }))
+      ];
+      tabs.forEach(t => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `pill-btn ${activeTab === t.id ? 'active' : ''}`;
+        btn.style.whiteSpace = 'nowrap';
+        btn.textContent = t.title;
+        btn.addEventListener('click', () => {
+          activeTab = t.id;
+          renderTabs();
+          renderDirectory(searchInput.value);
+        });
+        tabsList.appendChild(btn);
+      });
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function triggerDownload(url, filename) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function renderDirectory(filterText = '') {
+      const q = filterText.trim().toLowerCase();
+      categoriesContainer.innerHTML = '';
+      let totalVisible = 0;
+
+      CATEGORIES.forEach(cat => {
+        if (activeTab !== 'all' && cat.title !== activeTab) return;
+
+        const matched = cat.tools.filter(t =>
+          !q ||
+          t.name.toLowerCase().includes(q) ||
+          t.desc.toLowerCase().includes(q) ||
+          cat.title.toLowerCase().includes(q)
+        );
+        if (matched.length === 0) return;
+        totalVisible += matched.length;
+
+        const sec = document.createElement('section');
+        sec.className = 'category-section';
+        sec.innerHTML = `<h2 class="category-title">${cat.title}</h2>`;
+
+        const grid = document.createElement('div');
+        grid.className = 'tool-grid';
+
+        matched.forEach(tool => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'tool-card';
+          card.innerHTML = `
+            <span class="tool-icon" aria-hidden="true">${ICONS[tool.icon]}</span>
+            <div class="tool-meta">
+              <div class="tool-name">${tool.name}</div>
+              <p class="tool-desc">${tool.desc}</p>
+            </div>
+          `;
+          card.addEventListener('click', () => openTool(tool));
+          grid.appendChild(card);
+        });
+
+        sec.appendChild(grid);
+        categoriesContainer.appendChild(sec);
+      });
+
+      emptySearch.style.display = totalVisible === 0 ? 'block' : 'none';
+    }
+
+    searchInput.addEventListener('input', e => renderDirectory(e.target.value));
+
+    function showHome() {
+      workspaceView.classList.remove('active');
+      homeView.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('homeLogoBtn').addEventListener('click', showHome);
+    document.getElementById('backToHomeBtn').addEventListener('click', showHome);
+
+    function openTool(tool) {
+      homeView.classList.add('hidden');
+      workspaceView.classList.add('active');
+      wsIcon.innerHTML = ICONS[tool.icon];
+      wsTitle.textContent = tool.name;
+      wsDesc.textContent = tool.desc;
+      wsBody.innerHTML = '';
+      TOOL_BUILDERS[tool.id](wsBody);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function loadImageFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => resolve({ img, dataUrl: reader.result });
+          img.onerror = reject;
+          img.src = reader.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    /* =========================================================
+       20 FUNCTIONAL TOOL IMPLEMENTATIONS
+    ========================================================= */
+    const TOOL_BUILDERS = {
+      /* 1. ลบพื้นหลังรูป */
+      'bg-remove': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="bgFile" accept="image/*">
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพที่ต้องการลบพื้นหลัง</div>
+            <div class="dropzone-sub">ระบบจะตรวจจับสีพื้นหลังบริเวณขอบภาพให้อัตโนมัติ หรือคลิกที่จุดพื้นหลังบนภาพเพื่อระบุสี</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="bgTol">ความละเอียดการตัดขอบ (Tolerance): <span id="bgTolVal">38</span></label>
+              <input type="range" id="bgTol" min="5" max="140" value="38" class="input">
+            </div>
+            <button type="button" class="btn btn-primary" id="bgDownload" disabled>ดาวน์โหลด PNG พื้นใส</button>
+          </div>
+          <div class="preview-box checkerboard" id="bgPreviewWrap" style="display:none;">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">คลิกที่พื้นหลังในรูปเพื่อเปลี่ยนสีที่ต้องการลบ</div>
+            <canvas id="bgCanvas" style="cursor:crosshair;"></canvas>
+          </div>
+        `;
+        let sourceImg = null;
+        let targetColor = null;
+        const fileIn = root.querySelector('#bgFile');
+        const tolIn = root.querySelector('#bgTol');
+        const tolVal = root.querySelector('#bgTolVal');
+        const dlBtn = root.querySelector('#bgDownload');
+        const wrap = root.querySelector('#bgPreviewWrap');
+        const canvas = root.querySelector('#bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function processBg() {
+          if (!sourceImg) return;
+          canvas.width = sourceImg.width;
+          canvas.height = sourceImg.height;
+          ctx.drawImage(sourceImg, 0, 0);
+          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const d = imgData.data;
+          if (!targetColor) {
+            targetColor = [d[0], d[1], d[2]];
+          }
+          const tol = Number(tolIn.value);
+          const [tr, tg, tb] = targetColor;
+          for (let i = 0; i < d.length; i += 4) {
+            const dist = Math.sqrt(
+              Math.pow(d[i] - tr, 2) +
+              Math.pow(d[i + 1] - tg, 2) +
+              Math.pow(d[i + 2] - tb, 2)
+            );
+            if (dist <= tol) {
+              d[i + 3] = 0;
+            } else if (dist <= tol + 18) {
+              d[i + 3] = Math.round(((dist - tol) / 18) * 255);
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+          wrap.style.display = 'block';
+          dlBtn.disabled = false;
+        }
+
+        fileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const { img } = await loadImageFile(f);
+          sourceImg = img;
+          targetColor = null;
+          processBg();
+        });
+
+        tolIn.addEventListener('input', () => {
+          tolVal.textContent = tolIn.value;
+          processBg();
+        });
+
+        canvas.addEventListener('click', (e) => {
+          if (!sourceImg) return;
+          const rect = canvas.getBoundingClientRect();
+          const x = Math.floor((e.clientX - rect.left) * (canvas.width / rect.width));
+          const y = Math.floor((e.clientY - rect.top) * (canvas.height / rect.height));
+          const temp = document.createElement('canvas');
+          temp.width = sourceImg.width;
+          temp.height = sourceImg.height;
+          const tctx = temp.getContext('2d');
+          tctx.drawImage(sourceImg, 0, 0);
+          const p = tctx.getImageData(x, y, 1, 1).data;
+          targetColor = [p[0], p[1], p[2]];
+          processBg();
+        });
+
+        dlBtn.addEventListener('click', () => {
+          triggerDownload(canvas.toDataURL('image/png'), 'removed-bg.png');
+        });
+      },
+
+      /* 2. ย่อขนาดไฟล์รูป */
+      'img-compress': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="cmpFile" accept="image/*">
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพที่ต้องการบีบอัด</div>
+            <div class="dropzone-sub">รองรับ JPG, PNG, WebP พร้อมเปรียบเทียบขนาดก่อน-หลัง</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="cmpQual">คุณภาพรูปภาพ: <span id="cmpQualVal">75</span>%</label>
+              <input type="range" id="cmpQual" min="10" max="95" value="75" class="input">
+            </div>
+            <button type="button" class="btn btn-primary" id="cmpDownload" disabled>ดาวน์โหลดรูปที่บีบอัดแล้ว</button>
+          </div>
+          <div id="cmpStats" class="stat-grid" style="display:none;">
+            <div class="stat-card"><div class="stat-val" id="origSize">-</div><div class="stat-lbl">ขนาดเดิม</div></div>
+            <div class="stat-card"><div class="stat-val" id="newSize">-</div><div class="stat-lbl">ขนาดหลังบีบอัด</div></div>
+            <div class="stat-card"><div class="stat-val" id="savedPct">-</div><div class="stat-lbl">ลดลง</div></div>
+          </div>
+          <div class="preview-box" id="cmpPreviewWrap" style="display:none;">
+            <img id="cmpPreview" class="preview-img" alt="ตัวอย่างรูปที่ย่อขนาดแล้ว">
+          </div>
+        `;
+        let rawFile = null;
+        let loadedImg = null;
+        let outUrl = '';
+
+        const fileIn = root.querySelector('#cmpFile');
+        const qualIn = root.querySelector('#cmpQual');
+        const qualVal = root.querySelector('#cmpQualVal');
+        const dlBtn = root.querySelector('#cmpDownload');
+
+        function runCompress() {
+          if (!loadedImg) return;
+          const c = document.createElement('canvas');
+          c.width = loadedImg.width;
+          c.height = loadedImg.height;
+          const ctx = c.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.drawImage(loadedImg, 0, 0);
+          const q = Number(qualIn.value) / 100;
+          c.toBlob((blob) => {
+            if (!blob) return;
+            if (outUrl) URL.revokeObjectURL(outUrl);
+            outUrl = URL.createObjectURL(blob);
+            root.querySelector('#cmpPreview').src = outUrl;
+            root.querySelector('#cmpPreviewWrap').style.display = 'block';
+            root.querySelector('#cmpStats').style.display = 'grid';
+            root.querySelector('#origSize').textContent = formatBytes(rawFile.size);
+            root.querySelector('#newSize').textContent = formatBytes(blob.size);
+            const pct = Math.max(0, Math.round((1 - blob.size / rawFile.size) * 100));
+            root.querySelector('#savedPct').textContent = pct + '%';
+            dlBtn.disabled = false;
+          }, 'image/jpeg', q);
+        }
+
+        fileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          rawFile = f;
+          const { img } = await loadImageFile(f);
+          loadedImg = img;
+          runCompress();
+        });
+
+        qualIn.addEventListener('input', () => {
+          qualVal.textContent = qualIn.value;
+          runCompress();
+        });
+
+        dlBtn.addEventListener('click', () => {
+          if (outUrl) triggerDownload(outUrl, 'compressed.jpg');
+        });
+      },
+
+      /* 3. แปลงไฟล์รูป */
+      'img-convert': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="cvFile" accept="image/*">
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพ (PNG / JPG / WebP)</div>
+            <div class="dropzone-sub">แปลงนามสกุลไฟล์ภาพได้ทันทีในเบราว์เซอร์</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="cvFormat">แปลงเป็นนามสกุล</label>
+              <select id="cvFormat" class="select">
+                <option value="image/png">PNG (.png)</option>
+                <option value="image/jpeg">JPG (.jpg)</option>
+                <option value="image/webp">WebP (.webp)</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="cvBtn" disabled>แปลงและดาวน์โหลด</button>
+          </div>
+          <div class="preview-box" id="cvPreviewWrap" style="display:none;">
+            <img id="cvPreview" class="preview-img" alt="ตัวอย่างรูปที่แปลงแล้ว">
+          </div>
+        `;
+        let currentImg = null;
+        let convertedUrl = '';
+        const fileIn = root.querySelector('#cvFile');
+        const fmtSel = root.querySelector('#cvFormat');
+        const cvBtn = root.querySelector('#cvBtn');
+
+        function updateConversion() {
+          if (!currentImg) return;
+          const c = document.createElement('canvas');
+          c.width = currentImg.width;
+          c.height = currentImg.height;
+          const ctx = c.getContext('2d');
+          if (fmtSel.value === 'image/jpeg') {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, c.width, c.height);
+          }
+          ctx.drawImage(currentImg, 0, 0);
+          convertedUrl = c.toDataURL(fmtSel.value, 0.92);
+          root.querySelector('#cvPreview').src = convertedUrl;
+          root.querySelector('#cvPreviewWrap').style.display = 'block';
+          cvBtn.disabled = false;
+        }
+
+        fileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const { img } = await loadImageFile(f);
+          currentImg = img;
+          updateConversion();
+        });
+
+        fmtSel.addEventListener('change', updateConversion);
+
+        cvBtn.addEventListener('click', () => {
+          const ext = fmtSel.value === 'image/png' ? 'png' : fmtSel.value === 'image/webp' ? 'webp' : 'jpg';
+          triggerDownload(convertedUrl, `converted.${ext}`);
+        });
+      },
+
+      /* 4. ปรับขนาดรูป */
+      'img-resize': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="rsFile" accept="image/*">
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพที่ต้องการปรับขนาด</div>
+            <div class="dropzone-sub">กำหนดความกว้างและความสูง (พิกเซล) พร้อมล็อกอัตราส่วนได้</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="rsW">ความกว้าง (px)</label>
+              <input type="number" id="rsW" class="input" min="1" placeholder="กว้าง">
+            </div>
+            <div class="field">
+              <label for="rsH">ความสูง (px)</label>
+              <input type="number" id="rsH" class="input" min="1" placeholder="สูง">
+            </div>
+            <div class="field" style="justify-content:center;">
+              <label><input type="checkbox" id="rsLock" checked> ล็อกสัดส่วนเดิม</label>
+            </div>
+            <button type="button" class="btn btn-primary" id="rsDownload" disabled>ดาวน์โหลดรูปขนาดใหม่</button>
+          </div>
+          <div class="preview-box" id="rsPreviewWrap" style="display:none;">
+            <canvas id="rsCanvas"></canvas>
+          </div>
+        `;
+        let srcImg = null;
+        let ratio = 1;
+        const wIn = root.querySelector('#rsW');
+        const hIn = root.querySelector('#rsH');
+        const lockIn = root.querySelector('#rsLock');
+        const dlBtn = root.querySelector('#rsDownload');
+        const canvas = root.querySelector('#rsCanvas');
+
+        function renderResized() {
+          if (!srcImg) return;
+          const w = Math.max(1, parseInt(wIn.value, 10) || srcImg.width);
+          const h = Math.max(1, parseInt(hIn.value, 10) || srcImg.height);
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(srcImg, 0, 0, w, h);
+          root.querySelector('#rsPreviewWrap').style.display = 'block';
+          dlBtn.disabled = false;
+        }
+
+        root.querySelector('#rsFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const { img } = await loadImageFile(f);
+          srcImg = img;
+          ratio = img.width / img.height;
+          wIn.value = img.width;
+          hIn.value = img.height;
+          renderResized();
+        });
+
+        wIn.addEventListener('input', () => {
+          if (srcImg && lockIn.checked && wIn.value) {
+            hIn.value = Math.max(1, Math.round(Number(wIn.value) / ratio));
+          }
+          renderResized();
+        });
+
+        hIn.addEventListener('input', () => {
+          if (srcImg && lockIn.checked && hIn.value) {
+            wIn.value = Math.max(1, Math.round(Number(hIn.value) * ratio));
+          }
+          renderResized();
+        });
+
+        dlBtn.addEventListener('click', () => {
+          triggerDownload(canvas.toDataURL('image/png'), `resized-${canvas.width}x${canvas.height}.png`);
+        });
+      },
+
+      /* 5. ครอปรูป */
+      'img-crop': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="crFile" accept="image/*">
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพที่ต้องการครอป</div>
+            <div class="dropzone-sub">เลือกสัดส่วน 1:1, 16:9, 9:16, 4:3 และเลื่อนตำแหน่งตัดรูป</div>
+          </label>
+          <div class="pill-group" id="crRatios">
+            <button type="button" class="pill-btn active" data-ratio="1:1">1:1 (จัตุรัส)</button>
+            <button type="button" class="pill-btn" data-ratio="16:9">16:9 (แนวนอน)</button>
+            <button type="button" class="pill-btn" data-ratio="9:16">9:16 (แนวตั้ง)</button>
+            <button type="button" class="pill-btn" data-ratio="4:3">4:3</button>
+            <button type="button" class="pill-btn" data-ratio="3:4">3:4</button>
+          </div>
+          <div class="controls-row">
+            <div class="field">
+              <label for="crZoom">ซูม (Zoom): <span id="crZoomVal">100</span>%</label>
+              <input type="range" id="crZoom" min="100" max="250" value="100" class="input">
+            </div>
+            <div class="field">
+              <label for="crOffX">เลื่อนแนวนอน (X)</label>
+              <input type="range" id="crOffX" min="-100" max="100" value="0" class="input">
+            </div>
+            <div class="field">
+              <label for="crOffY">เลื่อนแนวตั้ง (Y)</label>
+              <input type="range" id="crOffY" min="-100" max="100" value="0" class="input">
+            </div>
+            <button type="button" class="btn btn-primary" id="crDownload" disabled>ดาวน์โหลดรูปที่ครอป</button>
+          </div>
+          <div class="preview-box" id="crPreviewWrap" style="display:none;">
+            <canvas id="crCanvas"></canvas>
+          </div>
+        `;
+        let srcImg = null;
+        let currentRatio = [1, 1];
+        const canvas = root.querySelector('#crCanvas');
+        const dlBtn = root.querySelector('#crDownload');
+        const zoomIn = root.querySelector('#crZoom');
+        const offXIn = root.querySelector('#crOffX');
+        const offYIn = root.querySelector('#crOffY');
+
+        function drawCrop() {
+          if (!srcImg) return;
+          const [rw, rh] = currentRatio;
+          const targetRatio = rw / rh;
+          const imgRatio = srcImg.width / srcImg.height;
+          let baseW, baseH;
+          if (imgRatio > targetRatio) {
+            baseH = srcImg.height;
+            baseW = baseH * targetRatio;
+          } else {
+            baseW = srcImg.width;
+            baseH = baseW / targetRatio;
+          }
+          const zoom = Number(zoomIn.value) / 100;
+          const cropW = baseW / zoom;
+          const cropH = baseH / zoom;
+          const maxShiftX = (srcImg.width - cropW) / 2;
+          const maxShiftY = (srcImg.height - cropH) / 2;
+          const sx = (srcImg.width - cropW) / 2 + (Number(offXIn.value) / 100) * maxShiftX;
+          const sy = (srcImg.height - cropH) / 2 + (Number(offYIn.value) / 100) * maxShiftY;
+
+          canvas.width = Math.round(cropW);
+          canvas.height = Math.round(cropH);
+          canvas.getContext('2d').drawImage(srcImg, sx, sy, cropW, cropH, 0, 0, canvas.width, canvas.height);
+          root.querySelector('#crPreviewWrap').style.display = 'block';
+          dlBtn.disabled = false;
+        }
+
+        root.querySelector('#crFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const { img } = await loadImageFile(f);
+          srcImg = img;
+          drawCrop();
+        });
+
+        root.querySelectorAll('#crRatios .pill-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            root.querySelectorAll('#crRatios .pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentRatio = btn.dataset.ratio.split(':').map(Number);
+            drawCrop();
+          });
+        });
+
+        [zoomIn, offXIn, offYIn].forEach(inp => inp.addEventListener('input', () => {
+          root.querySelector('#crZoomVal').textContent = zoomIn.value;
+          drawCrop();
+        }));
+
+        dlBtn.addEventListener('click', () => {
+          triggerDownload(canvas.toDataURL('image/png'), 'cropped.png');
+        });
+      },
+
+      /* 6. ดูดสีจากรูป */
+      'img-color': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="pkFile" accept="image/*">
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพที่ต้องการดูดสี</div>
+            <div class="dropzone-sub">คลิกบนจุดใดก็ได้ของรูปเพื่อดูรหัสสี HEX และ RGB พร้อมคัดลอก</div>
+          </label>
+          <div class="swatch-row" id="pkResult" style="display:none;">
+            <div class="color-chip" id="pkChip" style="background:#5848e5;"></div>
+            <div>
+              <div style="font-weight:700;font-size:15px;" id="pkHex">#5848E5</div>
+              <div style="font-size:12.5px;color:var(--muted);" id="pkRgb">rgb(88, 72, 229)</div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="pkCopyHex">คัดลอก HEX</button>
+            <button type="button" class="btn btn-secondary" id="pkCopyRgb">คัดลอก RGB</button>
+          </div>
+          <div class="preview-box" id="pkCanvasWrap" style="display:none;">
+            <canvas id="pkCanvas" style="cursor:crosshair;"></canvas>
+          </div>
+        `;
+        const canvas = root.querySelector('#pkCanvas');
+        const ctx = canvas.getContext('2d');
+        const hexEl = root.querySelector('#pkHex');
+        const rgbEl = root.querySelector('#pkRgb');
+        const chipEl = root.querySelector('#pkChip');
+
+        root.querySelector('#pkFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const { img } = await loadImageFile(f);
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          root.querySelector('#pkCanvasWrap').style.display = 'block';
+          root.querySelector('#pkResult').style.display = 'flex';
+        });
+
+        canvas.addEventListener('click', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const x = Math.floor((e.clientX - rect.left) * (canvas.width / rect.width));
+          const y = Math.floor((e.clientY - rect.top) * (canvas.height / rect.height));
+          const [r, g, b] = ctx.getImageData(x, y, 1, 1).data;
+          const hex = '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('').toUpperCase();
+          const rgb = `rgb(${r}, ${g}, ${b})`;
+          hexEl.textContent = hex;
+          rgbEl.textContent = rgb;
+          chipEl.style.background = hex;
+        });
+
+        root.querySelector('#pkCopyHex').addEventListener('click', (e) => {
+          navigator.clipboard?.writeText(hexEl.textContent);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = 'คัดลอก HEX'; }, 1200);
+        });
+
+        root.querySelector('#pkCopyRgb').addEventListener('click', (e) => {
+          navigator.clipboard?.writeText(rgbEl.textContent);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = 'คัดลอก RGB'; }, 1200);
+        });
+      },
+
+      /* 7. รวม PDF */
+      'pdf-merge': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="mgFiles" accept="application/pdf" multiple>
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF หลายไฟล์</div>
+            <div class="dropzone-sub">สามารถจัดเรียงลำดับไฟล์ขึ้น-ลง ก่อนกดรวมเป็นไฟล์เดียว</div>
+          </label>
+          <div class="file-list" id="mgList"></div>
+          <button type="button" class="btn btn-primary" id="mgRun" disabled>รวมไฟล์ PDF และดาวน์โหลด</button>
+          <div class="status-msg" id="mgStatus"></div>
+        `;
+        let files = [];
+        const listEl = root.querySelector('#mgList');
+        const runBtn = root.querySelector('#mgRun');
+        const statusEl = root.querySelector('#mgStatus');
+
+        function renderList() {
+          listEl.innerHTML = '';
+          files.forEach((f, idx) => {
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.innerHTML = `
+              <span>${idx + 1}. ${f.name} (${formatBytes(f.size)})</span>
+              <div style="display:flex;gap:4px;">
+                <button type="button" class="icon-btn" data-act="up" ${idx === 0 ? 'disabled' : ''}>↑</button>
+                <button type="button" class="icon-btn" data-act="down" ${idx === files.length - 1 ? 'disabled' : ''}>↓</button>
+                <button type="button" class="icon-btn" data-act="del">ลบ</button>
+              </div>
+            `;
+            item.querySelector('[data-act="up"]').addEventListener('click', () => {
+              [files[idx - 1], files[idx]] = [files[idx], files[idx - 1]];
+              renderList();
+            });
+            item.querySelector('[data-act="down"]').addEventListener('click', () => {
+              [files[idx + 1], files[idx]] = [files[idx], files[idx + 1]];
+              renderList();
+            });
+            item.querySelector('[data-act="del"]').addEventListener('click', () => {
+              files.splice(idx, 1);
+              renderList();
+            });
+            listEl.appendChild(item);
+          });
+          runBtn.disabled = files.length < 1;
+        }
+
+        root.querySelector('#mgFiles').addEventListener('change', (e) => {
+          files.push(...Array.from(e.target.files));
+          renderList();
+        });
+
+        runBtn.addEventListener('click', async () => {
+          statusEl.textContent = 'กำลังรวมไฟล์ PDF...';
+          const merged = await PDFLib.PDFDocument.create();
+          for (const f of files) {
+            const buf = await f.arrayBuffer();
+            const pdf = await PDFLib.PDFDocument.load(buf);
+            const copied = await merged.copyPages(pdf, pdf.getPageIndices());
+            copied.forEach(p => merged.addPage(p));
+          }
+          const bytes = await merged.save();
+          const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+          triggerDownload(url, 'merged.pdf');
+          statusEl.textContent = `รวมสำเร็จ (${merged.getPageCount()} หน้า)`;
+        });
+      },
+
+      /* 8. แยก PDF */
+      'pdf-split': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="spFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการแยกหน้า</div>
+            <div class="dropzone-sub" id="spInfo">ยังไม่ได้เลือกไฟล์</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="spRange">ระบุหน้าที่ต้องการดึง (เช่น 1, 3-5 หรือเว้นว่างเพื่อดึงทุกหน้า)</label>
+              <input type="text" id="spRange" class="input" placeholder="เช่น 1-3, 5">
+            </div>
+            <button type="button" class="btn btn-primary" id="spRun" disabled>แยกหน้า PDF และดาวน์โหลด</button>
+          </div>
+          <div class="status-msg" id="spStatus"></div>
+        `;
+        let pdfBytes = null;
+        let totalPages = 0;
+        const runBtn = root.querySelector('#spRun');
+        const infoEl = root.querySelector('#spInfo');
+        const statusEl = root.querySelector('#spStatus');
+
+        root.querySelector('#spFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          pdfBytes = await f.arrayBuffer();
+          const doc = await PDFLib.PDFDocument.load(pdfBytes);
+          totalPages = doc.getPageCount();
+          infoEl.textContent = `${f.name} — ทั้งหมด ${totalPages} หน้า`;
+          runBtn.disabled = false;
+        });
+
+        runBtn.addEventListener('click', async () => {
+          if (!pdfBytes) return;
+          const srcDoc = await PDFLib.PDFDocument.load(pdfBytes);
+          const raw = root.querySelector('#spRange').value.trim();
+          const indices = [];
+          if (!raw) {
+            for (let i = 0; i < totalPages; i++) indices.push(i);
+          } else {
+            raw.split(',').forEach(part => {
+              const p = part.trim();
+              if (p.includes('-')) {
+                const [a, b] = p.split('-').map(n => parseInt(n, 10));
+                for (let k = a; k <= b; k++) {
+                  if (k >= 1 && k <= totalPages) indices.push(k - 1);
+                }
+              } else {
+                const n = parseInt(p, 10);
+                if (n >= 1 && n <= totalPages) indices.push(n - 1);
+              }
+            });
+          }
+          if (indices.length === 0) {
+            statusEl.textContent = 'กรุณาระบุเลขหน้าให้อยู่ในช่วง 1 ถึง ' + totalPages;
+            return;
+          }
+          const outDoc = await PDFLib.PDFDocument.create();
+          const pages = await outDoc.copyPages(srcDoc, indices);
+          pages.forEach(p => outDoc.addPage(p));
+          const outBytes = await outDoc.save();
+          triggerDownload(URL.createObjectURL(new Blob([outBytes], { type: 'application/pdf' })), 'extracted-pages.pdf');
+          statusEl.textContent = `ดึงหน้าสำเร็จ (${indices.length} หน้า)`;
+        });
+      },
+
+      /* 9. ใส่เลขหน้า PDF */
+      'pdf-pagenum': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="pnFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการใส่เลขหน้า</div>
+            <div class="dropzone-sub" id="pnInfo">ยังไม่ได้เลือกไฟล์</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="pnPos">ตำแหน่ง</label>
+              <select id="pnPos" class="select">
+                <option value="bottom-center">ล่างกลาง</option>
+                <option value="bottom-right">ล่างขวา</option>
+                <option value="top-right">บนขวา</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pnFmt">รูปแบบเลขหน้า</label>
+              <select id="pnFmt" class="select">
+                <option value="n">1, 2, 3...</option>
+                <option value="of">1 / N</option>
+                <option value="page">Page 1 of N</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pnSize">ขนาดตัวอักษร</label>
+              <input type="number" id="pnSize" class="input" value="11" min="8" max="28">
+            </div>
+            <button type="button" class="btn btn-primary" id="pnRun" disabled>ใส่เลขหน้าและดาวน์โหลด</button>
+          </div>
+          <div class="status-msg" id="pnStatus"></div>
+        `;
+        let buf = null;
+        const runBtn = root.querySelector('#pnRun');
+
+        root.querySelector('#pnFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          buf = await f.arrayBuffer();
+          const doc = await PDFLib.PDFDocument.load(buf);
+          root.querySelector('#pnInfo').textContent = `${f.name} (${doc.getPageCount()} หน้า)`;
+          runBtn.disabled = false;
+        });
+
+        runBtn.addEventListener('click', async () => {
+          const doc = await PDFLib.PDFDocument.load(buf);
+          const font = await doc.embedFont(PDFLib.StandardFonts.Helvetica);
+          const pages = doc.getPages();
+          const total = pages.length;
+          const pos = root.querySelector('#pnPos').value;
+          const fmt = root.querySelector('#pnFmt').value;
+          const size = Number(root.querySelector('#pnSize').value) || 11;
+
+          pages.forEach((p, idx) => {
+            const { width, height } = p.getSize();
+            const num = idx + 1;
+            const text = fmt === 'of' ? `${num} / ${total}` : fmt === 'page' ? `Page ${num} of ${total}` : `${num}`;
+            const tw = font.widthOfTextAtSize(text, size);
+            let x = (width - tw) / 2;
+            let y = 24;
+            if (pos === 'bottom-right') { x = width - tw - 32; y = 24; }
+            if (pos === 'top-right') { x = width - tw - 32; y = height - 32; }
+            p.drawText(text, { x, y, size, font, color: PDFLib.rgb(0.25, 0.25, 0.3) });
+          });
+
+          const bytes = await doc.save();
+          triggerDownload(URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })), 'numbered.pdf');
+          root.querySelector('#pnStatus').textContent = 'ใส่เลขหน้าครบทุกหน้าเรียบร้อยแล้ว';
+        });
+      },
+
+      /* 10. จัดหน้า PDF */
+      'pdf-organize': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="orgFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF เพื่อดูตัวอย่างและจัดเรียงหน้า</div>
+            <div class="dropzone-sub">สามารถสลับหน้า หมุนทีละหน้า หรือลบหน้าที่ไม่ต้องการได้</div>
+          </label>
+          <button type="button" class="btn btn-primary" id="orgSave" disabled>บันทึก PDF ที่จัดหน้าแล้ว</button>
+          <div class="page-grid" id="orgGrid"></div>
+        `;
+        let rawBytes = null;
+        let pageStates = []; // [{ origIndex, rot }]
+        const gridEl = root.querySelector('#orgGrid');
+        const saveBtn = root.querySelector('#orgSave');
+
+        async function renderPages() {
+          gridEl.innerHTML = '';
+          if (!rawBytes) return;
+          const pdf = await window.pdfjsLib.getDocument({ data: rawBytes.slice(0) }).promise;
+
+          for (let i = 0; i < pageStates.length; i++) {
+            const st = pageStates[i];
+            const page = await pdf.getPage(st.origIndex + 1);
+            const vp = page.getViewport({ scale: 0.35, rotation: st.rot });
+            const card = document.createElement('div');
+            card.className = 'page-card';
+            const c = document.createElement('canvas');
+            c.width = vp.width;
+            c.height = vp.height;
+            await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+
+            const lbl = document.createElement('div');
+            lbl.style.fontSize = '12px';
+            lbl.style.marginTop = '4px';
+            lbl.textContent = `หน้า ${i + 1} (เดิม ${st.origIndex + 1})`;
+
+            const acts = document.createElement('div');
+            acts.className = 'page-actions';
+            acts.innerHTML = `
+              <button type="button" class="icon-btn" title="เลื่อนซ้าย">←</button>
+              <button type="button" class="icon-btn" title="เลื่อนขวา">→</button>
+              <button type="button" class="icon-btn" title="หมุน 90°">↻</button>
+              <button type="button" class="icon-btn" title="ลบหน้า">✕</button>
+            `;
+            const [bLeft, bRight, bRot, bDel] = acts.querySelectorAll('button');
+            bLeft.disabled = i === 0;
+            bRight.disabled = i === pageStates.length - 1;
+            bLeft.addEventListener('click', () => {
+              [pageStates[i - 1], pageStates[i]] = [pageStates[i], pageStates[i - 1]];
+              renderPages();
+            });
+            bRight.addEventListener('click', () => {
+              [pageStates[i + 1], pageStates[i]] = [pageStates[i], pageStates[i + 1]];
+              renderPages();
+            });
+            bRot.addEventListener('click', () => {
+              st.rot = (st.rot + 90) % 360;
+              renderPages();
+            });
+            bDel.addEventListener('click', () => {
+              if (pageStates.length > 1) {
+                pageStates.splice(i, 1);
+                renderPages();
+              }
+            });
+
+            card.append(c, lbl, acts);
+            gridEl.appendChild(card);
+          }
+          saveBtn.disabled = pageStates.length === 0;
+        }
+
+        root.querySelector('#orgFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          rawBytes = await f.arrayBuffer();
+          const doc = await PDFLib.PDFDocument.load(rawBytes);
+          pageStates = doc.getPageIndices().map(idx => ({ origIndex: idx, rot: 0 }));
+          renderPages();
+        });
+
+        saveBtn.addEventListener('click', async () => {
+          const src = await PDFLib.PDFDocument.load(rawBytes);
+          const out = await PDFLib.PDFDocument.create();
+          for (const st of pageStates) {
+            const [p] = await out.copyPages(src, [st.origIndex]);
+            const cur = p.getRotation().angle;
+            p.setRotation(PDFLib.degrees((cur + st.rot) % 360));
+            out.addPage(p);
+          }
+          const bytes = await out.save();
+          triggerDownload(URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })), 'organized.pdf');
+        });
+      },
+
+      /* 11. หมุน PDF */
+      'pdf-rotate': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="rtFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการหมุนทุกหน้า</div>
+            <div class="dropzone-sub" id="rtInfo">ยังไม่ได้เลือกไฟล์</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="rtDeg">องศาการหมุน</label>
+              <select id="rtDeg" class="select">
+                <option value="90">หมุนตามเข็ม 90°</option>
+                <option value="180">กลับหัว 180°</option>
+                <option value="270">หมุนทวนเข็ม 90° (270°)</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="rtRun" disabled>หมุนทุกหน้าและดาวน์โหลด</button>
+          </div>
+          <div class="status-msg" id="rtStatus"></div>
+        `;
+        let buf = null;
+        const runBtn = root.querySelector('#rtRun');
+
+        root.querySelector('#rtFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          buf = await f.arrayBuffer();
+          const doc = await PDFLib.PDFDocument.load(buf);
+          root.querySelector('#rtInfo').textContent = `${f.name} (${doc.getPageCount()} หน้า)`;
+          runBtn.disabled = false;
+        });
+
+        runBtn.addEventListener('click', async () => {
+          const doc = await PDFLib.PDFDocument.load(buf);
+          const deg = Number(root.querySelector('#rtDeg').value);
+          doc.getPages().forEach(p => {
+            const cur = p.getRotation().angle;
+            p.setRotation(PDFLib.degrees((cur + deg) % 360));
+          });
+          const bytes = await doc.save();
+          triggerDownload(URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })), 'rotated.pdf');
+          root.querySelector('#rtStatus').textContent = `หมุนทุกหน้า ${deg}° เรียบร้อยแล้ว`;
+        });
+      },
+
+      /* 12. รูปเป็น PDF */
+      'img-to-pdf': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="itpFiles" accept="image/*" multiple>
+            <div class="dropzone-title">คลิกเพื่อเลือกรูปภาพหลายรูป (JPG / PNG / WebP)</div>
+            <div class="dropzone-sub">รวมรูปภาพทุกใบเป็นไฟล์ PDF ไฟล์เดียว</div>
+          </label>
+          <div class="file-list" id="itpList"></div>
+          <button type="button" class="btn btn-primary" id="itpRun" disabled>สร้างไฟล์ PDF และดาวน์โหลด</button>
+          <div class="status-msg" id="itpStatus"></div>
+        `;
+        let imgFiles = [];
+        const listEl = root.querySelector('#itpList');
+        const runBtn = root.querySelector('#itpRun');
+
+        function renderImgs() {
+          listEl.innerHTML = '';
+          imgFiles.forEach((f, idx) => {
+            const el = document.createElement('div');
+            el.className = 'file-item';
+            el.innerHTML = `<span>${idx + 1}. ${f.name}</span><button type="button" class="icon-btn">ลบ</button>`;
+            el.querySelector('button').addEventListener('click', () => {
+              imgFiles.splice(idx, 1);
+              renderImgs();
+            });
+            listEl.appendChild(el);
+          });
+          runBtn.disabled = imgFiles.length === 0;
+        }
+
+        root.querySelector('#itpFiles').addEventListener('change', (e) => {
+          imgFiles.push(...Array.from(e.target.files));
+          renderImgs();
+        });
+
+        runBtn.addEventListener('click', async () => {
+          const doc = await PDFLib.PDFDocument.create();
+          for (const f of imgFiles) {
+            const { img } = await loadImageFile(f);
+            const c = document.createElement('canvas');
+            c.width = img.width;
+            c.height = img.height;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0);
+            const jpgDataUrl = c.toDataURL('image/jpeg', 0.92);
+            const embedded = await doc.embedJpg(jpgDataUrl);
+            const page = doc.addPage([img.width, img.height]);
+            page.drawImage(embedded, { x: 0, y: 0, width: img.width, height: img.height });
+          }
+          const bytes = await doc.save();
+          triggerDownload(URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })), 'images.pdf');
+          root.querySelector('#itpStatus').textContent = `สร้าง PDF จากรูปภาพ ${imgFiles.length} รูปสำเร็จ`;
+        });
+      },
+
+      /* 13. PDF เป็นรูป */
+      'pdf-to-img': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="ptiFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการแปลงเป็นรูปภาพ</div>
+            <div class="dropzone-sub">แปลงทุกหน้าเป็นไฟล์ JPG หรือ PNG ความคมชัดสูง</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="ptiFmt">รูปแบบไฟล์รูป</label>
+              <select id="ptiFmt" class="select">
+                <option value="image/png">PNG (.png)</option>
+                <option value="image/jpeg">JPG (.jpg)</option>
+              </select>
+            </div>
+          </div>
+          <div class="page-grid" id="ptiGrid"></div>
+        `;
+        const gridEl = root.querySelector('#ptiGrid');
+        const fmtSel = root.querySelector('#ptiFmt');
+
+        root.querySelector('#ptiFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          gridEl.innerHTML = '<div class="status-msg">กำลังแปลงหน้า PDF เป็นรูปภาพ...</div>';
+          const buf = await f.arrayBuffer();
+          const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+          gridEl.innerHTML = '';
+
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const vp = page.getViewport({ scale: 1.5 });
+            const c = document.createElement('canvas');
+            c.width = vp.width;
+            c.height = vp.height;
+            await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+
+            const card = document.createElement('div');
+            card.className = 'page-card';
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn btn-secondary';
+            btn.style.marginTop = '6px';
+            btn.style.width = '100%';
+            btn.style.padding = '6px';
+            btn.style.fontSize = '12px';
+            btn.textContent = `ดาวน์โหลดหน้า ${i}`;
+            btn.addEventListener('click', () => {
+              const ext = fmtSel.value === 'image/png' ? 'png' : 'jpg';
+              triggerDownload(c.toDataURL(fmtSel.value, 0.92), `page-${i}.${ext}`);
+            });
+            card.append(c, btn);
+            gridEl.appendChild(card);
+          }
+        });
+      },
+
+      /* 14. ใส่ลายน้ำ PDF (รองรับภาษาไทย) */
+      'pdf-watermark': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="wmFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการใส่ลายน้ำ</div>
+            <div class="dropzone-sub" id="wmInfo">รองรับข้อความภาษาไทยและภาษาอังกฤษ</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="wmText">ข้อความลายน้ำ</label>
+              <input type="text" id="wmText" class="input" value="สำเนาถูกต้อง - ใช้เฉพาะกิจเท่านั้น">
+            </div>
+            <div class="field">
+              <label for="wmOpacity">ความโปร่งใส: <span id="wmOpVal">25</span>%</label>
+              <input type="range" id="wmOpacity" min="8" max="75" value="25" class="input">
+            </div>
+            <button type="button" class="btn btn-primary" id="wmRun" disabled>ใส่ลายน้ำทุกหน้าและดาวน์โหลด</button>
+          </div>
+          <div class="status-msg" id="wmStatus"></div>
+        `;
+        let buf = null;
+        const runBtn = root.querySelector('#wmRun');
+        const opIn = root.querySelector('#wmOpacity');
+
+        opIn.addEventListener('input', () => {
+          root.querySelector('#wmOpVal').textContent = opIn.value;
+        });
+
+        root.querySelector('#wmFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          buf = await f.arrayBuffer();
+          const doc = await PDFLib.PDFDocument.load(buf);
+          root.querySelector('#wmInfo').textContent = `${f.name} (${doc.getPageCount()} หน้า)`;
+          runBtn.disabled = false;
+        });
+
+        runBtn.addEventListener('click', async () => {
+          const text = root.querySelector('#wmText').value.trim() || 'CONFIDENTIAL';
+          const alpha = Number(opIn.value) / 100;
+
+          // Render Thai watermark stamp on canvas -> embed as transparent PNG
+          const stampCanvas = document.createElement('canvas');
+          stampCanvas.width = 800;
+          stampCanvas.height = 300;
+          const sctx = stampCanvas.getContext('2d');
+          sctx.clearRect(0, 0, 800, 300);
+          sctx.save();
+          sctx.translate(400, 150);
+          sctx.rotate(-Math.PI / 8);
+          sctx.font = '700 44px "Noto Sans Thai", sans-serif';
+          sctx.fillStyle = `rgba(88, 72, 229, ${alpha})`;
+          sctx.textAlign = 'center';
+          sctx.textBaseline = 'middle';
+          sctx.fillText(text, 0, 0);
+          sctx.restore();
+
+          const pngUrl = stampCanvas.toDataURL('image/png');
+          const doc = await PDFLib.PDFDocument.load(buf);
+          const wmImg = await doc.embedPng(pngUrl);
+
+          doc.getPages().forEach(p => {
+            const { width, height } = p.getSize();
+            const w = Math.min(width * 0.85, 480);
+            const h = w * (300 / 800);
+            p.drawImage(wmImg, {
+              x: (width - w) / 2,
+              y: (height - h) / 2,
+              width: w,
+              height: h
+            });
+          });
+
+          const bytes = await doc.save();
+          triggerDownload(URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })), 'watermarked.pdf');
+          root.querySelector('#wmStatus').textContent = 'ใส่ลายน้ำภาษาไทยครบทุกหน้าเรียบร้อยแล้ว';
+        });
+      },
+
+      /* 15. บีบอัด PDF */
+      'pdf-compress': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="pcFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการลดขนาด</div>
+            <div class="dropzone-sub" id="pcInfo">ลดขนาดไฟล์ PDF ที่มีรูปภาพจำนวนมาก</div>
+          </label>
+          <div class="controls-row">
+            <div class="field">
+              <label for="pcQual">ระดับการบีบอัด</label>
+              <select id="pcQual" class="select">
+                <option value="0.65">บีบอัดปานกลาง (แนะนำ - ภาพยังคมชัด)</option>
+                <option value="0.45">บีบอัดสูง (ไฟล์เล็กมาก)</option>
+                <option value="0.8">บีบอัดน้อย (เน้นความคมชัดสูง)</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="pcRun" disabled>บีบอัด PDF และดาวน์โหลด</button>
+          </div>
+          <div class="stat-grid" id="pcStats" style="display:none;">
+            <div class="stat-card"><div class="stat-val" id="pcOld">-</div><div class="stat-lbl">ขนาดเดิม</div></div>
+            <div class="stat-card"><div class="stat-val" id="pcNew">-</div><div class="stat-lbl">ขนาดหลังบีบอัด</div></div>
+          </div>
+          <div class="status-msg" id="pcStatus"></div>
+        `;
+        let rawFile = null;
+        let rawBuf = null;
+        const runBtn = root.querySelector('#pcRun');
+
+        root.querySelector('#pcFile').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          rawFile = f;
+          rawBuf = await f.arrayBuffer();
+          root.querySelector('#pcInfo').textContent = `${f.name} (${formatBytes(f.size)})`;
+          runBtn.disabled = false;
+        });
+
+        runBtn.addEventListener('click', async () => {
+          const statusEl = root.querySelector('#pcStatus');
+          statusEl.textContent = 'กำลังบีบอัดหน้า PDF...';
+          const q = Number(root.querySelector('#pcQual').value);
+          const pdf = await window.pdfjsLib.getDocument({ data: rawBuf.slice(0) }).promise;
+          const outDoc = await PDFLib.PDFDocument.create();
+
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const vp = page.getViewport({ scale: 1.2 });
+            const c = document.createElement('canvas');
+            c.width = vp.width;
+            c.height = vp.height;
+            await page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+            const jpgUrl = c.toDataURL('image/jpeg', q);
+            const img = await outDoc.embedJpg(jpgUrl);
+            const origVp = page.getViewport({ scale: 1.0 });
+            const p = outDoc.addPage([origVp.width, origVp.height]);
+            p.drawImage(img, { x: 0, y: 0, width: origVp.width, height: origVp.height });
+          }
+
+          const outBytes = await outDoc.save({ useObjectStreams: true });
+          const finalBytes = outBytes.byteLength < rawBuf.byteLength ? outBytes : new Uint8Array(rawBuf);
+          root.querySelector('#pcStats').style.display = 'grid';
+          root.querySelector('#pcOld').textContent = formatBytes(rawFile.size);
+          root.querySelector('#pcNew').textContent = formatBytes(finalBytes.byteLength);
+          triggerDownload(URL.createObjectURL(new Blob([finalBytes], { type: 'application/pdf' })), 'compressed.pdf');
+          statusEl.textContent = 'บีบอัด PDF เสร็จสมบูรณ์';
+        });
+      },
+
+      /* 16. ย่อลิงก์ */
+      'short-link': (root) => {
+        // Check if current URL has #u= redirect hash
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field" style="flex:2;">
+              <label for="slUrl">วางลิงก์ยาวที่ต้องการย่อ (URL)</label>
+              <input type="url" id="slUrl" class="input" placeholder="about:invalid#zPythonSafez">
+            </div>
+            <div class="field">
+              <label for="slAlias">ตั้งชื่อสั้นๆ (ไม่บังคับ)</label>
+              <input type="text" id="slAlias" class="input" placeholder="เช่น promo25">
+            </div>
+            <button type="button" class="btn btn-primary" id="slCreate">ย่อลิงก์</button>
+          </div>
+          <div id="slError" style="color:var(--danger);font-size:13px;margin-bottom:8px;"></div>
+          <div class="file-list" id="slList"></div>
+        `;
+        const urlIn = root.querySelector('#slUrl');
+        const aliasIn = root.querySelector('#slAlias');
+        const errEl = root.querySelector('#slError');
+        const listEl = root.querySelector('#slList');
+        const links = [];
+
+        function hashCode(str) {
+          let h = 2166136261;
+          for (let i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+          }
+          return (h >>> 0).toString(36).slice(0, 6);
+        }
+
+        function renderLinks() {
+          listEl.innerHTML = '';
+          links.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'file-item';
+            row.innerHTML = `
+              <div style="min-width:0;flex:1;">
+                <div style="font-weight:700;color:var(--brand);font-size:14px;">${item.shortText}</div>
+                <div style="font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.longUrl}</div>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button type="button" class="btn btn-secondary" data-copy="short" style="padding:6px 10px;font-size:12px;">คัดลอกลิงก์สั้น</button>
+              </div>
+            `;
+            row.querySelector('[data-copy="short"]').addEventListener('click', (e) => {
+              navigator.clipboard?.writeText(item.shortText);
+              e.target.textContent = 'คัดลอกแล้ว!';
+              setTimeout(() => { e.target.textContent = 'คัดลอกลิงก์สั้น'; }, 1200);
+            });
+            listEl.appendChild(row);
+          });
+        }
+
+        root.querySelector('#slCreate').addEventListener('click', () => {
+          errEl.textContent = '';
+          let raw = urlIn.value.trim();
+          if (!raw) {
+            errEl.textContent = 'กรุณากรอกลิงก์ที่ต้องการย่อ';
+            return;
+          }
+          if (!/^https?:\/\//i.test(raw)) raw = 'https://' + raw;
+          try {
+            new URL(raw);
+          } catch {
+            errEl.textContent = 'รูปแบบลิงก์ไม่ถูกต้อง';
+            return;
+          }
+          const code = (aliasIn.value.trim().replace(/[^a-zA-Z0-9_-]/g, '') || hashCode(raw));
+          const shortText = `utl.to/${code}`;
+          links.unshift({ code, shortText, longUrl: raw });
+          urlIn.value = '';
+          aliasIn.value = '';
+          renderLinks();
+        });
+      },
+
+      /* 17. สร้าง QR Code */
+      'qr-code': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field" style="flex:2;">
+              <label for="qrText">ข้อความหรือลิงก์ URL</label>
+              <input type="text" id="qrText" class="input" value="about:invalid#zPythonSafez" placeholder="วางลิงก์หรือข้อความ...">
+            </div>
+            <div class="field" style="max-width:110px;">
+              <label for="qrFg">สีลาย QR</label>
+              <input type="color" id="qrFg" class="input" value="#1e2024" style="height:39px;padding:4px;">
+            </div>
+            <div class="field" style="max-width:110px;">
+              <label for="qrBg">สีพื้นหลัง</label>
+              <input type="color" id="qrBg" class="input" value="#ffffff" style="height:39px;padding:4px;">
+            </div>
+          </div>
+          <div class="controls-row">
+            <div class="field">
+              <label for="qrLogo">ใส่โลโก้ตรงกลาง (ไม่บังคับ)</label>
+              <input type="file" id="qrLogo" accept="image/*" class="input">
+            </div>
+            <button type="button" class="btn btn-primary" id="qrDlPng">ดาวน์โหลด PNG</button>
+            <button type="button" class="btn btn-secondary" id="qrDlSvg">ดาวน์โหลด SVG</button>
+          </div>
+          <div class="preview-box">
+            <canvas id="qrCanvas" width="280" height="280"></canvas>
+          </div>
+        `;
+        let logoImg = null;
+        let svgMarkup = '';
+        const textIn = root.querySelector('#qrText');
+        const fgIn = root.querySelector('#qrFg');
+        const bgIn = root.querySelector('#qrBg');
+        const canvas = root.querySelector('#qrCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function renderQr() {
+          const val = textIn.value.trim() || 'about:invalid#zPythonSafez';
+          const fg = fgIn.value;
+          const bg = bgIn.value;
+          const qr = window.qrcode(0, 'H');
+          qr.addData(val);
+          qr.make();
+          const count = qr.getModuleCount();
+          const size = 280;
+          const margin = 16;
+          const cell = (size - margin * 2) / count;
+
+          ctx.fillStyle = bg;
+          ctx.fillRect(0, 0, size, size);
+          ctx.fillStyle = fg;
+
+          let svgRects = `<rect width="${size}" height="${size}" fill="${bg}"/>`;
+          for (let r = 0; r < count; r++) {
+            for (let c = 0; c < count; c++) {
+              if (qr.isDark(r, c)) {
+                const x = margin + c * cell;
+                const y = margin + r * cell;
+                ctx.fillRect(x, y, Math.ceil(cell), Math.ceil(cell));
+                svgRects += `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${cell.toFixed(2)}" height="${cell.toFixed(2)}" fill="${fg}"/>`;
+              }
+            }
+          }
+
+          if (logoImg) {
+            const ls = 60;
+            const lx = (size - ls) / 2;
+            const ly = (size - ls) / 2;
+            ctx.fillStyle = bg;
+            ctx.fillRect(lx - 4, ly - 4, ls + 8, ls + 8);
+            ctx.drawImage(logoImg, lx, ly, ls, ls);
+          }
+
+          svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">${svgRects}</svg>`;
+        }
+
+        [textIn, fgIn, bgIn].forEach(el => el.addEventListener('input', renderQr));
+
+        root.querySelector('#qrLogo').addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) { logoImg = null; renderQr(); return; }
+          const { img } = await loadImageFile(f);
+          logoImg = img;
+          renderQr();
+        });
+
+        root.querySelector('#qrDlPng').addEventListener('click', () => {
+          triggerDownload(canvas.toDataURL('image/png'), 'qrcode.png');
+        });
+
+        root.querySelector('#qrDlSvg').addEventListener('click', () => {
+          const blob = new Blob([svgMarkup], { type: 'image/svg+xml' });
+          triggerDownload(URL.createObjectURL(blob), 'qrcode.svg');
+        });
+
+        renderQr();
+      },
+
+      /* 18. นับคำ / ตัวอักษร */
+      'word-count': (root) => {
+        root.innerHTML = `
+          <div class="field">
+            <label for="wcText">พิมพ์หรือวางข้อความภาษาไทย / อังกฤษ</label>
+            <textarea id="wcText" class="textarea" placeholder="พิมพ์หรือวางข้อความที่นี่ ระบบจะนับคำภาษาไทย-อังกฤษ ตัวอักษร และบรรทัดแบบเรียลไทม์..."></textarea>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-val" id="wcWords">0</div><div class="stat-lbl">คำ (ไทย-อังกฤษ)</div></div>
+            <div class="stat-card"><div class="stat-val" id="wcChars">0</div><div class="stat-lbl">ตัวอักษรทั้งหมด</div></div>
+            <div class="stat-card"><div class="stat-val" id="wcNoSpace">0</div><div class="stat-lbl">ไม่รวมเว้นวรรค</div></div>
+            <div class="stat-card"><div class="stat-val" id="wcLines">0</div><div class="stat-lbl">บรรทัด</div></div>
+          </div>
+        `;
+        const ta = root.querySelector('#wcText');
+        const segmenter = (typeof Intl !== 'undefined' && Intl.Segmenter)
+          ? new Intl.Segmenter('th', { granularity: 'word' })
+          : null;
+
+        function updateCounts() {
+          const text = ta.value;
+          const chars = Array.from(text).length;
+          const noSpace = Array.from(text.replace(/\s+/g, '')).length;
+          const lines = text.length === 0 ? 0 : text.split(/\r\n|\r|\n/).length;
+          let words = 0;
+          if (text.trim().length > 0) {
+            if (segmenter) {
+              for (const seg of segmenter.segment(text)) {
+                if (seg.isWordLike) words++;
+              }
+            } else {
+              words = text.trim().split(/\s+/).length;
+            }
+          }
+          root.querySelector('#wcWords').textContent = words.toLocaleString();
+          root.querySelector('#wcChars').textContent = chars.toLocaleString();
+          root.querySelector('#wcNoSpace').textContent = noSpace.toLocaleString();
+          root.querySelector('#wcLines').textContent = lines.toLocaleString();
+        }
+
+        ta.addEventListener('input', updateCounts);
+      },
+
+      /* 19. สุ่มรหัสผ่าน */
+      'password-gen': (root) => {
+        root.innerHTML = `
+          <div class="preview-box" style="margin-top:0;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <code id="pwOut" style="font-size:20px;font-weight:700;color:var(--brand);word-break:break-all;"></code>
+            <div style="display:flex;gap:8px;flex-shrink:0;">
+              <button type="button" class="btn btn-secondary" id="pwCopy">คัดลอก</button>
+              <button type="button" class="btn btn-primary" id="pwRegen">สุ่มใหม่</button>
+            </div>
+          </div>
+          <div class="controls-row">
+            <div class="field">
+              <label for="pwLen">ความยาวรหัสผ่าน: <span id="pwLenVal">16</span> ตัวอักษร</label>
+              <input type="range" id="pwLen" min="6" max="48" value="16" class="input">
+            </div>
+          </div>
+          <div class="controls-row" style="gap:18px;">
+            <label><input type="checkbox" id="pwUpper" checked> ตัวพิมพ์ใหญ่ (A-Z)</label>
+            <label><input type="checkbox" id="pwLower" checked> ตัวพิมพ์เล็ก (a-z)</label>
+            <label><input type="checkbox" id="pwNum" checked> ตัวเลข (0-9)</label>
+            <label><input type="checkbox" id="pwSym" checked> อักขระพิเศษ (!@#$%)</label>
+          </div>
+        `;
+        const lenIn = root.querySelector('#pwLen');
+        const outEl = root.querySelector('#pwOut');
+
+        function generatePw() {
+          let pool = '';
+          if (root.querySelector('#pwUpper').checked) pool += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          if (root.querySelector('#pwLower').checked) pool += 'abcdefghijklmnopqrstuvwxyz';
+          if (root.querySelector('#pwNum').checked) pool += '0123456789';
+          if (root.querySelector('#pwSym').checked) pool += '!@#$%^&*()_+-=[]{}';
+          if (!pool) pool = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+          const len = Number(lenIn.value);
+          const arr = new Uint32Array(len);
+          crypto.getRandomValues(arr);
+          let res = '';
+          for (let i = 0; i < len; i++) {
+            res += pool[arr[i] % pool.length];
+          }
+          outEl.textContent = res;
+        }
+
+        lenIn.addEventListener('input', () => {
+          root.querySelector('#pwLenVal').textContent = lenIn.value;
+          generatePw();
+        });
+
+        ['#pwUpper', '#pwLower', '#pwNum', '#pwSym'].forEach(sel => {
+          root.querySelector(sel).addEventListener('change', generatePw);
+        });
+
+        root.querySelector('#pwRegen').addEventListener('click', generatePw);
+        root.querySelector('#pwCopy').addEventListener('click', (e) => {
+          navigator.clipboard?.writeText(outEl.textContent);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = 'คัดลอก'; }, 1200);
+        });
+
+        generatePw();
+      },
+
+      /* 20. สุ่มชื่อ / จับฉลาก */
+      'random-picker': (root) => {
+        root.innerHTML = `
+          <div class="field" style="margin-bottom:14px;">
+            <label for="rpNames">ใส่รายชื่อ (บรรทัดละ 1 ชื่อ)</label>
+            <textarea id="rpNames" class="textarea" placeholder="สมชาย\nสมหญิง\nกิตติ\nพิมพ์ชนก\nธนกร\nณัฐวุฒิ"></textarea>
+          </div>
+          <div class="controls-row">
+            <div class="field">
+              <label for="rpCount">จำนวนผู้โชคดี หรือ จำนวนกลุ่ม</label>
+              <input type="number" id="rpCount" class="input" value="1" min="1" max="100">
+            </div>
+            <button type="button" class="btn btn-primary" id="rpPick">สุ่มจับฉลากผู้โชคดี</button>
+            <button type="button" class="btn btn-secondary" id="rpGroup">แบ่งกลุ่มแบบสุ่ม</button>
+          </div>
+          <div class="preview-box" id="rpResult" style="display:none;text-align:left;"></div>
+        `;
+        const namesIn = root.querySelector('#rpNames');
+        const countIn = root.querySelector('#rpCount');
+        const resBox = root.querySelector('#rpResult');
+
+        function getShuffled() {
+          const list = namesIn.value
+            .split(/\r\n|\r|\n/)
+            .map(s => s.trim())
+            .filter(Boolean);
+          for (let i = list.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [list[i], list[j]] = [list[j], list[i]];
+          }
+          return list;
+        }
+
+        root.querySelector('#rpPick').addEventListener('click', () => {
+          const list = getShuffled();
+          resBox.style.display = 'block';
+          if (list.length === 0) {
+            resBox.innerHTML = '<div style="color:var(--danger);">กรุณาใส่รายชื่ออย่างน้อย 1 ชื่อ</div>';
+            return;
+          }
+          const n = Math.min(list.length, Math.max(1, parseInt(countIn.value, 10) || 1));
+          const winners = list.slice(0, n);
+          resBox.innerHTML = `
+            <div style="font-weight:700;margin-bottom:8px;color:var(--brand);">ผลการสุ่มผู้โชคดี (${n} รายชื่อ):</div>
+            <ol style="margin:0;padding-left:20px;">
+              ${winners.map(w => `<li style="font-weight:600;margin-bottom:4px;">${w}</li>`).join('')}
+            </ol>
+          `;
+        });
+
+        root.querySelector('#rpGroup').addEventListener('click', () => {
+          const list = getShuffled();
+          resBox.style.display = 'block';
+          if (list.length === 0) {
+            resBox.innerHTML = '<div style="color:var(--danger);">กรุณาใส่รายชื่ออย่างน้อย 1 ชื่อ</div>';
+            return;
+          }
+          const gCount = Math.min(list.length, Math.max(1, parseInt(countIn.value, 10) || 2));
+          const groups = Array.from({ length: gCount }, () => []);
+          list.forEach((name, idx) => groups[idx % gCount].push(name));
+          resBox.innerHTML = `
+            <div style="font-weight:700;margin-bottom:10px;color:var(--brand);">ผลการแบ่งกลุ่ม (${gCount} กลุ่ม):</div>
+            <div class="tool-grid">
+              ${groups.map((g, i) => `
+                <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px;">
+                  <div style="font-weight:700;font-size:13px;margin-bottom:4px;">กลุ่มที่ ${i + 1} (${g.length} คน)</div>
+                  <div style="font-size:13px;color:#454b57;">${g.join(', ')}</div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        });
+      },
+
+      /* 21. สุ่มตัวเลข */
+      'number-gen': (root) => {
+        root.innerHTML = `
+          <div class="pill-group" id="numType">
+            <button type="button" class="pill-btn active" data-type="2">สุ่มเลข 2 หลัก</button>
+            <button type="button" class="pill-btn" data-type="3">สุ่มเลข 3 หลัก</button>
+            <button type="button" class="pill-btn" data-type="6">สุ่มเลข 6 หลัก</button>
+            <button type="button" class="pill-btn" data-type="custom">กำหนดช่วงเอง</button>
+          </div>
+          <div class="controls-row" id="numCustomRange" style="display:none; margin-top: 14px;">
+            <div class="field">
+              <label for="numMin">ค่าเริ่มต้น (Min)</label>
+              <input type="number" id="numMin" class="input" value="1">
+            </div>
+            <div class="field">
+              <label for="numMax">ค่าสิ้นสุด (Max)</label>
+              <input type="number" id="numMax" class="input" value="100">
+            </div>
+          </div>
+          <div class="controls-row" style="margin-top: 14px;">
+            <div class="field">
+              <label for="numQty">จำนวนชุดที่ต้องการสุ่ม</label>
+              <input type="number" id="numQty" class="input" value="1" min="1" max="100">
+            </div>
+            <button type="button" class="btn btn-primary" id="numRun">สุ่มตัวเลข</button>
+          </div>
+          <div class="preview-box" id="numResult" style="display:none; margin-top: 20px;">
+            <div style="font-weight:700;margin-bottom:12px;color:var(--brand);font-size:14px; text-align: left;">ผลการสุ่มตัวเลข:</div>
+            <div id="numResultList" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;"></div>
+          </div>
+        `;
+
+        const typeBtns = root.querySelectorAll('#numType .pill-btn');
+        const customRange = root.querySelector('#numCustomRange');
+        const minIn = root.querySelector('#numMin');
+        const maxIn = root.querySelector('#numMax');
+        const qtyIn = root.querySelector('#numQty');
+        const runBtn = root.querySelector('#numRun');
+        const resBox = root.querySelector('#numResult');
+        const resList = root.querySelector('#numResultList');
+
+        let currentType = '2';
+
+        typeBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            typeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentType = btn.dataset.type;
+            if (currentType === 'custom') {
+              customRange.style.display = 'flex';
+            } else {
+              customRange.style.display = 'none';
+            }
+          });
+        });
+
+        runBtn.addEventListener('click', () => {
+          resBox.style.display = 'block';
+          resList.innerHTML = '';
+          const qty = Math.max(1, parseInt(qtyIn.value, 10) || 1);
+          const results = [];
+
+          for (let i = 0; i < qty; i++) {
+            let numStr = '';
+            if (currentType === '2') {
+              const val = Math.floor(Math.random() * 100);
+              numStr = val.toString().padStart(2, '0');
+            } else if (currentType === '3') {
+              const val = Math.floor(Math.random() * 1000);
+              numStr = val.toString().padStart(3, '0');
+            } else if (currentType === '6') {
+              const val = Math.floor(Math.random() * 1000000);
+              numStr = val.toString().padStart(6, '0');
+            } else {
+              const min = parseInt(minIn.value, 10) || 0;
+              const max = parseInt(maxIn.value, 10) || 100;
+              if (min > max) {
+                resList.innerHTML = '<div style="color:var(--danger);">ค่าเริ่มต้นต้องไม่มากกว่าค่าสิ้นสุด</div>';
+                return;
+              }
+              const val = Math.floor(Math.random() * (max - min + 1)) + min;
+              numStr = val.toString();
+            }
+            results.push(numStr);
+          }
+
+          results.forEach(num => {
+            const item = document.createElement('div');
+            item.style.background = 'var(--brand-soft)';
+            item.style.color = 'var(--brand)';
+            item.style.fontWeight = '800';
+            item.style.fontSize = '24px';
+            item.style.padding = '8px 20px';
+            item.style.borderRadius = '10px';
+            item.style.border = '1px solid var(--border)';
+            item.style.minWidth = '80px';
+            item.style.textAlign = 'center';
+            item.textContent = num;
+            resList.appendChild(item);
+          });
+        });
+      },
+
+      /* 22. เซ็น E-signature */
+      'pdf-sign': (root) => {
+        root.innerHTML = `
+          <div class="tool-grid" style="grid-template-columns: 1fr; gap: 16px;">
+            <div>
+              <div style="font-weight: 600; font-size: 14px; margin-bottom: 8px;">วาดลายเซ็นของคุณบนกระดาน:</div>
+              <div style="border: 1px solid var(--border-hover); border-radius: 10px; background: #fff; position: relative; width: 100%; max-width: 500px; height: 180px; overflow: hidden; margin: 0 auto;">
+                <canvas id="sigCanvas" style="width: 100%; height: 100%; display: block; cursor: crosshair;"></canvas>
+              </div>
+              <div class="controls-row" style="margin-top: 10px; justify-content: center;">
+                <div class="field" style="max-width: 110px;">
+                  <label for="sigColor">สีปากกา</label>
+                  <select id="sigColor" class="select">
+                    <option value="#1e2024">สีดำ</option>
+                    <option value="#1a56db">สีน้ำเงิน</option>
+                    <option value="#e5484d">สีแดง</option>
+                  </select>
+                </div>
+                <div class="field" style="max-width: 110px;">
+                  <label for="sigWeight">ความหนา: <span id="sigWeightVal">3</span></label>
+                  <input type="range" id="sigWeight" min="1" max="10" value="3" class="input" style="padding:0;">
+                </div>
+                <button type="button" class="btn btn-secondary" id="sigClear">ล้างกระดาน</button>
+                <button type="button" class="btn btn-primary" id="sigDlPng">โหลด PNG พื้นใส</button>
+              </div>
+            </div>
+            
+            <div style="border-top: 1px solid var(--border); padding-top: 16px;">
+              <div style="font-weight: 600; font-size: 14px; margin-bottom: 8px;">(ทางเลือก) แปะลายเซ็นลงบนไฟล์ PDF:</div>
+              <label class="dropzone" id="sigDropzone">
+                <input type="file" id="sigPdfFile" accept="application/pdf">
+                <div class="dropzone-title">คลิกเพื่ออัปโหลดไฟล์ PDF</div>
+                <div class="dropzone-sub">อัปโหลด PDF จากนั้นคลิกบนหน้าเอกสารเพื่อแปะลายเซ็นด้านบน</div>
+              </label>
+              
+              <div id="sigPdfWrap" style="display:none; text-align: center; margin-top: 12px;">
+                <div style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">คลิกตำแหน่งบนเอกสารด้านล่างเพื่อเซ็นลายเซ็นของคุณลงไป</div>
+                <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 10px;">
+                  <button type="button" class="btn btn-secondary" id="sigPrevPage">หน้าก่อนหน้า</button>
+                  <span id="sigPageNum" style="font-weight: 600; display: inline-flex; align-items: center; font-size: 13px;">หน้า 1 / 1</span>
+                  <button type="button" class="btn btn-secondary" id="sigNextPage">หน้าถัดไป</button>
+                </div>
+                <div style="position: relative; display: inline-block; border: 1px solid var(--border); border-radius: 8px; max-width: 100%;">
+                  <canvas id="sigPdfCanvas" style="display: block; max-width: 100%;"></canvas>
+                  <div id="sigFloating" style="position: absolute; border: 2px dashed var(--brand); cursor: move; width: 100px; height: 40px; display: none; background: rgba(88, 72, 229, 0.1);">
+                    <div style="position: absolute; right: -6px; bottom: -6px; width: 12px; height: 12px; background: var(--brand); border-radius: 50%; cursor: se-resize;" id="sigResize"></div>
+                  </div>
+                </div>
+                <div style="margin-top: 14px;">
+                  <button type="button" class="btn btn-primary" id="sigPdfSave">ลงนามและดาวน์โหลด PDF</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const canvas = root.querySelector('#sigCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorIn = root.querySelector('#sigColor');
+        const weightIn = root.querySelector('#sigWeight');
+        const weightVal = root.querySelector('#sigWeightVal');
+        const clearBtn = root.querySelector('#sigClear');
+        const dlPngBtn = root.querySelector('#sigDlPng');
+
+        let drawing = false;
+        
+        function resizeCanvas() {
+          const rect = canvas.parentNode.getBoundingClientRect();
+          canvas.width = rect.width;
+          canvas.height = rect.height;
+          ctx.strokeStyle = colorIn.value;
+          ctx.lineWidth = Number(weightIn.value);
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+        }
+        
+        setTimeout(resizeCanvas, 50);
+
+        function getPos(e) {
+          const rect = canvas.getBoundingClientRect();
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          return {
+            x: (clientX - rect.left) * (canvas.width / rect.width),
+            y: (clientY - rect.top) * (canvas.height / rect.height)
+          };
+        }
+
+        function startDrawing(e) {
+          drawing = true;
+          const pos = getPos(e);
+          ctx.beginPath();
+          ctx.moveTo(pos.x, pos.y);
+          e.preventDefault();
+        }
+
+        function draw(e) {
+          if (!drawing) return;
+          const pos = getPos(e);
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+          e.preventDefault();
+        }
+
+        function stopDrawing() {
+          drawing = false;
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        colorIn.addEventListener('change', () => { ctx.strokeStyle = colorIn.value; });
+        weightIn.addEventListener('input', () => {
+          weightVal.textContent = weightIn.value;
+          ctx.lineWidth = Number(weightIn.value);
+        });
+
+        clearBtn.addEventListener('click', () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        dlPngBtn.addEventListener('click', () => {
+          const temp = document.createElement('canvas');
+          temp.width = canvas.width;
+          temp.height = canvas.height;
+          const tctx = temp.getContext('2d');
+          tctx.drawImage(canvas, 0, 0);
+          triggerDownload(temp.toDataURL('image/png'), 'signature.png');
+        });
+
+        let pdfBytes = null;
+        let pdfjsDoc = null;
+        let currentPage = 1;
+        let totalPages = 1;
+        const pdfFileIn = root.querySelector('#sigPdfFile');
+        const pdfWrap = root.querySelector('#sigPdfWrap');
+        const pdfCanvas = root.querySelector('#sigPdfCanvas');
+        const pdfCtx = pdfCanvas.getContext('2d');
+        const pageNumSpan = root.querySelector('#sigPageNum');
+        const prevBtn = root.querySelector('#sigPrevPage');
+        const nextBtn = root.querySelector('#sigNextPage');
+        const saveBtn = root.querySelector('#sigPdfSave');
+        const floatingSig = root.querySelector('#sigFloating');
+        const resizeHandle = root.querySelector('#sigResize');
+
+        let sigPos = { x: 50, y: 50, w: 120, h: 50 };
+        let isDraggingSig = false;
+        let isResizingSig = false;
+        let dragOffset = { x: 0, y: 0 };
+
+        async function renderPdfPage() {
+          if (!pdfjsDoc) return;
+          const page = await pdfjsDoc.getPage(currentPage);
+          const vp = page.getViewport({ scale: 1.2 });
+          pdfCanvas.width = vp.width;
+          pdfCanvas.height = vp.height;
+          await page.render({ canvasContext: pdfCtx, viewport: vp }).promise;
+          pageNumSpan.textContent = `หน้า ${currentPage} / ${totalPages}`;
+          
+          prevBtn.disabled = currentPage === 1;
+          nextBtn.disabled = currentPage === totalPages;
+          
+          updateFloatingSigPos();
+          floatingSig.style.display = 'block';
+        }
+
+        function updateFloatingSigPos() {
+          floatingSig.style.left = sigPos.x + 'px';
+          floatingSig.style.top = sigPos.y + 'px';
+          floatingSig.style.width = sigPos.w + 'px';
+          floatingSig.style.height = sigPos.h + 'px';
+          
+          floatingSig.style.backgroundImage = `url(${canvas.toDataURL()})`;
+          floatingSig.style.backgroundSize = '100% 100%';
+          floatingSig.style.backgroundRepeat = 'no-repeat';
+        }
+
+        pdfFileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          pdfBytes = await f.arrayBuffer();
+          pdfjsDoc = await window.pdfjsLib.getDocument({ data: pdfBytes.slice(0) }).promise;
+          totalPages = pdfjsDoc.numPages;
+          currentPage = 1;
+          pdfWrap.style.display = 'block';
+          renderPdfPage();
+        });
+
+        prevBtn.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderPdfPage();
+          }
+        });
+
+        nextBtn.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderPdfPage();
+          }
+        });
+
+        floatingSig.addEventListener('mousedown', (e) => {
+          if (e.target === resizeHandle) return;
+          isDraggingSig = true;
+          dragOffset.x = e.clientX - floatingSig.offsetLeft;
+          dragOffset.y = e.clientY - floatingSig.offsetTop;
+        });
+
+        resizeHandle.addEventListener('mousedown', (e) => {
+          isResizingSig = true;
+          dragOffset.x = e.clientX;
+          dragOffset.y = e.clientY;
+          dragOffset.w = sigPos.w;
+          dragOffset.h = sigPos.h;
+          e.stopPropagation();
+          e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (isDraggingSig) {
+            const x = e.clientX - dragOffset.x;
+            const y = e.clientY - dragOffset.y;
+            sigPos.x = Math.max(0, Math.min(pdfCanvas.width - sigPos.w, x));
+            sigPos.y = Math.max(0, Math.min(pdfCanvas.height - sigPos.h, y));
+            floatingSig.style.left = sigPos.x + 'px';
+            floatingSig.style.top = sigPos.y + 'px';
+          } else if (isResizingSig) {
+            const dw = e.clientX - dragOffset.x;
+            const dh = dw * (sigPos.h / sigPos.w);
+            sigPos.w = Math.max(40, Math.min(pdfCanvas.width - sigPos.x, dragOffset.w + dw));
+            sigPos.h = Math.max(20, Math.min(pdfCanvas.height - sigPos.y, dragOffset.h + dh));
+            floatingSig.style.width = sigPos.w + 'px';
+            floatingSig.style.height = sigPos.h + 'px';
+          }
+        });
+
+        window.addEventListener('mouseup', () => {
+          isDraggingSig = false;
+          isResizingSig = false;
+        });
+
+        floatingSig.addEventListener('touchstart', (e) => {
+          if (e.target === resizeHandle) {
+            isResizingSig = true;
+            dragOffset.x = e.touches[0].clientX;
+            dragOffset.y = e.touches[0].clientY;
+            dragOffset.w = sigPos.w;
+            dragOffset.h = sigPos.h;
+            e.stopPropagation();
+          } else {
+            isDraggingSig = true;
+            dragOffset.x = e.touches[0].clientX - floatingSig.offsetLeft;
+            dragOffset.y = e.touches[0].clientY - floatingSig.offsetTop;
+          }
+        });
+
+        window.addEventListener('touchmove', (e) => {
+          if (isDraggingSig) {
+            const x = e.touches[0].clientX - dragOffset.x;
+            const y = e.touches[0].clientY - dragOffset.y;
+            sigPos.x = Math.max(0, Math.min(pdfCanvas.width - sigPos.w, x));
+            sigPos.y = Math.max(0, Math.min(pdfCanvas.height - sigPos.h, y));
+            floatingSig.style.left = sigPos.x + 'px';
+            floatingSig.style.top = sigPos.y + 'px';
+          } else if (isResizingSig) {
+            const dw = e.touches[0].clientX - dragOffset.x;
+            const dh = dw * (sigPos.h / sigPos.w);
+            sigPos.w = Math.max(40, Math.min(pdfCanvas.width - sigPos.x, dragOffset.w + dw));
+            sigPos.h = Math.max(20, Math.min(pdfCanvas.height - sigPos.y, dragOffset.h + dh));
+            floatingSig.style.width = sigPos.w + 'px';
+            floatingSig.style.height = sigPos.h + 'px';
+          }
+        });
+
+        window.addEventListener('touchend', () => {
+          isDraggingSig = false;
+          isResizingSig = false;
+        });
+
+        saveBtn.addEventListener('click', async () => {
+          if (!pdfBytes) return;
+          const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+          const page = pdfDoc.getPage(currentPage - 1);
+          const { width, height } = page.getSize();
+          const sigDataUrl = canvas.toDataURL('image/png');
+          const sigImage = await pdfDoc.embedPng(sigDataUrl);
+          
+          const scaleX = width / pdfCanvas.width;
+          const scaleY = height / pdfCanvas.height;
+          
+          const realW = sigPos.w * scaleX;
+          const realH = sigPos.h * scaleY;
+          const realX = sigPos.x * scaleX;
+          const realY = height - (sigPos.y * scaleY) - realH;
+
+          page.drawImage(sigImage, {
+            x: realX,
+            y: realY,
+            width: realW,
+            height: realH
+          });
+
+          const signedBytes = await pdfDoc.save();
+          const blob = new Blob([signedBytes], { type: 'application/pdf' });
+          triggerDownload(URL.createObjectURL(blob), 'signed_document.pdf');
+        });
+      },
+
+      /* 23. แปลง JSON เป็นตาราง/CSV */
+      'json-csv': (root) => {
+        root.innerHTML = `
+          <div class="field" style="margin-bottom: 12px;">
+            <label for="jcInput">กรอกหรือวางข้อมูล JSON</label>
+            <textarea id="jcInput" class="textarea" placeholder='[
+  {"ชื่อ": "สมชาย", "อายุ": 28, "แผนก": "ไอที"},
+  {"ชื่อ": "สมหญิง", "อายุ": 25, "แผนก": "การตลาด"}
+]'></textarea>
+          </div>
+          <div class="controls-row">
+            <button type="button" class="btn btn-primary" id="jcRun">แปลงข้อมูล</button>
+            <button type="button" class="btn btn-secondary" id="jcDlCsv" disabled>ดาวน์โหลด CSV</button>
+          </div>
+          <div id="jcError" style="color:var(--danger); font-size:13px; margin-top:6px;"></div>
+          
+          <div id="jcResultWrap" style="display:none; margin-top:16px;">
+            <div style="font-weight:700; margin-bottom:8px; color:var(--brand); font-size:14px;">ผลการแปลงตารางข้อมูล:</div>
+            <div style="overflow-x:auto; border:1px solid var(--border); border-radius:10px; background:#fff;">
+              <table id="jcTable" style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
+                <thead></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        `;
+
+        const input = root.querySelector('#jcInput');
+        const runBtn = root.querySelector('#jcRun');
+        const dlBtn = root.querySelector('#jcDlCsv');
+        const errEl = root.querySelector('#jcError');
+        const wrap = root.querySelector('#jcResultWrap');
+        const table = root.querySelector('#jcTable');
+
+        let csvContent = '';
+
+        runBtn.addEventListener('click', () => {
+          errEl.textContent = '';
+          wrap.style.display = 'none';
+          dlBtn.disabled = true;
+          csvContent = '';
+
+          const val = input.value.trim();
+          if (!val) {
+            errEl.textContent = 'กรุณากรอกข้อมูล JSON';
+            return;
+          }
+
+          try {
+            let data = JSON.parse(val);
+            if (!Array.isArray(data)) {
+              if (typeof data === 'object') {
+                data = [data];
+              } else {
+                errEl.textContent = 'JSON ต้องเป็นอาร์เรย์ (Array) ของออบเจกต์';
+                return;
+              }
+            }
+
+            if (data.length === 0) {
+              errEl.textContent = 'ไม่พบข้อมูลในอาร์เรย์ JSON';
+              return;
+            }
+
+            const headers = Array.from(new Set(data.flatMap(obj => Object.keys(obj))));
+            
+            const thead = table.querySelector('thead');
+            thead.innerHTML = `<tr>${headers.map(h => `<th style="padding:10px 12px; border-bottom:2px solid var(--border); font-weight:700; background:#fafbfe;">${h}</th>`).join('')}</tr>`;
+
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = data.map(row => {
+              return `<tr>${headers.map(h => {
+                const cell = row[h] !== undefined ? row[h] : '';
+                return `<style>#jcTable td{padding:8px 12px; border-bottom:1px solid var(--border);}</style><td>${typeof cell === 'object' ? JSON.stringify(cell) : cell}</td>`;
+              }).join('')}</tr>`;
+            }).join('');
+
+            const csvRows = [];
+            csvRows.push(headers.join(','));
+            data.forEach(row => {
+              const values = headers.map(h => {
+                const cell = row[h] !== undefined ? String(row[h]) : '';
+                const escaped = cell.replace(/"/g, '""');
+                return `"${escaped}"`;
+              });
+              csvRows.push(values.join(','));
+            });
+
+            csvContent = '\uFEFF' + csvRows.join('\n');
+            wrap.style.display = 'block';
+            dlBtn.disabled = false;
+          } catch (e) {
+            errEl.textContent = 'รูปแบบ JSON ไม่ถูกต้อง: ' + e.message;
+          }
+        });
+
+        dlBtn.addEventListener('click', () => {
+          if (!csvContent) return;
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          triggerDownload(URL.createObjectURL(blob), 'converted_data.csv');
+        });
+      },
+
+      /* 24. ตัวแปลง Base64 */
+      'base64-tool': (root) => {
+        root.innerHTML = `
+          <div class="pill-group" id="b64Type">
+            <button type="button" class="pill-btn active" data-mode="text">แปลงข้อความ (Text)</button>
+            <button type="button" class="pill-btn" data-mode="image">แปลงรูปภาพ (Image)</button>
+          </div>
+
+          <div id="b64TextSection">
+            <div class="field" style="margin-bottom:12px;">
+              <label for="b64InputText">กรอกข้อความที่ต้องการเข้ารหัส (Encode) หรือ ถอดรหัส (Decode)</label>
+              <textarea id="b64InputText" class="textarea" placeholder="พิมพ์ข้อความที่นี่..."></textarea>
+            </div>
+            <div class="controls-row">
+              <button type="button" class="btn btn-primary" id="b64Encode">เข้ารหัส (Encode)</button>
+              <button type="button" class="btn btn-secondary" id="b64Decode">ถอดรหัส (Decode)</button>
+            </div>
+            <div class="field" style="margin-top:14px;">
+              <label for="b64OutputText">ผลลัพธ์</label>
+              <textarea id="b64OutputText" class="textarea" readonly placeholder="ผลลัพธ์จะปรากฏตรงนี้..."></textarea>
+            </div>
+            <div class="controls-row" style="margin-top:10px;">
+              <button type="button" class="btn btn-secondary" id="b64Copy">คัดลอกผลลัพธ์</button>
+            </div>
+          </div>
+
+          <div id="b64ImageSection" style="display:none;">
+            <label class="dropzone">
+              <input type="file" id="b64File" accept="image/*">
+              <div class="dropzone-title">คลิกเพื่อเลือกไฟล์รูปภาพที่ต้องการแปลงเป็น Base64</div>
+              <div class="dropzone-sub">ระบบจะสร้างรหัส Data URI Base64 สำหรับแท็ก &lt;img&gt; ทันที</div>
+            </label>
+            <div class="field" style="margin-top:14px;">
+              <label for="b64OutputImg">รหัส Base64 (Data URI)</label>
+              <textarea id="b64OutputImg" class="textarea" readonly style="min-height:100px; font-size:11px;"></textarea>
+            </div>
+            <div class="controls-row" style="margin-top:10px;">
+              <button type="button" class="btn btn-secondary" id="b64CopyImg">คัดลอกรหัส</button>
+            </div>
+          </div>
+        `;
+
+        const tabs = root.querySelectorAll('#b64Type .pill-btn');
+        const textSection = root.querySelector('#b64TextSection');
+        const imageSection = root.querySelector('#b64ImageSection');
+
+        tabs.forEach(btn => {
+          btn.addEventListener('click', () => {
+            tabs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (btn.dataset.mode === 'text') {
+              textSection.style.display = 'block';
+              imageSection.style.display = 'none';
+            } else {
+              textSection.style.display = 'none';
+              imageSection.style.display = 'block';
+            }
+          });
+        });
+
+        const inputText = root.querySelector('#b64InputText');
+        const outputText = root.querySelector('#b64OutputText');
+        const encodeBtn = root.querySelector('#b64Encode');
+        const decodeBtn = root.querySelector('#b64Decode');
+        const copyBtn = root.querySelector('#b64Copy');
+
+        encodeBtn.addEventListener('click', () => {
+          try {
+            const raw = inputText.value;
+            const bytes = new TextEncoder().encode(raw);
+            const binary = String.fromCharCode(...bytes);
+            outputText.value = btoa(binary);
+          } catch (e) {
+            outputText.value = 'เกิดข้อผิดพลาดในการเข้ารหัส';
+          }
+        });
+
+        decodeBtn.addEventListener('click', () => {
+          try {
+            const raw = inputText.value.trim();
+            const binary = atob(raw);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+              bytes[i] = binary.charCodeAt(i);
+            }
+            outputText.value = new TextDecoder().decode(bytes);
+          } catch (e) {
+            outputText.value = 'รหัส Base64 ไม่ถูกต้อง หรือเกิดข้อผิดพลาดในการถอดรหัส';
+          }
+        });
+
+        copyBtn.addEventListener('click', (e) => {
+          if (!outputText.value) return;
+          navigator.clipboard?.writeText(outputText.value);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = 'คัดลอกผลลัพธ์'; }, 1200);
+        });
+
+        const fileIn = root.querySelector('#b64File');
+        const outputImg = root.querySelector('#b64OutputImg');
+        const copyImgBtn = root.querySelector('#b64CopyImg');
+
+        fileIn.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            outputImg.value = reader.result;
+          };
+          reader.readAsDataURL(file);
+        });
+
+        copyImgBtn.addEventListener('click', (e) => {
+          if (!outputImg.value) return;
+          navigator.clipboard?.writeText(outputImg.value);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = 'คัดลอกรหัส'; }, 1200);
+        });
+      },
+
+      /* 25. เครื่องคำนวณอายุ & วันทำงาน */
+      'date-calc': (root) => {
+        root.innerHTML = `
+          <div class="pill-group" id="dcTabs">
+            <button type="button" class="pill-btn active" data-mode="age">คำนวณอายุปี-เดือน-วัน</button>
+            <button type="button" class="pill-btn" data-mode="work">คำนวณวันหยุด/วันทำงาน</button>
+          </div>
+
+          <div id="dcAgeSection">
+            <div class="controls-row">
+              <div class="field">
+                <label for="dcBirth">วันเกิด / วันเริ่มต้น</label>
+                <input type="date" id="dcBirth" class="input" value="1995-01-01">
+              </div>
+              <div class="field">
+                <label for="dcTarget">วันปัจจุบัน / วันที่เปรียบเทียบ</label>
+                <input type="date" id="dcTarget" class="input">
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="dcAgeRun" style="margin-top:10px;">คำนวณอายุ</button>
+            
+            <div class="stat-grid" id="dcAgeResult" style="display:none; margin-top:20px;">
+              <div class="stat-card"><div class="stat-val" id="dcAgeYears">0</div><div class="stat-lbl">ปี</div></div>
+              <div class="stat-card"><div class="stat-val" id="dcAgeMonths">0</div><div class="stat-lbl">เดือน</div></div>
+              <div class="stat-card"><div class="stat-val" id="dcAgeDays">0</div><div class="stat-lbl">วัน</div></div>
+            </div>
+            <div style="text-align:center; margin-top:12px; font-weight:600; font-size:14px; color:var(--brand);" id="dcAgeText"></div>
+          </div>
+
+          <div id="dcWorkSection" style="display:none;">
+            <div class="controls-row">
+              <div class="field">
+                <label for="dcWorkStart">วันที่เริ่มต้นทำงาน</label>
+                <input type="date" id="dcWorkStart" class="input">
+              </div>
+              <div class="field">
+                <label for="dcWorkEnd">วันที่สิ้นสุดทำงาน</label>
+                <input type="date" id="dcWorkEnd" class="input">
+              </div>
+            </div>
+            <div class="controls-row" style="margin-top:10px; gap:16px;">
+              <label><input type="checkbox" id="dcSkipSat" checked> ยกเว้นวันเสาร์</label>
+              <label><input type="checkbox" id="dcSkipSun" checked> ยกเว้นวันอาทิตย์</label>
+            </div>
+            <button type="button" class="btn btn-primary" id="dcWorkRun" style="margin-top:14px;">คำนวณจำนวนวันทำงาน</button>
+            
+            <div class="stat-grid" id="dcWorkResult" style="display:none; margin-top:20px;">
+              <div class="stat-card"><div class="stat-val" id="dcTotalDays">0</div><div class="stat-lbl">วันทั้งหมด</div></div>
+              <div class="stat-card"><div class="stat-val" id="dcWorkDays">0</div><div class="stat-lbl">วันทำงานจริง</div></div>
+              <div class="stat-card"><div class="stat-val" id="dcWeekendDays">0</div><div class="stat-lbl">วันหยุดสุดสัปดาห์</div></div>
+            </div>
+          </div>
+        `;
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        root.querySelector('#dcTarget').value = todayStr;
+        root.querySelector('#dcWorkStart').value = todayStr;
+        root.querySelector('#dcWorkEnd').value = todayStr;
+
+        const tabs = root.querySelectorAll('#dcTabs .pill-btn');
+        const ageSec = root.querySelector('#dcAgeSection');
+        const workSec = root.querySelector('#dcWorkSection');
+
+        tabs.forEach(btn => {
+          btn.addEventListener('click', () => {
+            tabs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (btn.dataset.mode === 'age') {
+              ageSec.style.display = 'block';
+              workSec.style.display = 'none';
+            } else {
+              ageSec.style.display = 'none';
+              workSec.style.display = 'block';
+            }
+          });
+        });
+
+        const birthIn = root.querySelector('#dcBirth');
+        const targetIn = root.querySelector('#dcTarget');
+        const ageRun = root.querySelector('#dcAgeRun');
+        const ageRes = root.querySelector('#dcAgeResult');
+        const yearsVal = root.querySelector('#dcAgeYears');
+        const monthsVal = root.querySelector('#dcAgeMonths');
+        const daysVal = root.querySelector('#dcAgeDays');
+        const ageText = root.querySelector('#dcAgeText');
+
+        ageRun.addEventListener('click', () => {
+          const d1 = new Date(birthIn.value);
+          const d2 = new Date(targetIn.value);
+          if (isNaN(d1) || isNaN(d2)) return;
+
+          let y = d2.getFullYear() - d1.getFullYear();
+          let m = d2.getMonth() - d1.getMonth();
+          let d = d2.getDate() - d1.getDate();
+
+          if (d < 0) {
+            m--;
+            const prevMonth = new Date(d2.getFullYear(), d2.getMonth(), 0);
+            d += prevMonth.getDate();
+          }
+          if (m < 0) {
+            y--;
+            m += 12;
+          }
+
+          yearsVal.textContent = y;
+          monthsVal.textContent = m;
+          daysVal.textContent = d;
+          ageRes.style.display = 'grid';
+          ageText.textContent = `อายุรวมทั้งหมด: ${y} ปี ${m} เดือน ${d} วัน`;
+        });
+
+        const wStartIn = root.querySelector('#dcWorkStart');
+        const wEndIn = root.querySelector('#dcWorkEnd');
+        const skipSat = root.querySelector('#dcSkipSat');
+        const skipSun = root.querySelector('#dcSkipSun');
+        const workRun = root.querySelector('#dcWorkRun');
+        const workRes = root.querySelector('#dcWorkResult');
+        
+        const totalDaysVal = root.querySelector('#dcTotalDays');
+        const workDaysVal = root.querySelector('#dcWorkDays');
+        const weekendVal = root.querySelector('#dcWeekendDays');
+
+        workRun.addEventListener('click', () => {
+          const sDate = new Date(wStartIn.value);
+          const eDate = new Date(wEndIn.value);
+          if (isNaN(sDate) || isNaN(eDate) || sDate > eDate) {
+            alert('กรุณาใส่วันที่ให้ถูกต้องและวันเริ่มต้นต้องไม่มากกว่าวันสิ้นสุด');
+            return;
+          }
+
+          let totalDays = 0;
+          let workDays = 0;
+          let weekendDays = 0;
+
+          const cur = new Date(sDate);
+          while (cur <= eDate) {
+            totalDays++;
+            const day = cur.getDay();
+            const isWeekend = (day === 0 && skipSun.checked) || (day === 6 && skipSat.checked);
+            if (isWeekend) {
+              weekendDays++;
+            } else {
+              workDays++;
+            }
+            cur.setDate(cur.getDate() + 1);
+          }
+
+          totalDaysVal.textContent = totalDays;
+          workDaysVal.textContent = workDays;
+          weekendVal.textContent = weekendDays;
+          workRes.style.display = 'grid';
+        });
+      }
+    };
+
+    // Initial render
+    renderTabs();
+    renderDirectory();
+  </script>
+</body>
+</html>
