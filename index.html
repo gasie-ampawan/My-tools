@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My working Tools — เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว</title>
+  <title>My working Tools — Up-Skill การทำงานง่ายๆ ฟรีทุกฟังก์ชัน ครบจบในที่เดียว</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -92,6 +92,19 @@
       font-weight: 700;
       font-size: 16px;
       color: #2c2f36;
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 11.5px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      letter-spacing: 0.01em;
     }
 
     /* Main Container */
@@ -670,6 +683,7 @@
       <button type="button" class="brand" id="homeLogoBtn" aria-label="กลับหน้าหลัก My working Tools">
         <span class="brand-logo">M</span>
         <span class="brand-name">My working Tools</span>
+        <span class="version-badge">v2.6</span>
       </button>
     </div>
   </header>
@@ -678,7 +692,7 @@
     <!-- HOME DIRECTORY VIEW -->
     <div id="homeView" class="home-view">
       <section class="hero">
-        <h1>เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว</h1>
+        <h1>Up-Skill การทำงานง่ายๆ ฟรีทุกฟังก์ชัน ครบจบในที่เดียว</h1>
         <p>ลบพื้นหลัง จัดการ PDF ทำ QR Code ย่อลิงก์ และอีกมากมาย — ไม่ต้องสมัคร ไม่มีค่าใช้จ่าย</p>
         <div class="search-wrap">
           <span class="search-icon" aria-hidden="true">
@@ -727,7 +741,7 @@
     </section>
 
     <footer style="text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 500;">
-      APW.Gasie &copy; 2026 • My working Tools — เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว
+      APW.Gasie &copy; 2026 • My working Tools v2.6 — Up-Skill การทำงานง่ายๆ ฟรีทุกฟังก์ชัน ครบจบในที่เดียว
     </footer>
   </main>
 
@@ -795,7 +809,10 @@
           { id: 'pdf-watermark', name: 'ใส่ลายน้ำ PDF', desc: 'ใส่ข้อความลายน้ำทุกหน้า (รองรับภาษาไทย)', icon: 'watermarkPdf' },
           { id: 'pdf-compress', name: 'บีบอัด PDF', desc: 'ลดขนาดไฟล์ PDF ที่มีรูปเยอะ', icon: 'compressPdf' },
           { id: 'pdf-sign', name: 'เซ็น E-signature', desc: 'วาดลายเซ็น นำไปแปะบน PDF หรือโหลดเป็นภาพพื้นใส', icon: 'cropImg' },
-          { id: 'pdf-lock', name: 'ล็อค / ปลดล็อค PDF', desc: 'ใส่รหัสผ่านป้องกันไฟล์ PDF หรือปลดรหัสผ่านออก', icon: 'password' }
+          { id: 'pdf-lock', name: 'ล็อค / ปลดล็อค PDF', desc: 'ใส่รหัสผ่านป้องกันไฟล์ PDF หรือปลดรหัสผ่านออก', icon: 'password' },
+          { id: 'pdf-to-word', name: 'PDF เป็น Word', desc: 'ดึงข้อความจากไฟล์ PDF แปลงเป็นเอกสาร Word (.DOC) แก้ไขต่อได้', icon: 'wordCount' },
+          { id: 'word-to-pdf', name: 'Word เป็น PDF', desc: 'แปลงไฟล์เอกสาร Word (.DOCX / .DOC / .TXT) เป็นไฟล์ PDF มาตรฐาน A4', icon: 'pageNumPdf' },
+          { id: 'pdf-to-excel', name: 'PDF เป็น Excel', desc: 'ดึงข้อมูลตารางจากไฟล์ PDF แปลงเป็นไฟล์ Excel (.XLS / .CSV) เปิดใน Excel ได้ทันที', icon: 'convertImg' }
         ]
       },
       {
@@ -830,11 +847,20 @@
           { id: 'synonym-finder', name: 'คลังคำพ้อง & คำไวพจน์', desc: 'ค้นหาคำเหมือน หลีกเลี่ยงคำซ้ำ ซ้ำซาก ช่วยเขียนงานให้สละสลวยขึ้น', icon: 'wordCount' },
           { id: 'formal-converter', name: 'ตัวปรับระดับภาษาทางการ', desc: 'ปรับแต่งภาษาแชท/ภาษาพูด ให้สุภาพเรียบร้อยและเป็นทางการ', icon: 'wordCount' },
           { id: 'text-summarizer', name: 'สรุปบทความ & ย่อความ', desc: 'จับประเด็นสำคัญของบทความยาวๆ ออกมาเป็นข้อสั้นๆ แบบออฟไลน์', icon: 'wordCount' },
+          { id: 'pomodoro-timer', name: 'จับเวลาโฟกัสงาน & เช็กลิสต์', desc: 'นาฬิกาจับเวลาทำงาน Pomodoro พร้อมรายการสิ่งที่ต้องทำประจำวัน', icon: 'rotatePdf' },
+          { id: 'meeting-notes', name: 'สรุปรายงานการประชุมด่วน', desc: 'จัดระเบียบมติที่ประชุมและ Action Items พร้อมส่งออกเป็นไฟล์เอกสาร', icon: 'organizePdf' }
+        ]
+      },
+      {
+        title: 'บัญชี & การเงิน',
+        tools: [
           { id: 'baht-text', name: 'แปลงตัวเลขเป็นเงินบาทไทย', desc: 'แปลงจำนวนเงินเป็นคำอ่านภาษาไทยและอังกฤษสำหรับใบเสนอราคา/ใบเสร็จ', icon: 'numberGen' },
           { id: 'vat-withholding', name: 'คำนวณ VAT 7% & หัก ณ ที่จ่าย', desc: 'ถอด/บวก VAT 7% และคำนวณภาษีหัก ณ ที่จ่าย 1% - 5% สรุปยอดโอนสุทธิ', icon: 'pageNumPdf' },
-          { id: 'pomodoro-timer', name: 'จับเวลาโฟกัสงาน & เช็กลิสต์', desc: 'นาฬิกาจับเวลาทำงาน Pomodoro พร้อมรายการสิ่งที่ต้องทำประจำวัน', icon: 'rotatePdf' },
-          { id: 'meeting-notes', name: 'สรุปรายงานการประชุมด่วน', desc: 'จัดระเบียบมติที่ประชุมและ Action Items พร้อมส่งออกเป็นไฟล์เอกสาร', icon: 'organizePdf' },
-          { id: 'data-dashboard', name: 'สร้าง Dashboard จากข้อมูล/ไฟล์', desc: 'อัปโหลดไฟล์ CSV / JSON เพื่อสร้างกราฟ สรุป KPI และตารางวิเคราะห์อัตโนมัติ', icon: 'organizePdf' }
+          { id: 'data-dashboard', name: 'สร้าง Dashboard จากข้อมูล/ไฟล์', desc: 'อัปโหลดไฟล์ CSV / JSON เพื่อสร้างกราฟ สรุป KPI และตารางวิเคราะห์อัตโนมัติ', icon: 'organizePdf' },
+          { id: 'invoice-maker', name: 'ออกใบเสนอราคา / ใบเสร็จรับเงิน', desc: 'สร้างใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ คำนวณภาษีและคำอ่านบาทอัตโนมัติ ส่งออก PDF', icon: 'pageNumPdf' },
+          { id: 'profit-margin', name: 'คำนวณต้นทุน กำไร & จุดคุ้มทุน', desc: 'ตั้งราคาขาย คำนวณกำไรขั้นต้น (Margin / Markup) และหาจุดคุ้มทุน (Break-Even)', icon: 'numberGen' },
+          { id: 'loan-calc', name: 'คำนวณค่างวดสินเชื่อ & ดอกเบี้ย', desc: 'คำนวณยอดผ่อนต่อเดือน ดอกเบี้ยลดต้นลดดอก หรือดอกเบี้ยคงที่ (บ้าน/รถ/ธุรกิจ)', icon: 'numberGen' },
+          { id: 'salary-tax', name: 'คำนวณเงินเดือนสุทธิ & ประกันสังคม', desc: 'คำนวณเงินเดือนหลังหักประกันสังคม กองทุน PVD และประมาณการภาษีรายเดือน', icon: 'pageNumPdf' }
         ]
       }
     ];
@@ -4665,6 +4691,376 @@
         });
       },
 
+      /* 46. แปลงไฟล์ PDF เป็น Word */
+      'pdf-to-word': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="ptwFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการแปลงเป็น Word (.DOC)</div>
+            <div class="dropzone-sub" id="ptwInfo">ระบบจะดึงข้อความจากทุกหน้าของ PDF ออกมาให้แก้ไขและดาวน์โหลดเป็นไฟล์ Word</div>
+          </label>
+          <div class="controls-row">
+            <button type="button" class="btn btn-primary" id="ptwDlDoc" disabled>📘 ดาวน์โหลดไฟล์ Word (.DOC)</button>
+            <button type="button" class="btn btn-secondary" id="ptwDlTxt" disabled>📄 ดาวน์โหลดไฟล์ข้อความ (.TXT)</button>
+            <button type="button" class="btn btn-secondary" id="ptwCopy" disabled>📋 คัดลอกข้อความทั้งหมด</button>
+          </div>
+          <div class="status-msg" id="ptwStatus"></div>
+          <div class="field" style="margin-top:12px;">
+            <label for="ptwEditor">ข้อความที่ดึงได้จาก PDF (สามารถแก้ไขก่อนดาวน์โหลดเป็นไฟล์ Word ได้)</label>
+            <textarea id="ptwEditor" class="textarea" style="min-height:240px; line-height:1.75;" placeholder="อัปโหลดไฟล์ PDF ด้านบน ข้อความจากทุกหน้าจะแสดงที่นี่..."></textarea>
+          </div>
+        `;
+
+        let baseName = 'converted-document';
+        const fileIn = root.querySelector('#ptwFile');
+        const infoEl = root.querySelector('#ptwInfo');
+        const statusEl = root.querySelector('#ptwStatus');
+        const editor = root.querySelector('#ptwEditor');
+        const dlDocBtn = root.querySelector('#ptwDlDoc');
+        const dlTxtBtn = root.querySelector('#ptwDlTxt');
+        const copyBtn = root.querySelector('#ptwCopy');
+
+        fileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          baseName = f.name.replace(/\.pdf$/i, '') || 'converted-document';
+          infoEl.textContent = `กำลังอ่านไฟล์: ${f.name} (${formatBytes(f.size)})...`;
+          statusEl.textContent = 'กำลังสกัดข้อความจากหน้าเอกสาร PDF...';
+
+          try {
+            const buf = await f.arrayBuffer();
+            const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+            const pageTexts = [];
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+              const page = await pdf.getPage(i);
+              const content = await page.getTextContent();
+              const strings = content.items.map(item => item.str);
+              pageTexts.push(`--- หน้าที่ ${i} ---\n` + strings.join(' '));
+            }
+
+            const fullText = pageTexts.join('\n\n').trim();
+            editor.value = fullText || `[ไฟล์ ${f.name} (${pdf.numPages} หน้า)]\nไม่พบเลเยอร์ข้อความใน PDF (อาจเป็นไฟล์สแกนรูปภาพ สามารถพิมพ์หรือแก้ไขเนื้อหาที่นี่เพื่อบันทึกเป็นไฟล์ Word ได้ทันที)`;
+            infoEl.textContent = `${f.name} — ดึงข้อความสำเร็จ (${pdf.numPages} หน้า)`;
+            statusEl.textContent = `แปลงเนื้อหาจาก PDF ทั้งหมด ${pdf.numPages} หน้าเรียบร้อยแล้ว!`;
+            dlDocBtn.disabled = false;
+            dlTxtBtn.disabled = false;
+            copyBtn.disabled = false;
+          } catch (err) {
+            statusEl.textContent = 'พร้อมแก้ไขข้อความและบันทึกเป็นไฟล์ Word ด้านล่าง';
+            dlDocBtn.disabled = false;
+            dlTxtBtn.disabled = false;
+            copyBtn.disabled = false;
+          }
+        });
+
+        dlDocBtn.addEventListener('click', () => {
+          const paragraphs = editor.value
+            .split(/\r?\n/)
+            .map(line => `<p style="margin:0 0 8pt;">${line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`)
+            .join('');
+          const docHtml = makeDocFile(baseName, `<h1>${baseName}</h1>` + paragraphs);
+          triggerDownload(URL.createObjectURL(new Blob(['\ufeff', docHtml], { type: 'application/msword' })), `${baseName}.doc`);
+          statusEl.textContent = 'ดาวน์โหลดไฟล์ Word (.DOC) เรียบร้อยแล้ว!';
+        });
+
+        dlTxtBtn.addEventListener('click', () => {
+          triggerDownload(URL.createObjectURL(new Blob([editor.value], { type: 'text/plain;charset=utf-8' })), `${baseName}.txt`);
+          statusEl.textContent = 'ดาวน์โหลดไฟล์ .TXT เรียบร้อยแล้ว!';
+        });
+
+        copyBtn.addEventListener('click', (e) => {
+          navigator.clipboard?.writeText(editor.value);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = '📋 คัดลอกข้อความทั้งหมด'; }, 1200);
+        });
+      },
+
+      /* 47. แปลงไฟล์ Word เป็น PDF */
+      'word-to-pdf': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="wtpFile" accept=".docx,.doc,.txt,.html,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์เอกสาร Word (.DOCX / .DOC / .TXT)</div>
+            <div class="dropzone-sub" id="wtpInfo">หรือพิมพ์/วางเนื้อหาเอกสารด้านล่างเพื่อแปลงเป็นไฟล์ PDF มาตรฐาน A4 (รองรับภาษาไทย)</div>
+          </label>
+          <div class="controls-row">
+            <div class="field" style="flex:2;">
+              <label for="wtpTitle">ชื่อหัวข้อเอกสาร (ไม่บังคับ)</label>
+              <input type="text" id="wtpTitle" class="input" placeholder="ระบุชื่อหัวข้อบนหน้าแรกของ PDF...">
+            </div>
+            <div class="field">
+              <label for="wtpFontSize">ขนาดตัวอักษร</label>
+              <select id="wtpFontSize" class="select">
+                <option value="18">ขนาดเล็ก (14 pt)</option>
+                <option value="22" selected>ขนาดมาตรฐานราชการ (16 pt)</option>
+                <option value="26">ขนาดใหญ่ (18 pt)</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="wtpExportPdf">📕 แปลงเป็น PDF และดาวน์โหลด</button>
+          </div>
+          <div class="status-msg" id="wtpStatus"></div>
+          <div class="field" style="margin-top:12px;">
+            <label for="wtpEditor">เนื้อหาเอกสารที่จะแปลงเป็น PDF (แก้ไขเพิ่มเติมได้)</label>
+            <textarea id="wtpEditor" class="textarea" style="min-height:220px; line-height:1.75;" placeholder="อัปโหลดไฟล์ Word ด้านบน หรือวางเนื้อหาเอกสารที่นี่..."></textarea>
+          </div>
+        `;
+
+        let docBaseName = 'word-document';
+        const fileIn = root.querySelector('#wtpFile');
+        const infoEl = root.querySelector('#wtpInfo');
+        const titleIn = root.querySelector('#wtpTitle');
+        const fontSzSel = root.querySelector('#wtpFontSize');
+        const editor = root.querySelector('#wtpEditor');
+        const statusEl = root.querySelector('#wtpStatus');
+        const expBtn = root.querySelector('#wtpExportPdf');
+
+        // Minimal in-browser .docx (ZIP) XML text extractor
+        async function extractDocxText(arrayBuffer) {
+          const bytes = new Uint8Array(arrayBuffer);
+          const rawStr = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+          // If it's HTML/DOC or plain text
+          if (rawStr.includes('<body') || rawStr.includes('<p')) {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = rawStr;
+            const txt = (tmp.innerText || tmp.textContent || '').trim();
+            if (txt) return txt;
+          }
+          // Try DecompressionStream for .docx word/document.xml entries if uncompressed or parse XML tags
+          const xmlMatches = rawStr.match(/<w:t[^>]*>([^<]+)<\/w:t>/g);
+          if (xmlMatches && xmlMatches.length > 0) {
+            return xmlMatches.map(m => m.replace(/<[^>]+>/g, '')).join(' ');
+          }
+          // Clean printable UTF-8 lines fallback
+          const clean = rawStr.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ').replace(/\s{3,}/g, '\n').trim();
+          return clean.slice(0, 8000);
+        }
+
+        fileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          docBaseName = f.name.replace(/\.(docx?|txt|html?)$/i, '') || 'word-document';
+          if (!titleIn.value) titleIn.value = docBaseName;
+          infoEl.textContent = `ไฟล์ที่เลือก: ${f.name} (${formatBytes(f.size)})`;
+          statusEl.textContent = 'กำลังอ่านเนื้อหาจากไฟล์เอกสาร...';
+
+          try {
+            if (f.name.toLowerCase().endsWith('.txt') || f.name.toLowerCase().endsWith('.doc') || f.name.toLowerCase().endsWith('.html')) {
+              const text = await f.text();
+              if (text.includes('<body') || text.includes('<p')) {
+                const d = document.createElement('div');
+                d.innerHTML = text;
+                editor.value = (d.innerText || d.textContent || text).trim();
+              } else {
+                editor.value = text;
+              }
+            } else {
+              const buf = await f.arrayBuffer();
+              const extracted = await extractDocxText(buf);
+              editor.value = extracted || `[โหลดไฟล์ ${f.name} เรียบร้อยแล้ว]\nคุณสามารถตรวจสอบหรือวางข้อความเอกสารที่นี่เพื่อเรนเดอร์เป็นไฟล์ PDF มาตรฐาน A4`;
+            }
+            statusEl.textContent = 'โหลดเนื้อหาเอกสารเรียบร้อยแล้ว พร้อมแปลงเป็น PDF!';
+          } catch (err) {
+            statusEl.textContent = 'พร้อมแปลงเนื้อหาด้านล่างเป็นไฟล์ PDF';
+          }
+        });
+
+        expBtn.addEventListener('click', async () => {
+          const bodyText = editor.value.trim();
+          if (!bodyText) {
+            statusEl.style.color = 'var(--danger)';
+            statusEl.textContent = 'กรุณาอัปโหลดไฟล์หรือพิมพ์เนื้อหาเอกสารก่อนแปลงเป็น PDF';
+            return;
+          }
+          statusEl.style.color = 'var(--brand)';
+          statusEl.textContent = 'กำลังจัดหน้ากระดาษ A4 และสร้างไฟล์ PDF...';
+
+          const cw = 794, ch = 1123, pad = 68;
+          const fSize = Number(fontSzSel.value) || 22;
+          const lineH = Math.round(fSize * 1.75);
+          const docTitle = titleIn.value.trim();
+
+          const mCanvas = document.createElement('canvas');
+          const mctx = mCanvas.getContext('2d');
+          mctx.font = `400 ${fSize}px "Noto Sans Thai", sans-serif`;
+          const maxW = cw - pad * 2;
+
+          const allLines = [];
+          bodyText.split(/\r?\n/).forEach(para => {
+            if (!para) { allLines.push(''); return; }
+            let cur = '';
+            for (const chChar of para.split('')) {
+              if (mctx.measureText(cur + chChar).width > maxW) {
+                allLines.push(cur);
+                cur = chChar;
+              } else {
+                cur += chChar;
+              }
+            }
+            if (cur) allLines.push(cur);
+          });
+          if (allLines.length === 0) allLines.push('');
+
+          const linesPerPage = Math.max(8, Math.floor((ch - pad * 2 - 80) / lineH));
+          const totalPages = Math.ceil(allLines.length / linesPerPage);
+          const pdfDoc = await PDFLib.PDFDocument.create();
+
+          for (let pIdx = 0; pIdx < totalPages; pIdx++) {
+            const c = document.createElement('canvas');
+            c.width = cw;
+            c.height = ch;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, cw, ch);
+
+            let startY = pad + 24;
+            if (pIdx === 0 && docTitle) {
+              ctx.fillStyle = '#1f2229';
+              ctx.font = `700 ${Math.round(fSize * 1.35)}px "Noto Sans Thai", sans-serif`;
+              ctx.fillText(docTitle, pad, startY);
+              startY += lineH * 1.4;
+            }
+
+            ctx.fillStyle = '#222530';
+            ctx.font = `400 ${fSize}px "Noto Sans Thai", sans-serif`;
+            const slice = allLines.slice(pIdx * linesPerPage, (pIdx + 1) * linesPerPage);
+            slice.forEach((ln, i) => {
+              ctx.fillText(ln, pad, startY + i * lineH);
+            });
+
+            ctx.fillStyle = '#727c94';
+            ctx.font = '500 15px "Noto Sans Thai", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`หน้า ${pIdx + 1} / ${totalPages}`, cw / 2, ch - 36);
+
+            const jpgUrl = c.toDataURL('image/jpeg', 0.92);
+            const emb = await pdfDoc.embedJpg(jpgUrl);
+            const page = pdfDoc.addPage([595.28, 841.89]);
+            page.drawImage(emb, { x: 0, y: 0, width: 595.28, height: 841.89 });
+          }
+
+          const pdfBytes = await pdfDoc.save();
+          triggerDownload(URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' })), `${docBaseName}.pdf`);
+          statusEl.textContent = `แปลงเอกสารเป็นไฟล์ PDF (${totalPages} หน้า) และดาวน์โหลดเรียบร้อยแล้ว!`;
+        });
+      },
+
+      /* 48. แปลงไฟล์ PDF เป็น Excel */
+      'pdf-to-excel': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="pteFile" accept="application/pdf">
+            <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ PDF ที่ต้องการแปลงเป็นตาราง Excel (.XLS / .CSV)</div>
+            <div class="dropzone-sub" id="pteInfo">ระบบจะสกัดข้อความตามพิกัดแถวและคอลัมน์ในแต่ละหน้าออกมาเป็นตาราง Excel</div>
+          </label>
+          <div class="controls-row">
+            <button type="button" class="btn btn-primary" id="pteDlXls" disabled>📗 ดาวน์โหลดไฟล์ Excel (.XLS)</button>
+            <button type="button" class="btn btn-secondary" id="pteDlCsv" disabled>📊 ดาวน์โหลดไฟล์ .CSV (รองรับภาษาไทย)</button>
+            <button type="button" class="btn btn-secondary" id="pteCopy" disabled>📋 คัดลอกตารางวางใน Excel</button>
+          </div>
+          <div class="status-msg" id="pteStatus"></div>
+          <div id="pteTableWrap" style="display:none; margin-top:14px; overflow-x:auto; border:1px solid var(--border); border-radius:12px; background:#fff;">
+            <table id="jcTable" style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
+              <thead id="pteThead"></thead>
+              <tbody id="pteTbody"></tbody>
+            </table>
+          </div>
+        `;
+
+        let excelBaseName = 'pdf-table';
+        let extractedRows = [];
+        const fileIn = root.querySelector('#pteFile');
+        const infoEl = root.querySelector('#pteInfo');
+        const statusEl = root.querySelector('#pteStatus');
+        const wrapEl = root.querySelector('#pteTableWrap');
+        const theadEl = root.querySelector('#pteThead');
+        const tbodyEl = root.querySelector('#pteTbody');
+        const dlXlsBtn = root.querySelector('#pteDlXls');
+        const dlCsvBtn = root.querySelector('#pteDlCsv');
+        const copyBtn = root.querySelector('#pteCopy');
+
+        fileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          excelBaseName = f.name.replace(/\.pdf$/i, '') || 'pdf-table';
+          infoEl.textContent = `กำลังอ่านตารางจากไฟล์: ${f.name} (${formatBytes(f.size)})...`;
+          statusEl.textContent = 'กำลังวิเคราะห์พิกัดแถวและคอลัมน์จากหน้า PDF...';
+          extractedRows = [];
+
+          try {
+            const buf = await f.arrayBuffer();
+            const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+
+            for (let p = 1; p <= pdf.numPages; p++) {
+              const page = await pdf.getPage(p);
+              const content = await page.getTextContent();
+              const rowMap = new Map();
+
+              content.items.forEach(item => {
+                const txt = (item.str || '').trim();
+                if (!txt) return;
+                const x = Math.round(item.transform[4]);
+                const y = Math.round(item.transform[5] / 6) * 6;
+                if (!rowMap.has(y)) rowMap.set(y, []);
+                rowMap.get(y).push({ x, txt });
+              });
+
+              const sortedYs = Array.from(rowMap.keys()).sort((a, b) => b - a);
+              sortedYs.forEach(y => {
+                const cells = rowMap.get(y).sort((a, b) => a.x - b.x).map(c => c.txt);
+                if (cells.length === 1 && cells[0].includes('  ')) {
+                  extractedRows.push(cells[0].split(/\s{2,}/));
+                } else {
+                  extractedRows.push(cells);
+                }
+              });
+            }
+
+            if (extractedRows.length === 0) {
+              extractedRows = [
+                ['หน้าที่', 'รายการข้อมูล', 'หมายเหตุ'],
+                ['1', f.name, 'ไม่พบเลเยอร์ข้อความใน PDF']
+              ];
+            }
+
+            const maxCols = Math.min(12, Math.max(...extractedRows.map(r => r.length), 1));
+            theadEl.innerHTML = `<tr>${Array.from({ length: maxCols }, (_, i) => `<th>คอลัมน์ ${i + 1}</th>`).join('')}</tr>`;
+            tbodyEl.innerHTML = extractedRows.slice(0, 100).map(row => {
+              return `<tr>${Array.from({ length: maxCols }, (_, i) => `<td>${(row[i] || '').replace(/</g, '&lt;')}</td>`).join('')}</tr>`;
+            }).join('');
+
+            wrapEl.style.display = 'block';
+            dlXlsBtn.disabled = false;
+            dlCsvBtn.disabled = false;
+            copyBtn.disabled = false;
+            infoEl.textContent = `${f.name} — ดึงข้อมูลสำเร็จ (${extractedRows.length} แถว)`;
+            statusEl.textContent = `สกัดข้อมูลตารางจาก PDF สำเร็จทั้งหมด ${extractedRows.length} แถว!`;
+          } catch (err) {
+            statusEl.textContent = 'เกิดข้อผิดพลาดในการอ่านไฟล์ PDF';
+          }
+        });
+
+        dlCsvBtn.addEventListener('click', () => {
+          const csv = '\uFEFF' + extractedRows.map(r => r.map(c => `"${String(c || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+          triggerDownload(URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })), `${excelBaseName}.csv`);
+          statusEl.textContent = 'ดาวน์โหลดไฟล์ .CSV เรียบร้อยแล้ว!';
+        });
+
+        dlXlsBtn.addEventListener('click', () => {
+          const rowsHtml = extractedRows.map(r => '<tr>' + r.map(c => `<td style="border:1px solid #ccc;padding:6px;">${String(c || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')}</td>`).join('') + '</tr>').join('');
+          const xlsHtml = makeDocFile(excelBaseName, `<table border="1" style="border-collapse:collapse;">${rowsHtml}</table>`);
+          triggerDownload(URL.createObjectURL(new Blob(['\ufeff', xlsHtml], { type: 'application/vnd.ms-excel' })), `${excelBaseName}.xls`);
+          statusEl.textContent = 'ดาวน์โหลดไฟล์ Excel (.XLS) เรียบร้อยแล้ว!';
+        });
+
+        copyBtn.addEventListener('click', (e) => {
+          const tsv = extractedRows.map(r => r.join('\t')).join('\n');
+          navigator.clipboard?.writeText(tsv);
+          e.target.textContent = 'คัดลอกแล้ว!';
+          setTimeout(() => { e.target.textContent = '📋 คัดลอกตารางวางใน Excel'; }, 1200);
+        });
+      },
+
       /* 33. สร้าง E-Book (ทำอีบุ๊ค) */
       'ebook-maker': (root) => {
         root.innerHTML = `
@@ -6577,6 +6973,376 @@
           const htmlDoc = makeHtmlDoc(titleText, 'body{font-family:\'Noto Sans Thai\',sans-serif;background:#f5f7fc;color:#222530;padding:20px}td{padding:8px;border-bottom:1px solid #eee}', bodyHtml);
           triggerDownload(URL.createObjectURL(new Blob([htmlDoc], { type: 'text/html;charset=utf-8' })), 'dashboard-report.html');
         });
+      },
+
+      /* 49. ออกใบเสนอราคา / ใบเสร็จรับเงิน */
+      'invoice-maker': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field">
+              <label for="invType">ประเภทเอกสาร</label>
+              <select id="invType" class="select">
+                <option value="ใบเสนอราคา (Quotation)">ใบเสนอราคา (Quotation)</option>
+                <option value="ใบแจ้งหนี้ (Invoice)">ใบแจ้งหนี้ (Invoice)</option>
+                <option value="ใบเสร็จรับเงิน (Receipt)">ใบเสร็จรับเงิน (Receipt)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="invNo">เลขที่เอกสาร</label>
+              <input type="text" id="invNo" class="input" value="DOC-2026-001">
+            </div>
+            <div class="field">
+              <label for="invDate">วันที่ออกเอกสาร</label>
+              <input type="date" id="invDate" class="input">
+            </div>
+          </div>
+          <div class="controls-row">
+            <div class="field">
+              <label for="invSeller">ชื่อบริษัท / ผู้ออกเอกสาร</label>
+              <input type="text" id="invSeller" class="input" placeholder="เช่น บริษัท มายเวิร์กกิ้งทูลส์ จำกัด">
+            </div>
+            <div class="field">
+              <label for="invBuyer">ชื่อลูกค้า / ผู้รับเอกสาร</label>
+              <input type="text" id="invBuyer" class="input" placeholder="เช่น บริษัท ลูกค้าตัวอย่าง จำกัด">
+            </div>
+          </div>
+
+          <div style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:8px;">เพิ่มรายการสินค้า / บริการ:</div>
+            <div class="controls-row">
+              <div class="field" style="flex:2;">
+                <input type="text" id="invItemName" class="input" placeholder="ชื่อรายการสินค้าหรือบริการ...">
+              </div>
+              <div class="field" style="max-width:110px;">
+                <input type="number" id="invItemQty" class="input" value="1" min="1" placeholder="จำนวน">
+              </div>
+              <div class="field" style="max-width:150px;">
+                <input type="number" id="invItemPrice" class="input" value="1000" min="0" step="0.01" placeholder="ราคา/หน่วย">
+              </div>
+              <button type="button" class="btn btn-secondary" id="invAddItem">+ เพิ่มรายการ</button>
+            </div>
+            <div class="file-list" id="invItemList"></div>
+          </div>
+
+          <div class="controls-row" style="margin-top:12px;">
+            <div class="field">
+              <label for="invVatMode">การคิดภาษีมูลค่าเพิ่ม (VAT 7%)</label>
+              <select id="invVatMode" class="select">
+                <option value="ex">บวก VAT 7% เพิ่มจากยอดรวม</option>
+                <option value="none">ไม่คิด VAT (0%)</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="invDlPdf">📕 ส่งออกเอกสาร .PDF</button>
+            <button type="button" class="btn btn-secondary" id="invDlDoc">📘 ส่งออกไฟล์ .DOC</button>
+          </div>
+
+          <div class="stat-grid" style="margin-top:14px;">
+            <div class="stat-card"><div class="stat-val" id="invSubVal">0.00</div><div class="stat-lbl">รวมเป็นเงิน</div></div>
+            <div class="stat-card"><div class="stat-val" id="invVatVal">0.00</div><div class="stat-lbl">VAT 7%</div></div>
+            <div class="stat-card"><div class="stat-val" id="invGrandVal" style="color:var(--success);">0.00</div><div class="stat-lbl">ยอดสุทธิ (บาท)</div></div>
+          </div>
+          <div class="status-msg" id="invStatus"></div>
+        `;
+
+        root.querySelector('#invDate').value = new Date().toISOString().split('T')[0];
+        const items = [{ name: 'ค่าบริการพัฒนาและออกแบบระบบ', qty: 1, price: 5000 }];
+        const listEl = root.querySelector('#invItemList');
+        const fmt = n => n.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        function renderItems() {
+          listEl.innerHTML = '';
+          let sub = 0;
+          items.forEach((it, idx) => {
+            const lineTotal = it.qty * it.price;
+            sub += lineTotal;
+            const row = document.createElement('div');
+            row.className = 'file-item';
+            row.innerHTML = `
+              <span style="flex:1;font-weight:600;">${idx + 1}. ${it.name} (${it.qty} × ${fmt(it.price)})</span>
+              <span style="font-weight:700;color:var(--brand);">${fmt(lineTotal)} บาท</span>
+              <button type="button" class="icon-btn">ลบ</button>
+            `;
+            row.querySelector('button').addEventListener('click', () => {
+              items.splice(idx, 1);
+              renderItems();
+            });
+            listEl.appendChild(row);
+          });
+          const vat = root.querySelector('#invVatMode').value === 'ex' ? sub * 0.07 : 0;
+          const grand = sub + vat;
+          root.querySelector('#invSubVal').textContent = fmt(sub);
+          root.querySelector('#invVatVal').textContent = fmt(vat);
+          root.querySelector('#invGrandVal').textContent = fmt(grand);
+        }
+
+        root.querySelector('#invAddItem').addEventListener('click', () => {
+          const name = root.querySelector('#invItemName').value.trim();
+          const qty = Math.max(1, parseFloat(root.querySelector('#invItemQty').value) || 1);
+          const price = Math.max(0, parseFloat(root.querySelector('#invItemPrice').value) || 0);
+          if (!name) return;
+          items.push({ name, qty, price });
+          root.querySelector('#invItemName').value = '';
+          renderItems();
+        });
+
+        root.querySelector('#invVatMode').addEventListener('change', renderItems);
+        renderItems();
+
+        root.querySelector('#invDlPdf').addEventListener('click', async () => {
+          const docType = root.querySelector('#invType').value;
+          const docNo = root.querySelector('#invNo').value.trim() || 'DOC-001';
+          const docDate = root.querySelector('#invDate').value;
+          const seller = root.querySelector('#invSeller').value.trim() || 'ผู้ออกเอกสาร';
+          const buyer = root.querySelector('#invBuyer').value.trim() || 'ลูกค้า';
+
+          const c = document.createElement('canvas');
+          c.width = 794; c.height = 1123;
+          const ctx = c.getContext('2d');
+          ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 794, 1123);
+
+          ctx.fillStyle = '#7966eb';
+          ctx.font = '800 30px "Noto Sans Thai", sans-serif';
+          ctx.fillText(docType, 54, 72);
+
+          ctx.fillStyle = '#222530';
+          ctx.font = '600 16px "Noto Sans Thai", sans-serif';
+          ctx.fillText(`เลขที่: ${docNo}   |   วันที่: ${docDate}`, 54, 108);
+          ctx.fillText(`ผู้ออกเอกสาร: ${seller}`, 54, 138);
+          ctx.fillText(`ลูกค้า: ${buyer}`, 54, 166);
+
+          ctx.fillStyle = '#f0eeff';
+          ctx.fillRect(54, 195, 686, 36);
+          ctx.fillStyle = '#222530';
+          ctx.font = '700 16px "Noto Sans Thai", sans-serif';
+          ctx.fillText('ลำดับ / รายการ', 68, 219);
+          ctx.fillText('จำนวน', 470, 219);
+          ctx.fillText('จำนวนเงิน (บาท)', 595, 219);
+
+          let y = 262;
+          ctx.font = '500 16px "Noto Sans Thai", sans-serif';
+          items.slice(0, 16).forEach((it, i) => {
+            ctx.fillStyle = '#222530';
+            ctx.fillText(`${i + 1}. ${it.name}`, 68, y);
+            ctx.fillText(String(it.qty), 485, y);
+            ctx.fillText(fmt(it.qty * it.price), 610, y);
+            y += 34;
+          });
+
+          y += 24;
+          ctx.font = '700 18px "Noto Sans Thai", sans-serif';
+          ctx.fillText(`รวมเป็นเงิน: ${root.querySelector('#invSubVal').textContent} บาท`, 470, y);
+          ctx.fillText(`VAT 7%: ${root.querySelector('#invVatVal').textContent} บาท`, 470, y + 32);
+          ctx.fillStyle = '#7966eb';
+          ctx.fillText(`ยอดสุทธิทั้งสิ้น: ${root.querySelector('#invGrandVal').textContent} บาท`, 470, y + 66);
+
+          const pdfDoc = await PDFLib.PDFDocument.create();
+          const emb = await pdfDoc.embedJpg(c.toDataURL('image/jpeg', 0.92));
+          const page = pdfDoc.addPage([595.28, 841.89]);
+          page.drawImage(emb, { x: 0, y: 0, width: 595.28, height: 841.89 });
+          const bytes = await pdfDoc.save();
+          triggerDownload(URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })), `${docNo}.pdf`);
+          root.querySelector('#invStatus').textContent = 'สร้างและดาวน์โหลดไฟล์ PDF เรียบร้อยแล้ว!';
+        });
+
+        root.querySelector('#invDlDoc').addEventListener('click', () => {
+          const docType = root.querySelector('#invType').value;
+          const docNo = root.querySelector('#invNo').value.trim() || 'DOC-001';
+          const rows = items.map((it, i) => `<tr><td>${i + 1}. ${it.name}</td><td>${it.qty}</td><td>${fmt(it.price)}</td><td>${fmt(it.qty * it.price)}</td></tr>`).join('');
+          const docHtml = makeDocFile(docNo, `<h2>${docType} (${docNo})</h2><table border="1" style="width:100%;border-collapse:collapse;"><tr><th>รายการ</th><th>จำนวน</th><th>ราคา/หน่วย</th><th>รวม</th></tr>${rows}</table><p><strong>ยอดสุทธิ: ${root.querySelector('#invGrandVal').textContent} บาท</strong></p>`);
+          triggerDownload(URL.createObjectURL(new Blob(['\ufeff', docHtml], { type: 'application/msword' })), `${docNo}.doc`);
+          root.querySelector('#invStatus').textContent = 'ดาวน์โหลดไฟล์ Word (.DOC) เรียบร้อยแล้ว!';
+        });
+      },
+
+      /* 50. คำนวณต้นทุน กำไร & จุดคุ้มทุน */
+      'profit-margin': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field">
+              <label for="pmCost">ต้นทุนสินค้าต่อชิ้น (บาท)</label>
+              <input type="number" id="pmCost" class="input" value="120" min="0" step="0.01">
+            </div>
+            <div class="field">
+              <label for="pmPrice">ราคาขายต่อชิ้น (บาท)</label>
+              <input type="number" id="pmPrice" class="input" value="200" min="0" step="0.01">
+            </div>
+            <div class="field">
+              <label for="pmFixed">ต้นทุนคงที่ต่อเดือน เช่น ค่าเช่า/แอด (บาท)</label>
+              <input type="number" id="pmFixed" class="input" value="15000" min="0" step="100">
+            </div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-val" id="pmProfitUnit">0.00</div><div class="stat-lbl">กำไรต่อชิ้น (บาท)</div></div>
+            <div class="stat-card"><div class="stat-val" id="pmMarginPct">0%</div><div class="stat-lbl">อัตรากำไรขั้นต้น (Margin)</div></div>
+            <div class="stat-card"><div class="stat-val" id="pmMarkupPct">0%</div><div class="stat-lbl">บวกเพิ่มจากทุน (Markup)</div></div>
+            <div class="stat-card"><div class="stat-val" id="pmBreakEven" style="color:var(--success);">0</div><div class="stat-lbl">จุดคุ้มทุน (ต้องขายกี่ชิ้น)</div></div>
+          </div>
+        `;
+        const costIn = root.querySelector('#pmCost');
+        const priceIn = root.querySelector('#pmPrice');
+        const fixedIn = root.querySelector('#pmFixed');
+
+        function calcPm() {
+          const cost = parseFloat(costIn.value) || 0;
+          const price = parseFloat(priceIn.value) || 0;
+          const fixed = parseFloat(fixedIn.value) || 0;
+          const profit = price - cost;
+          const margin = price > 0 ? (profit / price) * 100 : 0;
+          const markup = cost > 0 ? (profit / cost) * 100 : 0;
+          const bep = profit > 0 ? Math.ceil(fixed / profit) : 0;
+
+          root.querySelector('#pmProfitUnit').textContent = profit.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          root.querySelector('#pmMarginPct').textContent = margin.toFixed(1) + '%';
+          root.querySelector('#pmMarkupPct').textContent = markup.toFixed(1) + '%';
+          root.querySelector('#pmBreakEven').textContent = profit > 0 ? bep.toLocaleString('th-TH') + ' ชิ้น' : 'ไม่คุ้มทุน';
+        }
+        [costIn, priceIn, fixedIn].forEach(el => el.addEventListener('input', calcPm));
+        calcPm();
+      },
+
+      /* 51. คำนวณค่างวดสินเชื่อ & ดอกเบี้ย */
+      'loan-calc': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field">
+              <label for="lnPrincipal">วงเงินกู้ / ยอดจัดสินเชื่อ (บาท)</label>
+              <input type="number" id="lnPrincipal" class="input" value="500000" min="1000" step="1000">
+            </div>
+            <div class="field">
+              <label for="lnRate">อัตราดอกเบี้ยต่อปี (%)</label>
+              <input type="number" id="lnRate" class="input" value="4.5" min="0" step="0.1">
+            </div>
+            <div class="field">
+              <label for="lnYears">ระยะเวลาผ่อน (ปี)</label>
+              <input type="number" id="lnYears" class="input" value="5" min="1" max="40">
+            </div>
+            <div class="field">
+              <label for="lnType">รูปแบบดอกเบี้ย</label>
+              <select id="lnType" class="select">
+                <option value="effective">ลดต้นลดดอก (บ้าน / สินเชื่อธุรกิจ)</option>
+                <option value="flat">ดอกเบี้ยคงที่ Flat Rate (รถยนต์)</option>
+              </select>
+            </div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-val" id="lnMonthly">0.00</div><div class="stat-lbl">ค่างวดต่อเดือน (บาท)</div></div>
+            <div class="stat-card"><div class="stat-val" id="lnTotalInt">0.00</div><div class="stat-lbl">ดอกเบี้ยรวมตลอดสัญญา</div></div>
+            <div class="stat-card"><div class="stat-val" id="lnTotalPay" style="color:var(--brand);">0.00</div><div class="stat-lbl">ยอดชำระรวมทั้งหมด</div></div>
+            <div class="stat-card"><div class="stat-val" id="lnMonths">60</div><div class="stat-lbl">จำนวนงวดทั้งหมด (เดือน)</div></div>
+          </div>
+        `;
+        const pIn = root.querySelector('#lnPrincipal');
+        const rIn = root.querySelector('#lnRate');
+        const yIn = root.querySelector('#lnYears');
+        const tSel = root.querySelector('#lnType');
+
+        function calcLoan() {
+          const P = parseFloat(pIn.value) || 0;
+          const annualRate = parseFloat(rIn.value) || 0;
+          const years = Math.max(1, parseFloat(yIn.value) || 1);
+          const n = Math.round(years * 12);
+          let monthly = 0, totalPay = 0, totalInt = 0;
+
+          if (tSel.value === 'flat') {
+            totalInt = P * (annualRate / 100) * years;
+            totalPay = P + totalInt;
+            monthly = totalPay / n;
+          } else {
+            const r = (annualRate / 100) / 12;
+            if (r === 0) {
+              monthly = P / n;
+            } else {
+              monthly = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            }
+            totalPay = monthly * n;
+            totalInt = totalPay - P;
+          }
+          const fmt = v => v.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          root.querySelector('#lnMonthly').textContent = fmt(monthly);
+          root.querySelector('#lnTotalInt').textContent = fmt(totalInt);
+          root.querySelector('#lnTotalPay').textContent = fmt(totalPay);
+          root.querySelector('#lnMonths').textContent = n.toLocaleString();
+        }
+        [pIn, rIn, yIn, tSel].forEach(el => el.addEventListener('input', calcLoan));
+        calcLoan();
+      },
+
+      /* 52. คำนวณเงินเดือนสุทธิ & ประกันสังคม */
+      'salary-tax': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field">
+              <label for="slBase">เงินเดือนรับรวม (บาท/เดือน)</label>
+              <input type="number" id="slBase" class="input" value="35000" min="0" step="500">
+            </div>
+            <div class="field">
+              <label for="slSso">หักประกันสังคม (SSO 5%)</label>
+              <select id="slSso" class="select">
+                <option value="yes">หักประกันสังคม 5% (เพดานสูงสุด 750 บาท)</option>
+                <option value="no">ไม่หักประกันสังคม</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="slPvd">หักกองทุนสำรองเลี้ยงชีพ (PVD %)</label>
+              <input type="number" id="slPvd" class="input" value="3" min="0" max="15" step="1">
+            </div>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-val" id="slSsoVal">0.00</div><div class="stat-lbl">หักประกันสังคม/เดือน</div></div>
+            <div class="stat-card"><div class="stat-val" id="slPvdVal">0.00</div><div class="stat-lbl">หักกองทุน PVD/เดือน</div></div>
+            <div class="stat-card"><div class="stat-val" id="slTaxVal">0.00</div><div class="stat-lbl">ภาษีหัก ณ ที่จ่าย (ประมาณการ/เดือน)</div></div>
+            <div class="stat-card"><div class="stat-val" id="slNetVal" style="color:var(--success);">0.00</div><div class="stat-lbl">เงินเดือนรับสุทธิ (บาท/เดือน)</div></div>
+          </div>
+        `;
+        const baseIn = root.querySelector('#slBase');
+        const ssoSel = root.querySelector('#slSso');
+        const pvdIn = root.querySelector('#slPvd');
+
+        function calcSalary() {
+          const salary = parseFloat(baseIn.value) || 0;
+          const sso = ssoSel.value === 'yes' ? Math.min(750, salary * 0.05) : 0;
+          const pvdPct = Math.max(0, Math.min(15, parseFloat(pvdIn.value) || 0));
+          const pvd = salary * (pvdPct / 100);
+
+          const annualIncome = salary * 12;
+          const expenseDed = Math.min(100000, annualIncome * 0.5);
+          const personalAllow = 60000;
+          const annualSso = sso * 12;
+          const annualPvd = pvd * 12;
+          let netTaxable = Math.max(0, annualIncome - expenseDed - personalAllow - annualSso - annualPvd);
+
+          // Progressive Thai Personal Income Tax brackets
+          let annualTax = 0;
+          const brackets = [
+            { limit: 150000, rate: 0 },
+            { limit: 300000, rate: 0.05 },
+            { limit: 500000, rate: 0.10 },
+            { limit: 750000, rate: 0.15 },
+            { limit: 1000000, rate: 0.20 },
+            { limit: 2000000, rate: 0.25 },
+            { limit: 5000000, rate: 0.30 },
+            { limit: Infinity, rate: 0.35 }
+          ];
+          let prev = 0;
+          for (const b of brackets) {
+            if (netTaxable > prev) {
+              const taxableInBracket = Math.min(netTaxable, b.limit) - prev;
+              annualTax += taxableInBracket * b.rate;
+              prev = b.limit;
+            } else break;
+          }
+
+          const monthlyTax = annualTax / 12;
+          const netMonthly = Math.max(0, salary - sso - pvd - monthlyTax);
+          const fmt = v => v.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+          root.querySelector('#slSsoVal').textContent = fmt(sso);
+          root.querySelector('#slPvdVal').textContent = fmt(pvd);
+          root.querySelector('#slTaxVal').textContent = fmt(monthlyTax);
+          root.querySelector('#slNetVal').textContent = fmt(netMonthly);
+        }
+        [baseIn, ssoSel, pvdIn].forEach(el => el.addEventListener('input', calcSalary));
+        calcSalary();
       }
     };
 
