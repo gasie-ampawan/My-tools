@@ -11,6 +11,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     :root {
       --bg: #f5f7fc;
@@ -320,6 +321,29 @@
     }
 
     /* Interactive Smooth Transitions & Animations */
+    @font-face {
+      font-family: 'Sarabun';
+      src: url('./fonts/Sarabun-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Sarabun';
+      src: url('./fonts/Sarabun-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Chonburi';
+      src: url('./fonts/Chonburi-Regular.ttf') format('truetype');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'Mitr';
+      src: url('./fonts/Mitr-Regular.ttf') format('truetype');
+      font-weight: 400;
+    }
+
     @keyframes slideInUp {
       from {
         opacity: 0;
@@ -786,7 +810,8 @@
           { id: 'img-crop', name: 'ครอปรูป', desc: 'ตัดรูปตามสัดส่วน 1:1, 16:9, 9:16 ฯลฯ', icon: 'cropImg' },
           { id: 'img-color', name: 'ดูดสีจากรูป', desc: 'คลิกบนรูปเพื่อดูรหัสสี HEX / RGB', icon: 'eyedropper' },
           { id: 'img-filter', name: 'ทำภาพขาวดำ / ฟิลเตอร์ภาพ', desc: 'ปรับสี โทน ขาวดำ ซีเปีย และความสว่างของภาพ', icon: 'eyedropper' },
-          { id: 'img-ocr', name: 'แปลงรูปภาพเป็นข้อความ (OCR)', desc: 'สแกนดึงตัวอักษรจากภาพถ่ายออกมาเป็นข้อความ', icon: 'wordCount' }
+          { id: 'img-ocr', name: 'แปลงรูปภาพเป็นข้อความ (OCR)', desc: 'สแกนดึงตัวอักษรจากภาพถ่ายออกมาเป็นข้อความ', icon: 'wordCount' },
+          { id: 'design-studio', name: 'สตูดิโอช่วยออกแบบ', desc: 'สร้างแบนเนอร์/การ์ด ใส่ข้อความ สติกเกอร์ ปรับเลเยอร์ โหลด PNG', icon: 'cropImg' }
         ]
       },
       {
@@ -848,7 +873,8 @@
           { id: 'formal-converter', name: 'ตัวปรับระดับภาษาทางการ', desc: 'ปรับแต่งภาษาแชท/ภาษาพูด ให้สุภาพเรียบร้อยและเป็นทางการ', icon: 'wordCount' },
           { id: 'text-summarizer', name: 'สรุปบทความ & ย่อความ', desc: 'จับประเด็นสำคัญของบทความยาวๆ ออกมาเป็นข้อสั้นๆ แบบออฟไลน์', icon: 'wordCount' },
           { id: 'pomodoro-timer', name: 'จับเวลาโฟกัสงาน & เช็กลิสต์', desc: 'นาฬิกาจับเวลาทำงาน Pomodoro พร้อมรายการสิ่งที่ต้องทำประจำวัน', icon: 'rotatePdf' },
-          { id: 'meeting-notes', name: 'สรุปรายงานการประชุมด่วน', desc: 'จัดระเบียบมติที่ประชุมและ Action Items พร้อมส่งออกเป็นไฟล์เอกสาร', icon: 'organizePdf' }
+          { id: 'meeting-notes', name: 'สรุปรายงานการประชุมด่วน', desc: 'จัดระเบียบมติที่ประชุมและ Action Items พร้อมส่งออกเป็นไฟล์เอกสาร', icon: 'organizePdf' },
+          { id: 'plagiarism-checker', name: 'ตรวจความซ้ำซ้อนเนื้อหา', desc: 'เปรียบเทียบข้อความ 2 ชุด หาจุดซ้ำ และคำนวณ % ความเหมือน', icon: 'wordCount' }
         ]
       },
       {
@@ -6355,8 +6381,8 @@
       'data-dashboard': (root) => {
         root.innerHTML = `
           <label class="dropzone">
-            <input type="file" id="dbFile" accept=".csv,.json,text/csv,application/json">
-            <div class="dropzone-title">คลิกเพื่ออัปโหลดไฟล์ข้อมูล (.CSV หรือ .JSON)</div>
+            <input type="file" id="dbFile" accept=".csv,.json,.xlsx,.xls,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+            <div class="dropzone-title">คลิกเพื่ออัปโหลดไฟล์ข้อมูล (.CSV, .JSON, .XLSX, .XLS)</div>
             <div class="dropzone-sub">หรือวางข้อมูล CSV / JSON ลงในช่องด้านล่างเพื่อสร้างกราฟและสรุป KPI อัตโนมัติ</div>
           </label>
           <div class="field" style="margin-bottom:12px;">
@@ -6844,11 +6870,28 @@
           const f = e.target.files[0];
           if (!f) return;
           const reader = new FileReader();
-          reader.onload = () => {
-            rawIn.value = reader.result;
-            loadAndRender(reader.result);
-          };
-          reader.readAsText(f);
+          if (f.name.endsWith('.xlsx') || f.name.endsWith('.xls')) {
+            reader.onload = (evt) => {
+              try {
+                const data = new Uint8Array(evt.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const csv = XLSX.utils.sheet_to_csv(worksheet);
+                rawIn.value = csv;
+                loadAndRender(csv);
+              } catch (err) {
+                errEl.textContent = 'เกิดข้อผิดพลาดในการอ่านไฟล์ Excel: ' + err.message;
+              }
+            };
+            reader.readAsArrayBuffer(f);
+          } else {
+            reader.onload = () => {
+              rawIn.value = reader.result;
+              loadAndRender(reader.result);
+            };
+            reader.readAsText(f);
+          }
         });
 
         analyzeBtn.addEventListener('click', () => {
@@ -7343,6 +7386,402 @@
         }
         [baseIn, ssoSel, pvdIn].forEach(el => el.addEventListener('input', calcSalary));
         calcSalary();
+      },
+
+      /* 53. สตูดิโอช่วยออกแบบ */
+      'design-studio': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field">
+              <label for="dsSize">ขนาดชิ้นงาน</label>
+              <select id="dsSize" class="select">
+                <option value="1:1" selected>โพสต์ Instagram/Facebook (1:1 - 600x600 px)</option>
+                <option value="16:9">ปก YouTube/แนวนอน (16:9 - 800x450 px)</option>
+                <option value="9:16">สตอรี่/Reels (9:16 - 450x800 px)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="dsBg">สีพื้นหลัง</label>
+              <input type="color" id="dsBg" class="input" value="#f0eeff" style="height:39px; padding:4px;">
+            </div>
+            <button type="button" class="btn btn-primary" id="dsDl">💾 ดาวน์โหลดรูปภาพ (.PNG)</button>
+          </div>
+
+          <div style="border-top: 1px solid var(--border); padding-top:14px; margin-top:10px;">
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:8px;">เครื่องมือแต่งภาพ (คลิกเลือกเพื่อเพิ่มลงบนกระดาน):</div>
+            <div class="controls-row">
+              <div class="field" style="flex:2;">
+                <input type="text" id="dsTextVal" class="input" value="ข้อความของคุณ" placeholder="พิมพ์ข้อความที่ต้องการใส่...">
+              </div>
+              <div class="field" style="max-width:110px;">
+                <input type="color" id="dsTextColor" class="input" value="#222530" style="height:39px; padding:4px;">
+              </div>
+              <div class="field" style="max-width:100px;">
+                <select id="dsTextSize" class="select">
+                  <option value="28">28px</option>
+                  <option value="36" selected>36px</option>
+                  <option value="48">48px</option>
+                  <option value="64">64px</option>
+                </select>
+              </div>
+              <div class="field">
+                <select id="dsFontFamily" class="select">
+                  <option value="Sarabun">Sarabun (fonts/)</option>
+                  <option value="Chonburi">Chonburi (fonts/)</option>
+                  <option value="Mitr">Mitr (fonts/)</option>
+                  <option value="Noto Sans Thai">Noto Sans Thai</option>
+                  <option value="Tahoma">Tahoma</option>
+                  <option value="monospace">Monospace</option>
+                </select>
+              </div>
+              <button type="button" class="btn btn-secondary" id="dsAddText">+ ใส่ข้อความ</button>
+            </div>
+            <div class="controls-row">
+              <div class="field">
+                <label for="dsFontFile">อัปโหลดไฟล์ฟอนต์ส่วนตัว (.ttf / .otf / .woff)</label>
+                <input type="file" id="dsFontFile" accept=".ttf,.otf,.woff,.woff2" class="input">
+              </div>
+            </div>
+            <div class="controls-row">
+              <div class="field">
+                <label for="dsSticker">สติกเกอร์ / ตกแต่ง</label>
+                <select id="dsSticker" class="select">
+                  <option value="✨">✨ ประกายระยิบระยับ (Sparkles)</option>
+                  <option value="🔥">🔥 ฮอตสุดๆ (Fire)</option>
+                  <option value="❤️">❤️ หัวใจอบอุ่น (Heart)</option>
+                  <option value="👍">👍 เยี่ยมเลย (Thumbs Up)</option>
+                  <option value="⭐">⭐ ดาวนำโชค (Star)</option>
+                  <option value="💡">💡 ไอเดีย (Idea Bulb)</option>
+                </select>
+              </div>
+              <button type="button" class="btn btn-secondary" id="dsAddSticker" style="align-self:flex-end; height:39px;">+ ใส่สติกเกอร์</button>
+              <div class="field">
+                <label for="dsImgFile">อัปโหลดรูปภาพประกอบ</label>
+                <input type="file" id="dsImgFile" accept="image/*" class="input">
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-box" style="margin-top:18px;">
+            <div style="font-size:12.5px; color:var(--muted); margin-bottom:8px; text-align:left;">กระดานออกแบบ (คลิกลากที่วัตถุเพื่อย้ายตำแหน่ง หรือดับเบิลคลิกเพื่อลบ):</div>
+            <div style="overflow:auto; max-height:500px; display:flex; justify-content:center; align-items:center; background:#ebeff9; padding:20px; border-radius:12px;">
+              <canvas id="dsCanvas" style="background:#ffffff; box-shadow:0 8px 24px rgba(0,0,0,0.1); cursor:move; max-width:100%;"></canvas>
+            </div>
+          </div>
+        `;
+
+        const sizeSel = root.querySelector('#dsSize');
+        const bgIn = root.querySelector('#dsBg');
+        const dlBtn = root.querySelector('#dsDl');
+        const textIn = root.querySelector('#dsTextVal');
+        const textColorIn = root.querySelector('#dsTextColor');
+        const textSizeSel = root.querySelector('#dsTextSize');
+        const addTextBtn = root.querySelector('#dsAddText');
+        const stickerSel = root.querySelector('#dsSticker');
+        const addStickerBtn = root.querySelector('#dsAddSticker');
+        const imgFileIn = root.querySelector('#dsImgFile');
+        const canvas = root.querySelector('#dsCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const elements = [
+          { type: 'text', val: 'My working Tools', x: 300, y: 280, color: '#7966eb', size: 48 }
+        ];
+        let activeElementIdx = -1;
+        let isDragging = false;
+        const dragOffset = { x: 0, y: 0 };
+
+        const fontFamilySelect = root.querySelector('#dsFontFamily');
+        const fontFileIn = root.querySelector('#dsFontFile');
+
+        // Load custom downloaded font file (.ttf / .otf / .woff)
+        fontFileIn.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = async (evt) => {
+            const fontName = file.name.replace(/\.[^/.]+$/, ""); // remove extension
+            const fontFace = new FontFace(fontName, evt.target.result);
+            try {
+              const loadedFace = await fontFace.load();
+              document.fonts.add(loadedFace);
+              
+              // Add option to select list
+              const opt = document.createElement('option');
+              opt.value = fontName;
+              opt.textContent = `📁 ${fontName} (Custom)`;
+              fontFamilySelect.appendChild(opt);
+              fontFamilySelect.value = fontName;
+              
+              alert(`ติดตั้งและพร้อมใช้งานฟอนต์ "${fontName}" เรียบร้อยแล้ว!`);
+            } catch (err) {
+              alert('ไม่สามารถโหลดไฟล์ฟอนต์ได้ กรุณาลองใช้ไฟล์ .ttf หรือ .otf อื่น');
+            }
+          };
+          reader.readAsArrayBuffer(file);
+        });
+
+        function setCanvasDims() {
+          const sz = sizeSel.value;
+          if (sz === '1:1') { canvas.width = 600; canvas.height = 600; }
+          else if (sz === '16:9') { canvas.width = 800; canvas.height = 450; }
+          else if (sz === '9:16') { canvas.width = 450; canvas.height = 800; }
+          renderDesign();
+        }
+
+        function renderDesign() {
+          ctx.fillStyle = bgIn.value;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          elements.forEach((el, idx) => {
+            ctx.save();
+            if (el.type === 'text') {
+              ctx.font = `700 ${el.size}px "${el.font || 'Noto Sans Thai'}", sans-serif`;
+              ctx.fillStyle = el.color;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(el.val, el.x, el.y);
+            } else if (el.type === 'sticker') {
+              ctx.font = '72px serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(el.val, el.x, el.y);
+            } else if (el.type === 'image' && el.img) {
+              const maxW = 220;
+              const ratio = maxW / el.img.width;
+              const w = el.img.width * ratio;
+              const h = el.img.height * ratio;
+              ctx.drawImage(el.img, el.x - w / 2, el.y - h / 2, w, h);
+            }
+
+            if (idx === activeElementIdx) {
+              ctx.strokeStyle = '#7966eb';
+              ctx.lineWidth = 2;
+              ctx.setLineDash([4, 4]);
+              ctx.strokeRect(el.x - 120, el.y - 30, 240, 60);
+            }
+            ctx.restore();
+          });
+        }
+
+        sizeSel.addEventListener('change', setCanvasDims);
+        bgIn.addEventListener('input', renderDesign);
+
+        addTextBtn.addEventListener('click', () => {
+          const txt = textIn.value.trim();
+          if (!txt) return;
+          elements.push({
+            type: 'text',
+            val: txt,
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            color: textColorIn.value,
+            size: parseInt(textSizeSel.value, 10),
+            font: fontFamilySelect.value
+          });
+          activeElementIdx = elements.length - 1;
+          renderDesign();
+        });
+
+        addStickerBtn.addEventListener('click', () => {
+          elements.push({
+            type: 'sticker',
+            val: stickerSel.value,
+            x: canvas.width / 2,
+            y: canvas.height / 2
+          });
+          activeElementIdx = elements.length - 1;
+          renderDesign();
+        });
+
+        imgFileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const { img } = await loadImageFile(f);
+          elements.push({
+            type: 'image',
+            img: img,
+            x: canvas.width / 2,
+            y: canvas.height / 2
+          });
+          activeElementIdx = elements.length - 1;
+          renderDesign();
+        });
+
+        function getMousePos(e) {
+          const rect = canvas.getBoundingClientRect();
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          return {
+            x: (clientX - rect.left) * (canvas.width / rect.width),
+            y: (clientY - rect.top) * (canvas.height / rect.height)
+          };
+        }
+
+        function findElementAt(pos) {
+          for (let i = elements.length - 1; i >= 0; i--) {
+            const el = elements[i];
+            const dist = Math.sqrt(Math.pow(el.x - pos.x, 2) + Math.pow(el.y - pos.y, 2));
+            if (dist < 80) return i;
+          }
+          return -1;
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+          const pos = getMousePos(e);
+          const idx = findElementAt(pos);
+          if (idx !== -1) {
+            activeElementIdx = idx;
+            isDragging = true;
+            dragOffset.x = pos.x - elements[idx].x;
+            dragOffset.y = pos.y - elements[idx].y;
+            renderDesign();
+          } else {
+            activeElementIdx = -1;
+            renderDesign();
+          }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+          if (!isDragging || activeElementIdx === -1) return;
+          const pos = getMousePos(e);
+          elements[activeElementIdx].x = pos.x - dragOffset.x;
+          elements[activeElementIdx].y = pos.y - dragOffset.y;
+          renderDesign();
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        canvas.addEventListener('dblclick', (e) => {
+          const pos = getMousePos(e);
+          const idx = findElementAt(pos);
+          if (idx !== -1) {
+            elements.splice(idx, 1);
+            activeElementIdx = -1;
+            renderDesign();
+          }
+        });
+
+        dlBtn.addEventListener('click', () => {
+          const prevActive = activeElementIdx;
+          activeElementIdx = -1;
+          renderDesign();
+          triggerDownload(canvas.toDataURL('image/png'), 'designed-card.png');
+          activeElementIdx = prevActive;
+          renderDesign();
+        });
+
+        setCanvasDims();
+      },
+
+      /* 54. ตรวจความซ้ำซ้อนเนื้อหา */
+      'plagiarism-checker': (root) => {
+        root.innerHTML = `
+          <div class="tool-grid" style="grid-template-columns: 1fr; gap: 16px;">
+            <div class="field">
+              <label for="pcOrig">ข้อความหรือเอกสารต้นฉบับ (Original Content)</label>
+              <textarea id="pcOrig" class="textarea" placeholder="วางบทความหรือเอกสารอ้างอิงของคุณที่นี่..."></textarea>
+            </div>
+            <div class="field">
+              <label for="pcNew">ข้อความที่ต้องการเปรียบเทียบ (New Content)</label>
+              <textarea id="pcNew" class="textarea" placeholder="วางเนื้อหาที่เขียนขึ้นใหม่เพื่อตรวจสอบความซ้ำซ้อน..."></textarea>
+            </div>
+          </div>
+          <div style="margin-top:14px; text-align:center;">
+            <button type="button" class="btn btn-primary" id="pcBtn">🔍 ตรวจสอบความคล้ายคลึง & ซ้ำซ้อน</button>
+          </div>
+          <div class="status-msg" id="pcStatus"></div>
+
+          <div class="preview-box" id="pcResultWrap" style="display:none; text-align:left;">
+            <div class="stat-grid" style="margin-bottom:16px;">
+              <div class="stat-card"><div class="stat-val" id="pcIndex" style="color:var(--danger);">0%</div><div class="stat-lbl">ความคล้ายคลึง (Similarity Index)</div></div>
+              <div class="stat-card"><div class="stat-val" id="pcTotalWords">0</div><div class="stat-lbl">จำนวนคำทั้งหมด</div></div>
+              <div class="stat-card"><div class="stat-val" id="pcDupeWords">0</div><div class="stat-lbl">คำที่ซ้ำซ้อนกัน</div></div>
+            </div>
+            <div style="font-weight:700; margin-bottom:10px; color:var(--brand); font-size:14px;">รายงานการตรวจสอบ (จุดที่เน้นสีส้มคือประโยคหรือวลีที่ซ้ำกัน):</div>
+            <div id="pcReportText" style="font-size:14px; line-height:1.8; background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; white-space:pre-wrap; max-height:240px; overflow-y:auto;"></div>
+          </div>
+        `;
+
+        const origIn = root.querySelector('#pcOrig');
+        const newIn = root.querySelector('#pcNew');
+        const checkBtn = root.querySelector('#pcBtn');
+        const statusEl = root.querySelector('#pcStatus');
+        const wrapEl = root.querySelector('#pcResultWrap');
+        const indexVal = root.querySelector('#pcIndex');
+        const totalVal = root.querySelector('#pcTotalWords');
+        const dupeVal = root.querySelector('#pcDupeWords');
+        const reportText = root.querySelector('#pcReportText');
+
+        const segmenter = (typeof Intl !== 'undefined' && Intl.Segmenter)
+          ? new Intl.Segmenter('th', { granularity: 'word' })
+          : null;
+
+        function tokenize(text) {
+          if (segmenter) {
+            const out = [];
+            for (const seg of segmenter.segment(text.toLowerCase())) {
+              if (seg.isWordLike && seg.segment.trim()) out.push(seg.segment.trim());
+            }
+            if (out.length > 0) return out;
+          }
+          return text.toLowerCase()
+            .split(/[\s,.;!?()\-+*/\r\n\t]+/)
+            .map(s => s.trim())
+            .filter(Boolean);
+        }
+
+        checkBtn.addEventListener('click', () => {
+          const origText = origIn.value.trim();
+          const newText = newIn.value.trim();
+          statusEl.textContent = '';
+          wrapEl.style.display = 'none';
+
+          if (!origText || !newText) {
+            statusEl.textContent = 'กรุณากรอกข้อความให้ครบทั้งสองช่องเพื่อตรวจสอบ';
+            return;
+          }
+
+          const origTokens = tokenize(origText);
+          const newTokens = tokenize(newText);
+
+          if (newTokens.length === 0) {
+            statusEl.textContent = 'ไม่พบคำที่สามารถวิเคราะห์ได้ในช่องเปรียบเทียบ';
+            return;
+          }
+
+          const origSet = new Set(origTokens);
+          let matchCount = 0;
+          newTokens.forEach(token => {
+            if (origSet.has(token)) matchCount++;
+          });
+
+          const origLines = origText.split(/[\r\n.?!]+/).map(s => s.trim()).filter(s => s.length > 6);
+          let highlightedHTML = newText
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+          origLines.forEach(line => {
+            const safeLine = line
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;');
+            if (safeLine && highlightedHTML.includes(safeLine)) {
+              highlightedHTML = highlightedHTML
+                .split(safeLine)
+                .join('<mark style="background-color:#ffe3b3; color:#1a1d21; border-radius:4px; padding:2px 4px;">' + safeLine + '</mark>');
+            }
+          });
+
+          const pct = Math.round((matchCount / newTokens.length) * 100);
+          indexVal.textContent = pct + '%';
+          indexVal.style.color = pct > 40 ? 'var(--danger)' : 'var(--success)';
+          totalVal.textContent = newTokens.length.toLocaleString();
+          dupeVal.textContent = matchCount.toLocaleString();
+          reportText.innerHTML = highlightedHTML;
+
+          wrapEl.style.display = 'block';
+        });
       }
     };
 
