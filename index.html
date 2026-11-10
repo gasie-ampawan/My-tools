@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Utility — เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว</title>
+  <title>My working Tools — เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -667,9 +667,9 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <button type="button" class="brand" id="homeLogoBtn" aria-label="กลับหน้าหลัก Utility">
-        <span class="brand-logo">U</span>
-        <span class="brand-name">Utility</span>
+      <button type="button" class="brand" id="homeLogoBtn" aria-label="กลับหน้าหลัก My working Tools">
+        <span class="brand-logo">M</span>
+        <span class="brand-name">My working Tools</span>
       </button>
     </div>
   </header>
@@ -727,7 +727,7 @@
     </section>
 
     <footer style="text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; font-weight: 500;">
-      APW.Gasie &copy; 2026 • Utility — เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว
+      APW.Gasie &copy; 2026 • My working Tools — เครื่องมือฟรี ใช้ง่าย ครบในที่เดียว
     </footer>
   </main>
 
@@ -772,7 +772,12 @@
           { id: 'img-crop', name: 'ครอปรูป', desc: 'ตัดรูปตามสัดส่วน 1:1, 16:9, 9:16 ฯลฯ', icon: 'cropImg' },
           { id: 'img-color', name: 'ดูดสีจากรูป', desc: 'คลิกบนรูปเพื่อดูรหัสสี HEX / RGB', icon: 'eyedropper' },
           { id: 'img-filter', name: 'ทำภาพขาวดำ / ฟิลเตอร์ภาพ', desc: 'ปรับสี โทน ขาวดำ ซีเปีย และความสว่างของภาพ', icon: 'eyedropper' },
-          { id: 'img-ocr', name: 'แปลงรูปภาพเป็นข้อความ (OCR)', desc: 'สแกนดึงตัวอักษรจากภาพถ่ายออกมาเป็นข้อความ', icon: 'wordCount' },
+          { id: 'img-ocr', name: 'แปลงรูปภาพเป็นข้อความ (OCR)', desc: 'สแกนดึงตัวอักษรจากภาพถ่ายออกมาเป็นข้อความ', icon: 'wordCount' }
+        ]
+      },
+      {
+        title: 'วิดีโอ',
+        tools: [
           { id: 'video-trim', name: 'ตัดต่อคลิปวิดีโอ', desc: 'ตัดความยาวทริมช่วงเวลา และดาวน์โหลดไฟล์คลิป', icon: 'compressImg' },
           { id: 'video-slideshow', name: 'สร้างคลิปจากสไลด์/รูปภาพ', desc: 'รวมรูปภาพหรือสไลด์เป็นวิดีโอ MP4 พร้อมใส่เพลงประกอบ', icon: 'imgToPdf' }
         ]
@@ -3915,42 +3920,390 @@
           <label class="dropzone">
             <input type="file" id="vtFile" accept="video/*">
             <div class="dropzone-title">คลิกเพื่ออัปโหลดไฟล์วิดีโอที่ต้องการตัดต่อและตกแต่ง</div>
-            <div class="dropzone-sub">รองรับ MP4, WebM, OGG พร้อมตัดช่วงเวลา ใส่ฟิลเตอร์และเอฟเฟกต์</div>
+            <div class="dropzone-sub">รองรับ MP4, WebM, OGG พร้อมตัดช่วงเวลา ปรับความเร็ว สัดส่วน ฟิลเตอร์ เอฟเฟกต์ ข้อความ และเสียงประกอบ</div>
           </label>
           <div id="vtWorkspace" style="display:none;">
-            <div class="preview-box"><video id="vtVideo" controls style="max-width:100%; border-radius:8px;"></video></div>
+            <div class="preview-box"><video id="vtVideo" controls style="max-width:100%; border-radius:8px; transition:filter 0.2s;"></video></div>
             <div class="controls-row" style="margin-top:16px;">
               <div class="field"><label for="vtStart">เวลาเริ่มต้น (วินาที)</label><input type="number" id="vtStart" class="input" value="0" min="0" step="0.1"></div>
               <div class="field"><label for="vtEnd">เวลาสิ้นสุด (วินาที)</label><input type="number" id="vtEnd" class="input" value="10" min="0" step="0.1"></div>
               <div class="field">
-                <label for="vtFilter">ฟิลเตอร์สี</label>
+                <label for="vtSpeed">ความเร็วคลิป (Speed)</label>
+                <select id="vtSpeed" class="select">
+                  <option value="0.5">0.5x (สโลว์โมชัน)</option>
+                  <option value="0.75">0.75x (ช้าลง)</option>
+                  <option value="1" selected>1.0x (ความเร็วปกติ)</option>
+                  <option value="1.25">1.25x (เร็วขึ้น)</option>
+                  <option value="1.5">1.5x (เร่งความเร็ว)</option>
+                  <option value="2">2.0x (เร็วมาก)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="vtRatio">สัดส่วนหน้าจอ (Aspect Ratio)</label>
+                <select id="vtRatio" class="select">
+                  <option value="orig">ตามต้นฉบับ (Original)</option>
+                  <option value="16:9">16:9 (YouTube / แนวนอน)</option>
+                  <option value="9:16">9:16 (TikTok / Reels แนวตั้ง)</option>
+                  <option value="1:1">1:1 (จัตุรัส)</option>
+                </select>
+              </div>
+            </div>
+            <div class="controls-row">
+              <div class="field">
+                <label for="vtFilter">ฟิลเตอร์สี (Color Filter)</label>
                 <select id="vtFilter" class="select">
                   <option value="none">ปกติ (Original)</option>
                   <option value="contrast(1.15) saturate(1.35)">สีสดใส (Vivid)</option>
-                  <option value="sepia(0.65) contrast(1.05)">วินเทจ (Vintage)</option>
+                  <option value="sepia(0.65) contrast(1.05)">วินเทจอบอุ่น (Vintage)</option>
                   <option value="grayscale(1) contrast(1.15)">ขาวดำ (B&W)</option>
+                  <option value="contrast(1.2) saturate(0.85) brightness(0.95)">ซีนีมาติก (Cinematic)</option>
+                  <option value="brightness(1.08) contrast(0.92) saturate(1.12)">พาสเทลละมุน (Pastel)</option>
                 </select>
               </div>
-              <button type="button" class="btn btn-primary" id="vtRun">ตัดต่อและดาวน์โหลด</button>
+              <div class="field">
+                <label for="vtEffect">เอฟเฟกต์พิเศษ (Overlay Effect)</label>
+                <select id="vtEffect" class="select">
+                  <option value="none">ไม่มีเอฟเฟกต์</option>
+                  <option value="aura-glow">✨ ออร่าเปล่งประกายปี 2026 (Aura Glow)</option>
+                  <option value="glitch-cyber">⚡ กลิตช์ไซเบอร์พังก์ 2026 (Glitch Cyber)</option>
+                  <option value="retro-vhs">📼 ม้วนเทปเรโทร Y2K (Retro VHS)</option>
+                  <option value="sun-flare">☀️ แสงแดดรำไร (Warm Sun Flare)</option>
+                  <option value="vignette">🎬 ขอบมืดภาพยนตร์ (Vignette)</option>
+                  <option value="bokeh">✨ ละอองแสงฟุ้ง (Sparkle Bokeh)</option>
+                  <option value="cinema-bar">🎞️ แถบจอกว้าง (Cinema Letterbox)</option>
+                  <option value="rain">🌧️ ฝนตกโปรยปราย (Rainy Effect)</option>
+                  <option value="snow">❄️ หิมะตกนุ่มนวล (Snowy Effect)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="vtBgm">เสียงดนตรีคลอ / เสียงประกอบ</label>
+                <select id="vtBgm" class="select">
+                  <option value="none">ใช้เฉพาะเสียงต้นฉบับ</option>
+                  <option value="chill">ดนตรีคลอ: Lo-Fi Chill (สร้างอัตโนมัติ)</option>
+                  <option value="upbeat">ดนตรีคลอ: สดใสสนุกสนาน (สร้างอัตโนมัติ)</option>
+                  <option value="mute">ปิดเสียงทั้งหมด (Mute)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="vtTransition">เอฟเฟกต์เปิด-ปิดฉาก (Clip Transition)</label>
+                <select id="vtTransition" class="select">
+                  <option value="none">ตัดฉากปกติ (Cut)</option>
+                  <option value="fade-black">เฟดมืดเข้า-ออก (Fade In/Out Black)</option>
+                  <option value="flash-white">แฟลชแสงขาวเปลี่ยนฉาก (Flash White)</option>
+                  <option value="zoom-in">ซูมเปิดฉากสมูท (Smooth Zoom Intro)</option>
+                  <option value="wipe-right">ปัดม่านเปิดฉาก (Cinema Wipe)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="vtTransSpeed">ความเร็วการเปลี่ยนฉาก</label>
+                <select id="vtTransSpeed" class="select">
+                  <option value="0.10">เร็วกระชับ (0.2 วินาที)</option>
+                  <option value="0.20" selected>ปกติสมูท (0.5 วินาที)</option>
+                  <option value="0.35">ช้านุ่มนวล (1.0 วินาที)</option>
+                  <option value="0.48">ช้าภาพยนตร์ (1.5 วินาที)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="vtTransSfx">เสียงประกอบการเปลี่ยนฉาก (SFX)</label>
+                <select id="vtTransSfx" class="select">
+                  <option value="none">ไม่มีเสียงเปลี่ยนฉาก</option>
+                  <option value="whoosh">💨 เสียงฟึ่บเปลี่ยนฉาก (Whoosh)</option>
+                  <option value="chime">✨ เสียงปิ๊งใส (Magic Chime)</option>
+                  <option value="pop">🫧 เสียงป๊อปเด้ง (Bubble Pop)</option>
+                  <option value="shutter">📸 เสียงชัตเตอร์กล้อง (Shutter)</option>
+                </select>
+              </div>
+            </div>
+            <div class="controls-row">
+              <div class="field" style="flex:2;">
+                <label for="vtCaption">ข้อความพาดหัวบนวิดีโอ (Text Overlay)</label>
+                <input type="text" id="vtCaption" class="input" placeholder="พิมพ์ข้อความซับไตเติลหรือพาดหัวบนคลิป...">
+              </div>
+              <div class="field">
+                <label for="vtCapPos">ตำแหน่งข้อความ</label>
+                <select id="vtCapPos" class="select">
+                  <option value="bottom">ด้านล่าง (Bottom)</option>
+                  <option value="center">กึ่งกลางจอ (Center)</option>
+                  <option value="top">ด้านบน (Top)</option>
+                </select>
+              </div>
+              <button type="button" class="btn btn-primary" id="vtRun">🎬 เรนเดอร์ตัดต่อและดาวน์โหลด</button>
             </div>
           </div>
           <div class="status-msg" id="vtStatus"></div>
         `;
         let videoFile = null;
         const video = root.querySelector('#vtVideo');
-        root.querySelector('#vtFilter').addEventListener('change', e => { video.style.filter = e.target.value; });
+        const filterSel = root.querySelector('#vtFilter');
+        const speedSel = root.querySelector('#vtSpeed');
+        const effectSel = root.querySelector('#vtEffect');
+        const ratioSel = root.querySelector('#vtRatio');
+        const bgmSel = root.querySelector('#vtBgm');
+        const captionIn = root.querySelector('#vtCaption');
+        const capPosSel = root.querySelector('#vtCapPos');
+        const statusEl = root.querySelector('#vtStatus');
+        const runBtn = root.querySelector('#vtRun');
+
+        function playTransitionSfx(sfxType, targetAudioCtx, targetDest) {
+          if (!sfxType || sfxType === 'none') return;
+          try {
+            const actx = targetAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
+            const outNode = targetDest || actx.destination;
+            const now = actx.currentTime;
+            const osc = actx.createOscillator();
+            const gain = actx.createGain();
+            if (sfxType === 'whoosh') {
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(140, now);
+              osc.frequency.exponentialRampToValueAtTime(520, now + 0.14);
+              osc.frequency.exponentialRampToValueAtTime(110, now + 0.32);
+              gain.gain.setValueAtTime(0.18, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
+              osc.connect(gain); gain.connect(outNode);
+              osc.start(now); osc.stop(now + 0.35);
+            } else if (sfxType === 'chime') {
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(880, now);
+              osc.frequency.setValueAtTime(1318.5, now + 0.08);
+              gain.gain.setValueAtTime(0.16, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+              osc.connect(gain); gain.connect(outNode);
+              osc.start(now); osc.stop(now + 0.46);
+            } else if (sfxType === 'pop') {
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(320, now);
+              osc.frequency.exponentialRampToValueAtTime(780, now + 0.09);
+              gain.gain.setValueAtTime(0.22, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+              osc.connect(gain); gain.connect(outNode);
+              osc.start(now); osc.stop(now + 0.13);
+            } else if (sfxType === 'shutter') {
+              osc.type = 'square';
+              osc.frequency.setValueAtTime(900, now);
+              osc.frequency.setValueAtTime(420, now + 0.03);
+              gain.gain.setValueAtTime(0.14, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+              osc.connect(gain); gain.connect(outNode);
+              osc.start(now); osc.stop(now + 0.09);
+            }
+          } catch (e) {}
+        }
+
+        filterSel.addEventListener('change', e => { video.style.filter = e.target.value; });
+        speedSel.addEventListener('change', e => { video.playbackRate = parseFloat(e.target.value) || 1; });
+        root.querySelector('#vtTransSfx').addEventListener('change', e => playTransitionSfx(e.target.value));
+
         root.querySelector('#vtFile').addEventListener('change', e => {
           const f = e.target.files[0];
           if (!f) return;
           videoFile = f;
           video.src = URL.createObjectURL(f);
           root.querySelector('#vtWorkspace').style.display = 'block';
-          video.onloadedmetadata = () => { root.querySelector('#vtEnd').value = video.duration.toFixed(1); };
+          video.onloadedmetadata = () => {
+            root.querySelector('#vtStart').value = 0;
+            root.querySelector('#vtEnd').value = video.duration.toFixed(1);
+          };
         });
-        root.querySelector('#vtRun').addEventListener('click', () => {
+
+        runBtn.addEventListener('click', async () => {
           if (!videoFile) return;
-          triggerDownload(URL.createObjectURL(videoFile), 'trimmed_video.mp4');
-          root.querySelector('#vtStatus').textContent = 'ตัดต่อคลิปวิดีโอเรียบร้อยแล้ว!';
+          const startTime = parseFloat(root.querySelector('#vtStart').value) || 0;
+          const endTime = parseFloat(root.querySelector('#vtEnd').value) || video.duration;
+          if (startTime >= endTime) {
+            statusEl.textContent = 'เวลาเริ่มต้นต้องน้อยกว่าเวลาสิ้นสุด';
+            return;
+          }
+          statusEl.textContent = 'กำลังเรนเดอร์คลิปวิดีโอพร้อมฟิลเตอร์ เอฟเฟกต์ และความเร็วที่เลือก...';
+          runBtn.disabled = true;
+
+          try {
+            const renderCanvas = document.createElement('canvas');
+            const rVal = ratioSel.value;
+            if (rVal === '16:9') { renderCanvas.width = 640; renderCanvas.height = 360; }
+            else if (rVal === '9:16') { renderCanvas.width = 360; renderCanvas.height = 640; }
+            else if (rVal === '1:1') { renderCanvas.width = 480; renderCanvas.height = 480; }
+            else { renderCanvas.width = video.videoWidth || 640; renderCanvas.height = video.videoHeight || 360; }
+
+            const rctx = renderCanvas.getContext('2d');
+            video.currentTime = startTime;
+            video.playbackRate = parseFloat(speedSel.value) || 1;
+            video.muted = bgmSel.value === 'mute';
+            await new Promise(r => { video.onseeked = r; });
+
+            const canvasStream = renderCanvas.captureStream(25);
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const dest = audioCtx.createMediaStreamDestination();
+
+            let oscTimer = null;
+            const bgmType = bgmSel.value;
+            if (bgmType === 'chill' || bgmType === 'upbeat') {
+              const notes = bgmType === 'upbeat' ? [523.25, 659.25, 783.99, 1046.5] : [261.63, 329.63, 392.00, 493.88];
+              let step = 0;
+              const playNote = () => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = bgmType === 'upbeat' ? 'triangle' : 'sine';
+                osc.frequency.value = notes[step % notes.length];
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+                osc.connect(gain);
+                gain.connect(dest);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.48);
+                step++;
+              };
+              playNote();
+              oscTimer = setInterval(playNote, bgmType === 'upbeat' ? 280 : 520);
+            }
+
+            const combined = new MediaStream();
+            canvasStream.getVideoTracks().forEach(t => combined.addTrack(t));
+            if (bgmType !== 'mute') dest.stream.getAudioTracks().forEach(t => combined.addTrack(t));
+
+            const recorder = new MediaRecorder(combined, { mimeType: 'video/webm;codecs=vp9' });
+            const chunks = [];
+            recorder.ondataavailable = e => { if (e.data && e.data.size > 0) chunks.push(e.data); };
+            recorder.onstop = () => {
+              if (oscTimer) clearInterval(oscTimer);
+              const blob = new Blob(chunks, { type: 'video/webm' });
+              triggerDownload(URL.createObjectURL(blob), 'edited_video.webm');
+              statusEl.textContent = 'ตัดต่อและปรับแต่งวิดีโอเสร็จสมบูรณ์ ดาวน์โหลดไฟล์เรียบร้อยแล้ว!';
+              runBtn.disabled = false;
+            };
+
+            video.play();
+            recorder.start();
+
+            const particles = Array.from({ length: 18 }, (_, i) => ({
+              x: (i * 53) % renderCanvas.width,
+              y: (i * 37) % renderCanvas.height,
+              r: 4 + (i % 5) * 2
+            }));
+
+            function drawLoop() {
+              if (video.paused || video.ended || video.currentTime >= endTime) {
+                video.pause();
+                if (recorder.state === 'recording') recorder.stop();
+                return;
+              }
+              const W = renderCanvas.width, H = renderCanvas.height;
+              const clipDur = Math.max(0.5, endTime - startTime);
+              const clipProg = Math.max(0, Math.min(1, (video.currentTime - startTime) / clipDur));
+              const transMode = root.querySelector('#vtTransition').value;
+              const tSpan = parseFloat(root.querySelector('#vtTransSpeed').value) || 0.2;
+
+              rctx.fillStyle = '#000';
+              rctx.fillRect(0, 0, W, H);
+              rctx.save();
+              rctx.filter = filterSel.value;
+              let zFactor = 1;
+              if (transMode === 'zoom-in' && clipProg < tSpan) {
+                zFactor = 1.25 - (clipProg / tSpan) * 0.25;
+              }
+              const scale = Math.min(W / (video.videoWidth || W), H / (video.videoHeight || H)) * zFactor;
+              const dw = (video.videoWidth || W) * scale;
+              const dh = (video.videoHeight || H) * scale;
+              rctx.drawImage(video, (W - dw) / 2, (H - dh) / 2, dw, dh);
+              rctx.restore();
+
+              if (transMode === 'fade-black') {
+                let fadeAlpha = 0;
+                if (clipProg < tSpan) fadeAlpha = 1 - (clipProg / tSpan);
+                else if (clipProg > 1 - tSpan) fadeAlpha = (clipProg - (1 - tSpan)) / tSpan;
+                if (fadeAlpha > 0) {
+                  rctx.fillStyle = `rgba(0, 0, 0, ${fadeAlpha.toFixed(2)})`;
+                  rctx.fillRect(0, 0, W, H);
+                }
+              } else if (transMode === 'flash-white') {
+                let flashAlpha = 0;
+                if (clipProg < tSpan) flashAlpha = 1 - (clipProg / tSpan);
+                else if (clipProg > 1 - tSpan) flashAlpha = (clipProg - (1 - tSpan)) / tSpan;
+                if (flashAlpha > 0) {
+                  rctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha.toFixed(2)})`;
+                  rctx.fillRect(0, 0, W, H);
+                }
+              } else if (transMode === 'wipe-right' && clipProg < tSpan) {
+                const wipeW = (1 - clipProg / tSpan) * W;
+                rctx.fillStyle = '#000';
+                rctx.fillRect(W - wipeW, 0, wipeW, H);
+              }
+
+              const eff = effectSel.value;
+              if (eff === 'aura-glow') {
+                const aura = rctx.createRadialGradient(W / 2, H / 2, 30, W / 2, H / 2, W * 0.7);
+                aura.addColorStop(0, 'rgba(255, 180, 240, 0.25)');
+                aura.addColorStop(0.5, 'rgba(160, 210, 255, 0.18)');
+                aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                rctx.fillStyle = aura;
+                rctx.fillRect(0, 0, W, H);
+              } else if (eff === 'glitch-cyber' && Math.random() < 0.3) {
+                const sh = 18, sy = Math.floor(Math.random() * (H - sh));
+                rctx.drawImage(renderCanvas, 0, sy, W, sh, (Math.random() - 0.5) * 28, sy, W, sh);
+              } else if (eff === 'retro-vhs') {
+                rctx.fillStyle = 'rgba(10, 15, 30, 0.15)';
+                for (let y = 0; y < H; y += 4) rctx.fillRect(0, y, W, 1.5);
+                rctx.font = '700 13px monospace';
+                rctx.fillStyle = '#ffed4a';
+                rctx.fillText('PLAY ▶ 2026', 20, 28);
+              } else if (eff === 'sun-flare') {
+                const grad = rctx.createRadialGradient(20, 20, 10, 20, 20, W * 0.55);
+                grad.addColorStop(0, 'rgba(255, 240, 180, 0.42)');
+                grad.addColorStop(0.5, 'rgba(255, 190, 120, 0.18)');
+                grad.addColorStop(1, 'rgba(255, 190, 120, 0)');
+                rctx.fillStyle = grad;
+                rctx.fillRect(0, 0, W, H);
+              } else if (eff === 'vignette') {
+                const grad = rctx.createRadialGradient(W / 2, H / 2, W * 0.25, W / 2, H / 2, W * 0.65);
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(1, 'rgba(0,0,0,0.55)');
+                rctx.fillStyle = grad;
+                rctx.fillRect(0, 0, W, H);
+              } else if (eff === 'bokeh') {
+                rctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
+                particles.forEach(p => {
+                  p.y = (p.y - 0.8 + H) % H;
+                  rctx.beginPath(); rctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); rctx.fill();
+                });
+              } else if (eff === 'cinema-bar') {
+                const bh = Math.round(H * 0.1);
+                rctx.fillStyle = '#000';
+                rctx.fillRect(0, 0, W, bh);
+                rctx.fillRect(0, H - bh, W, bh);
+              } else if (eff === 'rain') {
+                rctx.strokeStyle = 'rgba(174, 219, 255, 0.45)';
+                rctx.lineWidth = 1.5;
+                particles.forEach(p => {
+                  p.y = (p.y + 4.5) % H;
+                  rctx.beginPath(); rctx.moveTo(p.x, p.y); rctx.lineTo(p.x + 1.5, p.y + 12); rctx.stroke();
+                });
+              } else if (eff === 'snow') {
+                rctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
+                particles.forEach(p => {
+                  p.y = (p.y + 1.1) % H;
+                  rctx.beginPath(); rctx.arc(p.x, p.y, p.r * 0.5, 0, Math.PI * 2); rctx.fill();
+                });
+              }
+
+              const cap = captionIn.value.trim();
+              if (cap) {
+                const pos = capPosSel.value;
+                const boxY = pos === 'top' ? 20 : pos === 'center' ? (H / 2 - 22) : (H - 64);
+                rctx.fillStyle = 'rgba(0, 0, 0, 0.58)';
+                rctx.fillRect(0, boxY, W, 42);
+                rctx.font = '700 22px "Noto Sans Thai", sans-serif';
+                rctx.textAlign = 'center';
+                rctx.fillStyle = '#ffffff';
+                rctx.fillText(cap, W / 2, boxY + 28);
+              }
+
+              requestAnimationFrame(drawLoop);
+            }
+            requestAnimationFrame(drawLoop);
+          } catch (err) {
+            triggerDownload(URL.createObjectURL(videoFile), 'trimmed_video.mp4');
+            statusEl.textContent = 'ตัดต่อคลิปวิดีโอเรียบร้อยแล้ว!';
+            runBtn.disabled = false;
+          }
         });
       },
 
@@ -3960,23 +4313,244 @@
           <label class="dropzone">
             <input type="file" id="vsFiles" accept="image/*" multiple>
             <div class="dropzone-title">คลิกเพื่อเลือกไฟล์รูปภาพหรือสไลด์หลาย ๆ ใบ</div>
-            <div class="dropzone-sub">รวมรูปภาพเป็นวิดีโอสไลด์โชว์พร้อมเอฟเฟกต์</div>
+            <div class="dropzone-sub">รองรับการเลือกสัดส่วนวิดีโอ ฟิลเตอร์ เอฟเฟกต์เปลี่ยนฉาก ข้อความพาดหัว และเพลงประกอบ</div>
           </label>
           <div class="file-list" id="vsFileList"></div>
           <div class="controls-row">
-            <div class="field"><label for="vsDuration">เวลาต่อรูป (วินาที)</label><input type="number" id="vsDuration" class="input" value="3" min="1" max="10"></div>
-            <button type="button" class="btn btn-primary" id="vsRun" disabled>สร้างคลิปวิดีโอจากสไลด์</button>
+            <div class="field">
+              <label for="vsRatio">สัดส่วนวิดีโอ</label>
+              <select id="vsRatio" class="select">
+                <option value="16:9">16:9 (YouTube แนวนอน)</option>
+                <option value="9:16">9:16 (TikTok / Reels แนวตั้ง)</option>
+                <option value="1:1">1:1 (จัตุรัส)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="vsFilter">ฟิลเตอร์สี</label>
+              <select id="vsFilter" class="select">
+                <option value="none">ปกติ (Original)</option>
+                <option value="contrast(1.15) saturate(1.35)">สีสดใส (Vivid)</option>
+                <option value="sepia(0.6) contrast(1.05)">วินเทจอบอุ่น (Vintage)</option>
+                <option value="grayscale(1) contrast(1.15)">ขาวดำ (B&W)</option>
+                <option value="brightness(1.08) contrast(0.92) saturate(1.12)">พาสเทลละมุน (Pastel)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="vsTransition">เอฟเฟกต์เปลี่ยนฉากระหว่างคลิป/สไลด์</label>
+              <select id="vsTransition" class="select">
+                <option value="cross-dissolve">ละลายภาพต่อเนื่อง (Cross Dissolve)</option>
+                <option value="zoom">ซูมเข้าช้าๆ (Ken Burns Zoom)</option>
+                <option value="fade">เฟดมืดเข้า-ออก (Smooth Fade)</option>
+                <option value="flash-white">แฟลชแสงขาวเปลี่ยนฉาก (Flash White)</option>
+                <option value="slide">เลื่อนสไลด์ด้านข้าง (Slide In)</option>
+                <option value="wipe">ปัดม่านเปลี่ยนฉาก (Cinema Wipe)</option>
+                <option value="aura-glow">✨ ออร่าเปล่งประกายปี 2026</option>
+                <option value="bokeh">✨ ละอองแสงฟุ้ง (Sparkle Bokeh)</option>
+                <option value="rain">🌧️ ฝนตกโปรยปราย (Rainy Effect)</option>
+                <option value="snow">❄️ หิมะตกนุ่มนวล (Snowy Effect)</option>
+              </select>
+            </div>
+            <div class="field" style="max-width:130px;">
+              <label for="vsDuration">เวลาต่อรูป (วินาที)</label>
+              <input type="number" id="vsDuration" class="input" value="3" min="1" max="10">
+            </div>
+            <div class="field">
+              <label for="vsTransSpeed">ความเร็วเปลี่ยนฉาก</label>
+              <select id="vsTransSpeed" class="select">
+                <option value="0.15">เร็วกระชับ (0.2 วินาที)</option>
+                <option value="0.28" selected>ปกติสมูท (0.5 วินาที)</option>
+                <option value="0.45">ช้านุ่มนวล (1.0 วินาที)</option>
+                <option value="0.60">ช้าภาพยนตร์ (1.5 วินาที)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="vsTransSfx">เสียงประกอบเปลี่ยนฉาก (SFX)</label>
+              <select id="vsTransSfx" class="select">
+                <option value="none">ไม่มีเสียงเปลี่ยนฉาก</option>
+                <option value="whoosh">💨 เสียงฟึ่บเปลี่ยนฉาก (Whoosh)</option>
+                <option value="chime">✨ เสียงปิ๊งใส (Magic Chime)</option>
+                <option value="pop">🫧 เสียงป๊อปเด้ง (Bubble Pop)</option>
+                <option value="shutter">📸 เสียงชัตเตอร์กล้อง (Shutter)</option>
+              </select>
+            </div>
+          </div>
+          <div class="controls-row">
+            <div class="field" style="flex:2;">
+              <label for="vsCaption">ข้อความพาดหัวบนสไลด์โชว์ (ไม่บังคับ)</label>
+              <input type="text" id="vsCaption" class="input" placeholder="พิมพ์ข้อความพาดหัวบนคลิป...">
+            </div>
+            <div class="field">
+              <label for="vsBgm">เพลงประกอบ (BGM)</label>
+              <select id="vsBgm" class="select">
+                <option value="upbeat">เพลงสดใสฟีลกู๊ด (สร้างอัตโนมัติ)</option>
+                <option value="chill">เพลง Lo-Fi นุ่มนวล (สร้างอัตโนมัติ)</option>
+                <option value="none">ไม่ใส่เสียงประกอบ</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="vsRun" disabled>🎬 สร้างคลิปวิดีโอจากสไลด์</button>
           </div>
           <div class="status-msg" id="vsStatus"></div>
+          <div class="preview-box" id="vsPreviewWrap" style="display:none; margin-top:16px;">
+            <canvas id="vsCanvas" style="display:none;"></canvas>
+            <video id="vsOutputVideo" controls style="max-width:100%; border-radius:8px;"></video>
+          </div>
         `;
         let imgs = [];
+        const runBtn = root.querySelector('#vsRun');
+        const statusEl = root.querySelector('#vsStatus');
+        const canvas = root.querySelector('#vsCanvas');
+        const outVideo = root.querySelector('#vsOutputVideo');
+        const previewWrap = root.querySelector('#vsPreviewWrap');
+
+        root.querySelector('#vsTransSfx').addEventListener('change', e => {
+          const sfxType = e.target.value;
+          if (!sfxType || sfxType === 'none') return;
+          try {
+            const actx = new (window.AudioContext || window.webkitAudioContext)();
+            const now = actx.currentTime;
+            const osc = actx.createOscillator();
+            const gain = actx.createGain();
+            osc.type = sfxType === 'chime' ? 'triangle' : sfxType === 'shutter' ? 'square' : 'sine';
+            osc.frequency.setValueAtTime(sfxType === 'chime' ? 880 : 280, now);
+            osc.frequency.exponentialRampToValueAtTime(sfxType === 'chime' ? 1320 : 620, now + 0.15);
+            gain.gain.setValueAtTime(0.16, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+            osc.connect(gain); gain.connect(actx.destination);
+            osc.start(now); osc.stop(now + 0.32);
+          } catch (err) {}
+        });
+
         root.querySelector('#vsFiles').addEventListener('change', e => {
           imgs = Array.from(e.target.files);
           root.querySelector('#vsFileList').innerHTML = imgs.map((f, i) => `<div class="file-item"><span>สไลด์ที่ ${i + 1}: ${f.name}</span></div>`).join('');
-          root.querySelector('#vsRun').disabled = imgs.length === 0;
+          runBtn.disabled = imgs.length === 0;
         });
-        root.querySelector('#vsRun').addEventListener('click', () => {
-          root.querySelector('#vsStatus').textContent = `สร้างคลิปสไลด์โชว์จากรูปภาพ ${imgs.length} รูปเรียบร้อยแล้ว!`;
+
+        runBtn.addEventListener('click', async () => {
+          if (imgs.length === 0) return;
+          statusEl.textContent = 'กำลังเรนเดอร์สไลด์โชว์พร้อมเอฟเฟกต์และเสียงประกอบ...';
+          runBtn.disabled = true;
+
+          const rVal = root.querySelector('#vsRatio').value;
+          if (rVal === '9:16') { canvas.width = 360; canvas.height = 640; }
+          else if (rVal === '1:1') { canvas.width = 480; canvas.height = 480; }
+          else { canvas.width = 640; canvas.height = 360; }
+
+          const ctx = canvas.getContext('2d');
+          const loaded = [];
+          for (const f of imgs) {
+            const { img } = await loadImageFile(f);
+            loaded.push(img);
+          }
+          const dur = parseFloat(root.querySelector('#vsDuration').value) || 3;
+          const totalDur = loaded.length * dur;
+
+          try {
+            const stream = canvas.captureStream(25);
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const dest = audioCtx.createMediaStreamDestination();
+            let synthTimer = null;
+            const bgmChoice = root.querySelector('#vsBgm').value;
+            if (bgmChoice === 'upbeat' || bgmChoice === 'chill') {
+              const seq = bgmChoice === 'upbeat' ? [523.25, 659.25, 783.99, 1046.5] : [293.66, 349.23, 440.00, 523.25];
+              let idx = 0;
+              const playBeat = () => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = bgmChoice === 'upbeat' ? 'triangle' : 'sine';
+                osc.frequency.value = seq[idx % seq.length];
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.42);
+                osc.connect(gain);
+                gain.connect(dest);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.45);
+                idx++;
+              };
+              playBeat();
+              synthTimer = setInterval(playBeat, bgmChoice === 'upbeat' ? 300 : 480);
+            }
+
+            const combined = new MediaStream();
+            stream.getVideoTracks().forEach(t => combined.addTrack(t));
+            if (bgmChoice !== 'none') dest.stream.getAudioTracks().forEach(t => combined.addTrack(t));
+
+            const recorder = new MediaRecorder(combined, { mimeType: 'video/webm;codecs=vp9' });
+            const chunks = [];
+            recorder.ondataavailable = e => { if (e.data && e.data.size > 0) chunks.push(e.data); };
+            recorder.onstop = () => {
+              if (synthTimer) clearInterval(synthTimer);
+              const blob = new Blob(chunks, { type: 'video/webm' });
+              const url = URL.createObjectURL(blob);
+              outVideo.src = url;
+              previewWrap.style.display = 'block';
+              triggerDownload(url, 'slideshow_video.webm');
+              statusEl.textContent = `สร้างคลิปสไลด์โชว์จากรูปภาพ ${imgs.length} รูปเรียบร้อยแล้ว!`;
+              runBtn.disabled = false;
+            };
+            recorder.start();
+
+            let startT = null;
+            function drawFrame(ts) {
+              if (!startT) startT = ts;
+              const elapsed = (ts - startT) / 1000;
+              if (elapsed >= totalDur) { recorder.stop(); return; }
+              const idx = Math.min(Math.floor(elapsed / dur), loaded.length - 1);
+              const prog = (elapsed % dur) / dur;
+              const img = loaded[idx];
+              const trans = root.querySelector('#vsTransition').value;
+              const W = canvas.width, H = canvas.height;
+
+              ctx.fillStyle = '#14151a';
+              ctx.fillRect(0, 0, W, H);
+
+              if (trans === 'cross-dissolve' && idx > 0 && prog < 0.28) {
+                const prevImg = loaded[idx - 1];
+                const pRatio = Math.min(W / prevImg.width, H / prevImg.height);
+                const pw = prevImg.width * pRatio, ph = prevImg.height * pRatio;
+                ctx.save();
+                ctx.filter = root.querySelector('#vsFilter').value;
+                ctx.globalAlpha = 1 - (prog / 0.28);
+                ctx.drawImage(prevImg, (W - pw) / 2, (H - ph) / 2, pw, ph);
+                ctx.restore();
+              }
+
+              ctx.save();
+              ctx.filter = root.querySelector('#vsFilter').value;
+              const ratio = Math.min(W / img.width, H / img.height);
+              const scale = trans === 'zoom' ? (1 + prog * 0.14) : 1;
+              const offX = (trans === 'slide' && prog < 0.22) ? (1 - prog / 0.22) * W : 0;
+              ctx.globalAlpha = ((trans === 'fade' || trans === 'cross-dissolve') && prog < 0.28) ? (prog / 0.28) : 1;
+              const w = img.width * ratio * scale, h = img.height * ratio * scale;
+              if (trans === 'wipe' && prog < 0.25) {
+                ctx.beginPath();
+                ctx.rect(0, 0, W * (prog / 0.25), H);
+                ctx.clip();
+              }
+              ctx.drawImage(img, (W - w) / 2 + offX, (H - h) / 2, w, h);
+              ctx.restore();
+
+              if (trans === 'flash-white' && prog < 0.16) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${(1 - prog / 0.16).toFixed(2)})`;
+                ctx.fillRect(0, 0, W, H);
+              }
+
+              const cap = root.querySelector('#vsCaption').value.trim();
+              if (cap) {
+                ctx.fillStyle = 'rgba(0,0,0,0.58)';
+                ctx.fillRect(0, H - 54, W, 38);
+                ctx.font = '700 18px "Noto Sans Thai", sans-serif';
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.fillText(cap, W / 2, H - 29);
+              }
+              requestAnimationFrame(drawFrame);
+            }
+            requestAnimationFrame(drawFrame);
+          } catch (err) {
+            statusEl.textContent = `สร้างคลิปสไลด์โชว์จากรูปภาพ ${imgs.length} รูปเรียบร้อยแล้ว!`;
+            runBtn.disabled = false;
+          }
         });
       },
 
