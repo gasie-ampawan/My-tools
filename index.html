@@ -700,7 +700,7 @@
       border-bottom: 1px solid var(--border);
     }
   </style>
-</head>
+<style data-link-removed-style>a[data-link-removed],a[href*="zPythonSafez"]:not([onclick]){pointer-events:none!important;cursor:default!important;opacity:.6}</style></head>
 <body>
   <header class="topbar">
     <div class="topbar-inner">
@@ -2221,32 +2221,86 @@
       /* 17. สร้าง QR Code */
       'qr-code': (root) => {
         root.innerHTML = `
-          <div class="controls-row">
-            <div class="field" style="flex:2;">
-              <label for="qrText">ข้อความหรือลิงก์ URL</label>
-              <input type="text" id="qrText" class="input" value="Utility APW.Gasie 2026" placeholder="วางลิงก์หรือข้อความ...">
+          <div class="pill-group" id="qrTabs">
+            <button type="button" class="pill-btn active" data-mode="single">🔘 สร้าง QR Code เดี่ยว</button>
+            <button type="button" class="pill-btn" data-mode="batch">📑 สร้างหลายอันพร้อมกันจากไฟล์ / รายการ</button>
+          </div>
+
+          <!-- Single Mode -->
+          <div id="qrSingleWrap">
+            <div class="controls-row">
+              <div class="field" style="flex:2;">
+                <label for="qrText">ข้อความหรือลิงก์ URL</label>
+                <input type="text" id="qrText" class="input" value="about:invalid#zPythonSafez" placeholder="วางลิงก์หรือข้อความ...">
+              </div>
+              <div class="field" style="max-width:110px;">
+                <label for="qrFg">สีลาย QR</label>
+                <input type="color" id="qrFg" class="input" value="#1e2024" style="height:39px;padding:4px;">
+              </div>
+              <div class="field" style="max-width:110px;">
+                <label for="qrBg">สีพื้นหลัง</label>
+                <input type="color" id="qrBg" class="input" value="#ffffff" style="height:39px;padding:4px;">
+              </div>
             </div>
-            <div class="field" style="max-width:110px;">
-              <label for="qrFg">สีลาย QR</label>
-              <input type="color" id="qrFg" class="input" value="#1e2024" style="height:39px;padding:4px;">
+            <div class="controls-row">
+              <div class="field">
+                <label for="qrLogo">ใส่โลโก้ตรงกลาง (ไม่บังคับ)</label>
+                <input type="file" id="qrLogo" accept="image/*" class="input">
+              </div>
+              <button type="button" class="btn btn-primary" id="qrDlPng">ดาวน์โหลด PNG</button>
+              <button type="button" class="btn btn-secondary" id="qrDlSvg">ดาวน์โหลด SVG</button>
             </div>
-            <div class="field" style="max-width:110px;">
-              <label for="qrBg">สีพื้นหลัง</label>
-              <input type="color" id="qrBg" class="input" value="#ffffff" style="height:39px;padding:4px;">
+            <div class="preview-box">
+              <canvas id="qrCanvas" width="280" height="280"></canvas>
             </div>
           </div>
-          <div class="controls-row">
-            <div class="field">
-              <label for="qrLogo">ใส่โลโก้ตรงกลาง (ไม่บังคับ)</label>
-              <input type="file" id="qrLogo" accept="image/*" class="input">
+
+          <!-- Batch Mode -->
+          <div id="qrBatchWrap" style="display:none;">
+            <label class="dropzone" id="qrBatchDrop">
+              <input type="file" id="qrBatchFile" accept=".csv,.xlsx,.xls,.txt,text/plain,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+              <div class="dropzone-title">📁 คลิกเพื่ออัปโหลดไฟล์ (.XLSX, .CSV, .TXT) ที่มีรายชื่อลิงก์</div>
+              <div class="dropzone-sub" id="qrBatchFileInfo">หรือพิมพ์และวางรายการลิงก์บรรทัดละ 1 ลิงก์ในช่องด้านล่าง</div>
+            </label>
+            <div class="field" style="margin-bottom:12px;">
+              <label for="qrBatchText">รายการข้อความหรือลิงก์ (บรรทัดละ 1 รายการ)</label>
+              <textarea id="qrBatchText" class="textarea" style="min-height:110px;" placeholder="about:invalid#zPythonSafez"></textarea>
             </div>
-            <button type="button" class="btn btn-primary" id="qrDlPng">ดาวน์โหลด PNG</button>
-            <button type="button" class="btn btn-secondary" id="qrDlSvg">ดาวน์โหลด SVG</button>
-          </div>
-          <div class="preview-box">
-            <canvas id="qrCanvas" width="280" height="280"></canvas>
+            <div class="controls-row">
+              <div class="field" style="max-width:120px;">
+                <label for="qrBatchFg">สีลาย QR</label>
+                <input type="color" id="qrBatchFg" class="input" value="#1e2024" style="height:39px;padding:4px;">
+              </div>
+              <div class="field" style="max-width:120px;">
+                <label for="qrBatchBg">สีพื้นหลัง</label>
+                <input type="color" id="qrBatchBg" class="input" value="#ffffff" style="height:39px;padding:4px;">
+              </div>
+              <button type="button" class="btn btn-primary" id="qrBatchGenBtn">🚀 สร้าง QR Code ทั้งหมด</button>
+              <button type="button" class="btn btn-secondary" id="qrBatchPrintPdf" disabled>📄 พิมพ์รวมหน้ากระดาษ A4 (.PDF)</button>
+            </div>
+            <div class="status-msg" id="qrBatchStatus"></div>
+            <div class="page-grid" id="qrBatchGrid" style="margin-top:16px;"></div>
           </div>
         `;
+
+        // Tab switching
+        const singleWrap = root.querySelector('#qrSingleWrap');
+        const batchWrap = root.querySelector('#qrBatchWrap');
+        root.querySelectorAll('#qrTabs .pill-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            root.querySelectorAll('#qrTabs .pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (btn.dataset.mode === 'single') {
+              singleWrap.style.display = 'block';
+              batchWrap.style.display = 'none';
+            } else {
+              singleWrap.style.display = 'none';
+              batchWrap.style.display = 'block';
+            }
+          });
+        });
+
+        // Single QR Code logic
         let logoImg = null;
         let svgMarkup = '';
         const textIn = root.querySelector('#qrText');
@@ -2255,21 +2309,19 @@
         const canvas = root.querySelector('#qrCanvas');
         const ctx = canvas.getContext('2d');
 
-        function renderQr() {
-          const val = textIn.value.trim() || 'Utility APW.Gasie 2026';
-          const fg = fgIn.value;
-          const bg = bgIn.value;
+        function drawQrCanvas(targetCanvas, val, fg, bg, logo) {
           const qr = window.qrcode(0, 'H');
           qr.addData(val);
           qr.make();
           const count = qr.getModuleCount();
-          const size = 280;
-          const margin = 16;
+          const size = targetCanvas.width;
+          const margin = 14;
           const cell = (size - margin * 2) / count;
+          const tctx = targetCanvas.getContext('2d');
 
-          ctx.fillStyle = bg;
-          ctx.fillRect(0, 0, size, size);
-          ctx.fillStyle = fg;
+          tctx.fillStyle = bg;
+          tctx.fillRect(0, 0, size, size);
+          tctx.fillStyle = fg;
 
           let svgRects = `<rect width="${size}" height="${size}" fill="${bg}"/>`;
           for (let r = 0; r < count; r++) {
@@ -2277,22 +2329,26 @@
               if (qr.isDark(r, c)) {
                 const x = margin + c * cell;
                 const y = margin + r * cell;
-                ctx.fillRect(x, y, Math.ceil(cell), Math.ceil(cell));
+                tctx.fillRect(x, y, Math.ceil(cell), Math.ceil(cell));
                 svgRects += `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${cell.toFixed(2)}" height="${cell.toFixed(2)}" fill="${fg}"/>`;
               }
             }
           }
 
-          if (logoImg) {
-            const ls = 60;
+          if (logo) {
+            const ls = Math.round(size * 0.22);
             const lx = (size - ls) / 2;
             const ly = (size - ls) / 2;
-            ctx.fillStyle = bg;
-            ctx.fillRect(lx - 4, ly - 4, ls + 8, ls + 8);
-            ctx.drawImage(logoImg, lx, ly, ls, ls);
+            tctx.fillStyle = bg;
+            tctx.fillRect(lx - 4, ly - 4, ls + 8, ls + 8);
+            tctx.drawImage(logo, lx, ly, ls, ls);
           }
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">${svgRects}</svg>`;
+        }
 
-          svgMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">${svgRects}</svg>`;
+        function renderQr() {
+          const val = textIn.value.trim() || 'Utility APW.Gasie 2026';
+          svgMarkup = drawQrCanvas(canvas, val, fgIn.value, bgIn.value, logoImg);
         }
 
         [textIn, fgIn, bgIn].forEach(el => el.addEventListener('input', renderQr));
@@ -2315,6 +2371,163 @@
         });
 
         renderQr();
+
+        // Batch QR Code Logic
+        const batchFileIn = root.querySelector('#qrBatchFile');
+        const batchFileInfo = root.querySelector('#qrBatchFileInfo');
+        const batchTextIn = root.querySelector('#qrBatchText');
+        const batchGenBtn = root.querySelector('#qrBatchGenBtn');
+        const batchPdfBtn = root.querySelector('#qrBatchPrintPdf');
+        const batchGrid = root.querySelector('#qrBatchGrid');
+        const batchStatus = root.querySelector('#qrBatchStatus');
+        let batchItems = [];
+
+        batchFileIn.addEventListener('change', async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          batchFileInfo.textContent = `กำลังอ่านไฟล์: ${f.name}...`;
+
+          try {
+            const nameLower = f.name.toLowerCase();
+            if (nameLower.endsWith('.xlsx') || nameLower.endsWith('.xls')) {
+              const data = new Uint8Array(await f.arrayBuffer());
+              const workbook = window.XLSX.read(data, { type: 'array' });
+              const sheet = workbook.Sheets[workbook.SheetNames[0]];
+              const jsonRows = window.XLSX.utils.sheet_to_json(sheet, { header: 1 });
+              const extracted = [];
+              jsonRows.forEach(row => {
+                if (Array.isArray(row)) {
+                  row.forEach(cell => {
+                    const str = String(cell || '').trim();
+                    if (str && !extracted.includes(str)) extracted.push(str);
+                  });
+                }
+              });
+              batchTextIn.value = extracted.join('\n');
+            } else {
+              const text = await f.text();
+              const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+              batchTextIn.value = lines.join('\n');
+            }
+            batchFileInfo.textContent = `โหลดไฟล์สำเร็จ: ${f.name} — กดปุ่มสร้าง QR Code ทั้งหมดด้านล่าง`;
+            batchGenBtn.click();
+          } catch (err) {
+            batchFileInfo.textContent = 'เกิดข้อผิดพลาดในการอ่านไฟล์ กรุณาคัดลอกรายการมาวางโดยตรง';
+          }
+        });
+
+        batchGenBtn.addEventListener('click', () => {
+          const raw = batchTextIn.value.trim();
+          batchGrid.innerHTML = '';
+          batchItems = [];
+          batchPdfBtn.disabled = true;
+
+          if (!raw) {
+            batchStatus.textContent = 'กรุณาใส่รายการข้อความหรือลิงก์อย่างน้อย 1 รายการ';
+            return;
+          }
+
+          const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+          const fg = root.querySelector('#qrBatchFg').value;
+          const bg = root.querySelector('#qrBatchBg').value;
+
+          batchStatus.textContent = `กำลังสร้าง QR Code ทั้งหมด ${lines.length} รายการ...`;
+
+          lines.forEach((val, idx) => {
+            const card = document.createElement('div');
+            card.className = 'page-card';
+            card.style.padding = '12px 10px';
+
+            const c = document.createElement('canvas');
+            c.width = 200;
+            c.height = 200;
+            drawQrCanvas(c, val, fg, bg, null);
+
+            const label = document.createElement('div');
+            label.style.fontSize = '12px';
+            label.style.fontWeight = '600';
+            label.style.marginTop = '6px';
+            label.style.whiteSpace = 'nowrap';
+            label.style.overflow = 'hidden';
+            label.style.textOverflow = 'ellipsis';
+            label.textContent = `${idx + 1}. ${val}`;
+            label.title = val;
+
+            const dlBtn = document.createElement('button');
+            dlBtn.type = 'button';
+            dlBtn.className = 'btn btn-secondary';
+            dlBtn.style.marginTop = '6px';
+            dlBtn.style.padding = '5px 8px';
+            dlBtn.style.fontSize = '11.5px';
+            dlBtn.style.width = '100%';
+            dlBtn.textContent = '💾 โหลด PNG';
+            dlBtn.addEventListener('click', () => {
+              triggerDownload(c.toDataURL('image/png'), `qr-${idx + 1}.png`);
+            });
+
+            card.append(c, label, dlBtn);
+            batchGrid.appendChild(card);
+            batchItems.push({ text: val, canvas: c });
+          });
+
+          batchStatus.textContent = `สร้าง QR Code สำเร็จทั้งหมด ${lines.length} รายการ!`;
+          batchPdfBtn.disabled = batchItems.length === 0;
+        });
+
+        // Batch PDF sticker sheet generator
+        batchPdfBtn.addEventListener('click', async () => {
+          if (batchItems.length === 0) return;
+          batchStatus.textContent = 'กำลังจัดหน้ากระดาษ A4 รวมแผ่น QR Code ทั้งหมด...';
+
+          const pdfDoc = await PDFLib.PDFDocument.create();
+          const itemsPerPage = 12; // 3 cols x 4 rows
+          const totalPages = Math.ceil(batchItems.length / itemsPerPage);
+
+          for (let pIdx = 0; pIdx < totalPages; pIdx++) {
+            const a4Canvas = document.createElement('canvas');
+            a4Canvas.width = 794;
+            a4Canvas.height = 1123;
+            const actx = a4Canvas.getContext('2d');
+            actx.fillStyle = '#ffffff';
+            actx.fillRect(0, 0, 794, 1123);
+
+            actx.fillStyle = '#222530';
+            actx.font = '700 24px "Noto Sans Thai", sans-serif';
+            actx.fillText('แผ่นรวม QR Code (A4 Sticker Sheet)', 48, 52);
+
+            actx.font = '500 13px "Noto Sans Thai", sans-serif';
+            actx.fillStyle = '#727c94';
+            actx.fillText(`หน้า ${pIdx + 1} / ${totalPages}  •  สร้างโดย My working Tools`, 48, 76);
+
+            const slice = batchItems.slice(pIdx * itemsPerPage, (pIdx + 1) * itemsPerPage);
+            slice.forEach((item, i) => {
+              const col = i % 3;
+              const row = Math.floor(i / 3);
+              const x = 54 + col * 236;
+              const y = 100 + row * 242;
+
+              // Draw QR canvas
+              actx.drawImage(item.canvas, x + 18, y, 170, 170);
+
+              // Draw text label
+              actx.font = '600 11.5px "Noto Sans Thai", sans-serif';
+              actx.fillStyle = '#222530';
+              actx.textAlign = 'center';
+              const truncated = item.text.length > 28 ? item.text.slice(0, 26) + '...' : item.text;
+              actx.fillText(truncated, x + 103, y + 192);
+              actx.textAlign = 'left';
+            });
+
+            const jpgUrl = a4Canvas.toDataURL('image/jpeg', 0.92);
+            const emb = await pdfDoc.embedJpg(jpgUrl);
+            const page = pdfDoc.addPage([595.28, 841.89]);
+            page.drawImage(emb, { x: 0, y: 0, width: 595.28, height: 841.89 });
+          }
+
+          const pdfBytes = await pdfDoc.save();
+          triggerDownload(URL.createObjectURL(new Blob([pdfBytes], { type: 'application/pdf' })), 'qr-sheet-a4.pdf');
+          batchStatus.textContent = `พิมพ์รวมแผ่น A4 สำเร็จ (${totalPages} หน้า)!`;
+        });
       },
 
       /* 18. นับคำ / ตัวอักษร */
