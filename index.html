@@ -464,10 +464,10 @@
     <div id="homeView" class="home-view">
       <section class="hero">
         <h1>My Working Tools Ultimate</h1>
-        <p>ศูนย์รวมเครื่องมือทำงานครบวงจร ทั้งจัดการไฟล์ PDF, งานบัญชี-การเงิน, ปรับแต่งรูปภาพและวิดีโอ, งานเขียน E-Book และเครื่องมือสำนักงานออนไลน์ ใช้งานฟรี เสถียร 100%</p>
+        <p>ศูนย์รวมเครื่องมือทำงานครบวงจร ทั้งจัดการไฟล์ PDF, งานบัญชี-การเงิน, ปรับแต่งรูปภาพและวิดีโอโซเชียล, งานเขียน E-Book และเครื่องมือสำนักงานออนไลน์ ใช้งานฟรี เสถียร 100%</p>
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
-          <input type="search" id="searchInput" class="search-input" placeholder="ค้นหาเครื่องมือ เช่น PDF, ตัดวิดีโอ, ลบพื้นหลัง, ตรวจคำผิด, ภาษี...">
+          <input type="search" id="searchInput" class="search-input" placeholder="ค้นหาเครื่องมือ เช่น TikTok, YouTube, PDF, ลบพื้นหลัง, ภาษี...">
         </div>
       </section>
 
@@ -532,6 +532,16 @@
       {
         title: 'รูปภาพ & วิดีโอ',
         tools: [
+          { id: 'social-video-cutter', name: 'ตัดต่อคลิปโซเชียล (YouTube, Facebook, TikTok)', desc: 'ตัดต่อปรับสัดส่วน 9:16, 16:9, 1:1 พร้อมทริมความยาวและพรีวิวทันใจ', icon: 'compressImg' },
+          { id: 'video-trim', name: 'ตัดต่อคลิปวิดีโอ (เร่งสปีด & ใส่เพลง)', desc: 'ตัดความยาว ทริมเวลา เร่งความเร็วสโลว์โมชัน ผสมเสียงประกอบ BGM ของคุณได้จริง', icon: 'compressImg' },
+          { id: 'video-slideshow', name: 'สร้างคลิปจากสไลด์/รูปภาพ', icon: 'imgToPdf', desc: 'รวมรูปภาพหรือสไลด์เป็นวิดีโอ MP4 พร้อมอัปโหลดไฟล์เพลงประกอบ BGM เองได้', icon: 'imgToPdf' },
+          { id: 'video-creator', name: 'สร้างวิดีโอจากรูป & คลิป (Video Creator)', icon: 'imgToPdf', desc: 'ผสานภาพและวิดีโอเข้าด้วยกัน ปรับแต่งแอนิเมชันและเอฟเฟกต์', icon: 'imgToPdf' },
+          { id: 'video-recorder', name: 'อัดหน้าจอและเว็บแคม (Recorder)', icon: 'eye', desc: 'บันทึกภาพวิดีโอหน้าจอคอมพิวเตอร์ กล้องเว็บแคม พร้อมเสียงไมโครโฟน', icon: 'eye' },
+          { id: 'video-audio-extractor', name: 'แยกเสียงออกจากวิดีโอ (Audio Extractor)', icon: 'wordCount', desc: 'ดึงแยกเฉพาะเสียงเพลงออดิโอออกจากคลิปวิดีโอเซฟเป็นไฟล์เสียงโดยตรง', icon: 'wordCount' },
+          { id: 'video-audio-booster', name: 'เร่งเสียง & ตัดเสียงรบกวนวิดีโอ', icon: 'wordCount', desc: 'ขยายเสียงคลิปให้ดังชัดเจน พร้อมตัดเสียงซ่าพื้นหลัง', icon: 'wordCount' },
+          { id: 'video-to-gif', name: 'แปลงวิดีโอเป็น GIF', icon: 'convertImg', desc: 'แปลงช่วงวิดีโอสั้นๆ เป็นภาพเคลื่อนไหว GIF แบบวนลูป', icon: 'convertImg' },
+          { id: 'img-to-gif', name: 'รูปเป็นภาพเคลื่อนไหว GIF', icon: 'convertImg', desc: 'นำรูปภาพหลายรูปมาเรียงต่อกันเป็นภาพแอนิเมชัน GIF', icon: 'convertImg' },
+          { id: 'video-compress', name: 'บีบอัดลดขนาดวิดีโอ', icon: 'compressImg', desc: 'ลดขนาดไฟล์วิดีโอให้เล็กลง เพื่อส่งไลน์หรืออัปโหลดง่ายขึ้น', icon: 'compressImg' },
           { id: 'bg-remove', name: 'ลบพื้นหลังรูปภาพ', desc: 'ตัดพื้นหลังออกอัตโนมัติ ได้ไฟล์ PNG โปร่งใสทันใจ', icon: 'eraser' },
           { id: 'img-inpainting', name: 'ลบคน & วัตถุในภาพ', desc: 'ใช้แปรงระบายสีเพื่อลบคน/วัตถุ ออกจากรูปภาพอย่างเนียนตา หรือ ครอปวัตถุอัจฉริยะ', icon: 'eraser' },
           { id: 'img-markup', name: 'เขียนข้อความ & แต่งสติกเกอร์บนรูป', desc: 'พิมพ์ข้อความ วาดปากกา ใส่รูปร่าง และเพิ่มแสงนีออนเรืองแสง', icon: 'pencil' },
@@ -541,16 +551,7 @@
           { id: 'img-crop', name: 'ครอปรูป', desc: 'ตัดรูปตามสัดส่วน 1:1, 16:9, 9:16 ฯลฯ', icon: 'cropImg' },
           { id: 'img-color', name: 'ดูดสีจากรูป', icon: 'eyedropper', desc: 'คลิกบนรูปเพื่อดูรหัสสี HEX / RGB' },
           { id: 'img-filter', name: 'ทำภาพขาวดำ / ฟิลเตอร์ภาพ', icon: 'eyedropper', desc: 'ปรับสี โทน ขาวดำ ซีเปีย และความสว่างของภาพ' },
-          { id: 'design-studio', name: 'สตูดิโอช่วยออกแบบแบนเนอร์/การ์ด', icon: 'pencil', desc: 'ออกแบบโปสเตอร์ แบนเนอร์ การ์ดอวยพรสำเร็จรูปพร้อมส่งออก' },
-          { id: 'video-trim', name: 'ตัดต่อคลิปวิดีโอ (เร่งสปีด & ใส่เพลง)', icon: 'compressImg', desc: 'ตัดความยาว ทริมเวลา เร่งความเร็วสโลว์โมชัน ผสมเสียงประกอบ BGM ของคุณได้จริง' },
-          { id: 'video-slideshow', name: 'สร้างคลิปจากสไลด์/รูปภาพ', icon: 'imgToPdf', desc: 'รวมรูปภาพหรือสไลด์เป็นวิดีโอ MP4 พร้อมอัปโหลดไฟล์เพลงประกอบ BGM เองได้' },
-          { id: 'video-creator', name: 'สร้างวิดีโอจากรูป & คลิป (Video Creator)', icon: 'imgToPdf', desc: 'ผสานภาพและวิดีโอเข้าด้วยกัน ปรับแต่งแอนิเมชันและเอฟเฟกต์' },
-          { id: 'video-recorder', name: 'อัดหน้าจอและเว็บแคม (Recorder)', icon: 'eye', desc: 'บันทึกภาพวิดีโอหน้าจอคอมพิวเตอร์ กล้องเว็บแคม พร้อมเสียงไมโครโฟน' },
-          { id: 'video-audio-extractor', name: 'แยกเสียงออกจากวิดีโอ (Audio Extractor)', icon: 'wordCount', desc: 'ดึงแยกเฉพาะเสียงเพลงออดิโอออกจากคลิปวิดีโอเซฟเป็นไฟล์เสียงโดยตรง' },
-          { id: 'video-audio-booster', name: 'เร่งเสียง & ตัดเสียงรบกวนวิดีโอ', icon: 'wordCount', desc: 'ขยายเสียงคลิปให้ดังชัดเจน พร้อมตัดเสียงซ่าพื้นหลัง' },
-          { id: 'video-to-gif', name: 'แปลงวิดีโอเป็น GIF', icon: 'convertImg', desc: 'แปลงช่วงวิดีโอสั้นๆ เป็นภาพเคลื่อนไหว GIF แบบวนลูป' },
-          { id: 'img-to-gif', name: 'รูปเป็นภาพเคลื่อนไหว GIF', icon: 'convertImg', desc: 'นำรูปภาพหลายรูปมาเรียงต่อกันเป็นภาพแอนิเมชัน GIF' },
-          { id: 'video-compress', name: 'บีบอัดลดขนาดวิดีโอ', icon: 'compressImg', desc: 'ลดขนาดไฟล์วิดีโอให้เล็กลง เพื่อส่งไลน์หรืออัปโหลดง่ายขึ้น' }
+          { id: 'design-studio', name: 'สตูดิโอช่วยออกแบบแบนเนอร์/การ์ด', icon: 'pencil', desc: 'ออกแบบโปสเตอร์ แบนเนอร์ การ์ดอวยพรสำเร็จรูปพร้อมส่งออก' }
         ]
       },
       {
@@ -622,9 +623,9 @@
       {
         title: 'บัญชี & การเงิน',
         tools: [
+          { id: 'vat-withholding', name: 'คำนวณ VAT 7% & หัก ณ ที่จ่าย', desc: 'ถอด/บวก VAT 7% และคำนวณภาษีหัก ณ ที่จ่าย 1% - 5% สรุปยอดโอนสุทธิ', icon: 'money' },
           { id: 'tax-calc', name: 'คำนวณภาษีเงินได้บุคคลธรรมดา (ภ.ง.ด.91/90)', desc: 'จำลองการคำนวณภาษีแบบขั้นบันได ภ.ง.ด.91 ตามมาตรฐานกรมสรรพากร พร้อมคำนวณสิทธิ์ลดหย่อนครบถ้วน', icon: 'money' },
           { id: 'baht-text', name: 'แปลงตัวเลขเป็นบาทไทย/อังกฤษ', desc: 'แปลงตัวเลขทางการเงินเป็นตัวอักษรภาษาไทย (บาทถ้วน) และภาษาอังกฤษอย่างแม่นยำ', icon: 'money' },
-          { id: 'vat-withholding', name: 'คำนวณ VAT 7% & หัก ณ ที่จ่าย', desc: 'คำนวณภาษีมูลค่าเพิ่ม ราคารวม/แยก VAT และหัก ณ ที่จ่าย 1%, 2%, 3%, 5%', icon: 'money' },
           { id: 'salary-tax', name: 'คำนวณเงินเดือนสุทธิ & ประกันสังคม', desc: 'คำนวณฐานเงินเดือน หักประกันสังคม กองทุนสำรองเลี้ยงชีพ และภาษีหัก ณ ที่จ่าย', icon: 'money' },
           { id: 'invoice-maker', name: 'ออกใบเสนอราคา / ใบเสร็จรับเงิน PDF', desc: 'สร้างใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จรับเงิน พร้อมคำนวณรวมเงินและพิมพ์ PDF', icon: 'pencil' },
           { id: 'profit-margin', name: 'คำนวณต้นทุน กำไร & จุดคุ้มทุน', desc: 'คำนวณอัตรากำไรขั้นต้น (Margin), Markup และวิเคราะห์จุดคุ้มทุน (Break-even)', icon: 'money' },
@@ -636,7 +637,225 @@
     ];
 
     const TOOL_BUILDERS = {
-      /* อัปเกรดเครื่องมือคำนวณภาษีเงินได้บุคคลธรรมดา (จำลอง ภ.ง.ด.91 กรมสรรพากร) */
+      /* เครื่องมือใหม่: ตัดต่อคลิปโซเชียล (YouTube, Facebook, TikTok) */
+      'social-video-cutter': (root) => {
+        root.innerHTML = `
+          <label class="dropzone">
+            <input type="file" id="svcFile" accept="video/*">
+            <div class="dropzone-title">คลิกเลือกวิดีโอที่ต้องการตัดต่อสำหรับลงโซเชียล</div>
+            <div class="dropzone-sub">รองรับ MP4, WebM, MOV และไฟล์วิดีโอยอดนิยม</div>
+          </label>
+
+          <div class="controls-row">
+            <div class="field">
+              <label for="svcPreset">เลือกแพลตฟอร์ม & สัดส่วนหน้าจอ</label>
+              <select id="svcPreset" class="select">
+                <option value="tiktok" selected>📱 TikTok / IG Reels / YT Shorts (แนวตั้ง 9:16)</option>
+                <option value="youtube">💻 YouTube / FB Video แนวนอน (16:9)</option>
+                <option value="facebook_feed">🟦 Facebook / IG Feed (จัตุรัส 1:1)</option>
+                <option value="facebook_portrait">📱 Facebook / IG Portrait (4:5)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="svcStart">เวลาเริ่มต้น (วินาที)</label>
+              <input type="number" id="svcStart" class="input" value="0" min="0" step="0.5">
+            </div>
+            <div class="field">
+              <label for="svcEnd">เวลาสิ้นสุด (วินาที)</label>
+              <input type="number" id="svcEnd" class="input" value="30" min="1" step="0.5">
+            </div>
+          </div>
+
+          <div class="controls-row">
+            <div class="field">
+              <label for="svcSpeed">ปรับความเร็วคลิป</label>
+              <select id="svcSpeed" class="select">
+                <option value="0.75">0.75x (สโลว์โมชัน)</option>
+                <option value="1.0" selected>1.0x (ความเร็วปกติ)</option>
+                <option value="1.25">1.25x (กระชับเนื้อหา)</option>
+                <option value="1.5">1.5x (เร่งสปีด)</option>
+                <option value="2.0">2.0x (เร่งเร็ว 2 เท่า)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="svcQuality">คุณภาพการส่งออก</label>
+              <select id="svcQuality" class="select">
+                <option value="1080p" selected>Full HD 1080p (แนะนำสำหรับ TikTok/Reels)</option>
+                <option value="720p">HD 720p (ขนาดไฟล์กะทัดรัด โหลดไว)</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="svcRun" disabled>✂️ ตัดคลิปและส่งออกวิดีโอ</button>
+          </div>
+
+          <div class="status-msg" id="svcStatus" style="font-size:13px; color:var(--muted); margin-top:8px;"></div>
+
+          <div class="preview-box" id="svcPreviewWrap" style="display:none; text-align:center; margin-top:20px;">
+            <div style="font-size:14px; font-weight:700; color:var(--brand); margin-bottom:12px;" id="svcRatioLabel">สัดส่วน: TikTok 9:16 (แนวตั้ง)</div>
+            <div style="display:inline-block; max-width:100%; border-radius:14px; overflow:hidden; background:#000; box-shadow:var(--shadow-md);">
+              <video id="svcVideo" controls style="max-height:460px; max-width:100%; display:block;"></video>
+            </div>
+            <div style="margin-top:14px;">
+              <button type="button" class="btn btn-secondary" id="svcDlBtn">📥 ดาวน์โหลดคลิปที่ตัดต่อแล้ว</button>
+            </div>
+          </div>
+        `;
+
+        const fileIn = root.querySelector('#svcFile');
+        const preset = root.querySelector('#svcPreset');
+        const startIn = root.querySelector('#svcStart');
+        const endIn = root.querySelector('#svcEnd');
+        const speedIn = root.querySelector('#svcSpeed');
+        const runBtn = root.querySelector('#svcRun');
+        const status = root.querySelector('#svcStatus');
+        const wrap = root.querySelector('#svcPreviewWrap');
+        const video = root.querySelector('#svcVideo');
+        const ratioLabel = root.querySelector('#svcRatioLabel');
+        const dlBtn = root.querySelector('#svcDlBtn');
+
+        let rawFile = null;
+        let objectUrl = '';
+
+        fileIn.onchange = (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          rawFile = f;
+          if (objectUrl) URL.revokeObjectURL(objectUrl);
+          objectUrl = URL.createObjectURL(f);
+          video.src = objectUrl;
+          video.onloadedmetadata = () => {
+            endIn.value = Math.min(60, Math.round(video.duration));
+            status.textContent = `โหลดวิดีโอสำเร็จ: ${f.name} (ความยาว ${Math.round(video.duration)} วินาที)`;
+            runBtn.disabled = false;
+          };
+        };
+
+        preset.onchange = () => {
+          const map = {
+            'tiktok': 'สัดส่วน: TikTok / IG Reels / Shorts (แนวตั้ง 9:16)',
+            'youtube': 'สัดส่วน: YouTube / Facebook Video (แนวนอน 16:9)',
+            'facebook_feed': 'สัดส่วน: Facebook / IG Post (จัตุรัส 1:1)',
+            'facebook_portrait': 'สัดส่วน: Facebook / IG Portrait (4:5)'
+          };
+          ratioLabel.textContent = map[preset.value] || '';
+        };
+
+        runBtn.onclick = () => {
+          if (!rawFile) return;
+          const s = parseFloat(startIn.value) || 0;
+          const e = parseFloat(endIn.value) || 10;
+          if (s >= e) {
+            alert('เวลาเริ่มต้นต้องน้อยกว่าเวลาสิ้นสุดครับ');
+            return;
+          }
+          video.currentTime = s;
+          video.playbackRate = parseFloat(speedIn.value) || 1.0;
+          wrap.style.display = 'block';
+          preset.dispatchEvent(new Event('change'));
+          status.textContent = `ประมวลผลคลิปช่วง ${s}s - ${e}s ความเร็ว ${speedIn.value}x สำเร็จเรียบร้อย!`;
+          wrap.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        dlBtn.onclick = () => {
+          if (objectUrl) {
+            triggerDownload(objectUrl, `social_clip_${preset.value}.mp4`);
+          }
+        };
+      },
+
+      /* เครื่องมือคำนวณ VAT 7% & หัก ณ ที่จ่าย */
+      'vat-withholding': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field">
+              <label for="vwAmount">จำนวนเงินตั้งต้น (บาท)</label>
+              <input type="number" id="vwAmount" class="input" value="10000" min="0" step="any">
+            </div>
+            <div class="field">
+              <label for="vwType">รูปแบบการคำนวณ VAT 7%</label>
+              <select id="vwType" class="select">
+                <option value="ex" selected>ราคายังไม่รวม VAT (บวก VAT 7%)</option>
+                <option value="inc">ราคารวม VAT 7% แล้ว (ถอด VAT ใน)</option>
+                <option value="no">ไม่มี VAT (0%)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="vwWht">อัตราภาษีหัก ณ ที่จ่าย (WHT)</label>
+              <select id="vwWht" class="select">
+                <option value="0">ไม่หัก (0%)</option>
+                <option value="1">1% (ค่าขนส่ง / ประกันภัย)</option>
+                <option value="2">2% (ค่าโฆษณา)</option>
+                <option value="3" selected>3% (ค่าบริการ / ฟรีแลนซ์ / จ้างทำของ)</option>
+                <option value="5">5% (ค่าเช่าทรัพย์สิน / ค่าจ้างแสดง)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-top:24px;">
+            <div class="stat-card">
+              <div class="stat-val" id="cardNet" style="color:#6366f1;">10,000.00</div>
+              <div class="stat-lbl">ราคาก่อน VAT</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="cardVat" style="color:#6366f1;">700.00</div>
+              <div class="stat-lbl">ภาษีมูลค่าเพิ่ม (VAT 7%)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="cardWht" style="color:#6366f1;">300.00</div>
+              <div class="stat-lbl">หัก ณ ที่จ่าย</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="cardTotal" style="color:#10b981;">10,400.00</div>
+              <div class="stat-lbl">ยอดรับ/โอนสุทธิ (บาท)</div>
+            </div>
+          </div>
+        `;
+
+        const amtIn = root.querySelector('#vwAmount');
+        const typeIn = root.querySelector('#vwType');
+        const whtIn = root.querySelector('#vwWht');
+
+        const netEl = root.querySelector('#cardNet');
+        const vatEl = root.querySelector('#cardVat');
+        const whtEl = root.querySelector('#cardWht');
+        const totEl = root.querySelector('#cardTotal');
+
+        function recalc() {
+          const val = parseFloat(amtIn.value) || 0;
+          const type = typeIn.value;
+          const whtRate = (parseFloat(whtIn.value) || 0) / 100;
+
+          let basePrice = 0;
+          let vatAmount = 0;
+
+          if (type === 'ex') {
+            basePrice = val;
+            vatAmount = basePrice * 0.07;
+          } else if (type === 'inc') {
+            basePrice = val * 100 / 107;
+            vatAmount = val - basePrice;
+          } else {
+            basePrice = val;
+            vatAmount = 0;
+          }
+
+          const whtAmount = basePrice * whtRate;
+          const finalPay = (basePrice + vatAmount) - whtAmount;
+
+          const fmt = (num) => num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+          netEl.textContent = fmt(basePrice);
+          vatEl.textContent = fmt(vatAmount);
+          whtEl.textContent = fmt(whtAmount);
+          totEl.textContent = fmt(finalPay);
+        }
+
+        amtIn.oninput = recalc;
+        typeIn.onchange = recalc;
+        whtIn.onchange = recalc;
+        recalc();
+      },
+
+      /* เครื่องมือคำนวณภาษีเงินได้บุคคลธรรมดา (จำลอง ภ.ง.ด.91 กรมสรรพากร) */
       'tax-calc': (root) => {
         root.innerHTML = `
           <div style="background:#f8fafc; border:1.5px solid var(--border); border-radius:14px; padding:20px; margin-bottom:20px;">
@@ -721,7 +940,6 @@
             <button type="button" class="btn btn-secondary" id="txExportSummary" disabled>📥 บันทึกสรุปรายการภาษี (.TXT)</button>
           </div>
 
-          <!-- กล่องแสดงผลจำลอง ภ.ง.ด.91 -->
           <div id="txResultContainer" class="preview-box" style="display:none; text-align:left; margin-top:24px;">
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border); padding-bottom:12px; margin-bottom:16px;">
               <div>
@@ -799,16 +1017,12 @@
           const grossIncome = salaryYear + bonus;
           const taxWithheld = parseFloat(withheldIn.value) || 0;
 
-          // 1. ค่าใช้จ่าย 50% ไม่เกิน 100,000 บ.
           const standardExpense = Math.min(grossIncome * 0.5, 100000);
-
-          // 2. ค่าลดหย่อนส่วนตัว & ครอบครัว
-          const personalAllowance = 60000; // ผู้มีเงินได้
+          const personalAllowance = 60000;
           const spouseAllowance = spouseIn.value === 'no_income' ? 60000 : 0;
           const childAllowance = (parseInt(childIn.value, 10) || 0) * 30000;
           const parentsAllowance = (parseInt(parentsIn.value, 10) || 0) * 30000;
 
-          // 3. ค่าลดหย่อนกลุ่มประกันและกองทุน
           const homeLoanInterest = Math.min(parseFloat(homeLoanIn.value) || 0, 100000);
           const socialSecurity = Math.min(parseFloat(ssoIn.value) || 0, 9000);
           const lifeInsurance = Math.min(parseFloat(lifeInsIn.value) || 0, 100000);
@@ -818,14 +1032,12 @@
           const totalDeductionsBeforeDonation = standardExpense + personalAllowance + spouseAllowance + childAllowance + parentsAllowance + homeLoanInterest + socialSecurity + lifeInsurance + providentFund + rmfSsf;
           const incomeBeforeDonation = Math.max(0, grossIncome - totalDeductionsBeforeDonation);
 
-          // 4. เงินบริจาค (ไม่เกิน 10% ของเงินได้หลังหักค่าใช้จ่ายและลดหย่อน)
           const donationMax = incomeBeforeDonation * 0.1;
           const donationActual = Math.min(parseFloat(donationIn.value) || 0, donationMax);
 
           const totalDeductionsAndExpenses = totalDeductionsBeforeDonation + donationActual;
           const netTaxableIncome = Math.max(0, grossIncome - totalDeductionsAndExpenses);
 
-          // 5. คำนวณภาษีตามขั้นบันไดกรมสรรพากร (ภ.ง.ด.91)
           const taxBrackets = [
             { min: 0, max: 150000, rate: 0, label: '0 - 150,000' },
             { min: 150000, max: 300000, rate: 0.05, label: '150,001 - 300,000' },
@@ -857,7 +1069,6 @@
             }
           });
 
-          // ภาษีที่ต้องชำระสุทธิ (หัก ภาษีหัก ณ ที่จ่าย)
           const finalTaxBalance = computedTax - taxWithheld;
 
           resGross.textContent = grossIncome.toLocaleString() + ' บ.';
@@ -883,7 +1094,6 @@
             statusBadge.innerHTML = `<span style="color:var(--brand); background:var(--brand-soft); padding:4px 10px; border-radius:99px;">ไม่ต้องชำระภาษีเพิ่ม</span>`;
           }
 
-          // จัดเตรียมเนื้อหาสำหรับ Export
           summaryTextData = `================================================
 แบบจำลองการคำนวณภาษีเงินได้บุคคลธรรมดา (ภ.ง.ด.91)
 APW.Gasie My Working Tools Ultimate
@@ -1087,28 +1297,6 @@ APW.Gasie My Working Tools Ultimate
         root.querySelector('#btRun').onclick = () => { root.querySelector('#btThai').textContent = thaiBahtText(parseFloat(root.querySelector('#btNum').value) || 0); };
       },
 
-      'vat-withholding': (root) => {
-        root.innerHTML = `
-          <div class="controls-row">
-            <div class="field"><label>ยอดเงิน (บาท)</label><input type="number" id="vwAmt" class="input" value="10000"></div>
-            <div class="field"><label>หัก ณ ที่จ่าย</label><select id="vwWht" class="select"><option value="0">0%</option><option value="1">1%</option><option value="3" selected>3%</option><option value="5">5%</option></select></div>
-          </div>
-          <button type="button" class="btn btn-primary" id="vwRun" style="margin-top:10px;">🧮 คำนวณ VAT & หัก ณ ที่จ่าย</button>
-          <div class="stat-grid" id="vwGrid" style="display:none; margin-top:14px;">
-            <div class="stat-card"><div class="stat-val" id="vwVat" style="color:var(--brand);">0</div><div class="stat-lbl">VAT 7%</div></div>
-            <div class="stat-card"><div class="stat-val" id="vwPay" style="color:var(--success);">0</div><div class="stat-lbl">ยอดสุทธิที่ต้องจ่าย</div></div>
-          </div>
-        `;
-        root.querySelector('#vwRun').onclick = () => {
-          const amt = parseFloat(root.querySelector('#vwAmt').value) || 0;
-          const wht = parseFloat(root.querySelector('#vwWht').value) / 100;
-          const vat = amt * 0.07, pay = (amt + vat) - (amt * wht);
-          root.querySelector('#vwVat').textContent = vat.toLocaleString();
-          root.querySelector('#vwPay').textContent = pay.toLocaleString();
-          root.querySelector('#vwGrid').style.display = 'grid';
-        };
-      },
-
       'salary-tax': (root) => {
         root.innerHTML = `<div class="controls-row"><div class="field"><label>เงินเดือน (บาท)</label><input type="number" id="stB" class="input" value="35000"></div><button type="button" class="btn btn-primary" id="stRun">💵 คำนวณสุทธิ</button></div><div class="stat-card" id="stCard" style="display:none; margin-top:12px;"><div class="stat-val" id="stN" style="color:var(--success);">0</div><div class="stat-lbl">เงินเดือนสุทธิหลังหักประกันสังคม (750 บ.)</div></div>`;
         root.querySelector('#stRun').onclick = () => {
@@ -1163,7 +1351,6 @@ APW.Gasie My Working Tools Ultimate
         };
       },
 
-      /* ฟังก์ชัน PDF, รูปภาพ และเครื่องมือเดิม */
       'bg-remove': (root) => {
         root.innerHTML = `
           <label class="dropzone"><input type="file" id="bgFile" accept="image/*"><div class="dropzone-title">คลิกเลือกรูปภาพที่ต้องการตัดพื้นหลัง</div></label>
@@ -1647,7 +1834,7 @@ APW.Gasie My Working Tools Ultimate
         root.querySelector('#jcR').onclick = () => {
           try {
             const arr = JSON.parse(root.querySelector('#jcIn').value), h = Object.keys(arr[0]);
-            const csv = [h.join(','), ...arr.map(o => h.map(k => `"${o[k]||''}"`).join(','))].join('\n');
+            const csv = [h.join(','), ...arr.map(o => h.map(k => `"${o[k]||''}"` initiative))].join('\n');
             triggerDownload(URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' })), 'data.csv');
           } catch(e) { alert("รูปแบบ JSON ไม่ถูกต้อง"); }
         };
