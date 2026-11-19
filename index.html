@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Working Tools Ultimate (73 Tools Complete) — APW.Gasie © 2026</title>
+  <title>My Working Tools Ultimate (80 Tools Complete) — APW.Gasie © 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -42,11 +42,104 @@
     body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.5; }
 
     .topbar { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-    .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .topbar-inner { max-width: 1200px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); cursor: pointer; border: none; background: none; padding: 0; font: inherit; }
     .brand-logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--brand), var(--accent)); color: #fff; font-weight: 800; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; }
     .brand-name { font-weight: 800; font-size: 18px; color: var(--brand-dark); }
     .brand-badge { font-size: 11px; font-weight: 700; background: var(--brand-soft); color: var(--brand-dark); padding: 2px 8px; border-radius: 99px; margin-left: 6px; }
+
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+    .menu-popup-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: 0.2s;
+    }
+    .menu-popup-btn:hover { background: var(--brand-dark); transform: translateY(-1px); }
+
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .popup-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+
+    .popup-box {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 960px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+    .popup-header {
+      padding: 16px 22px;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #f8fafc;
+    }
+    .popup-body {
+      padding: 20px 22px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .popup-cat-card {
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+    }
+    .popup-cat-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--brand-dark);
+      margin: 0 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .popup-item-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font: inherit;
+      font-size: 13px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .popup-item-btn:hover { background: var(--brand-soft); color: var(--brand-dark); font-weight: 600; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .container { max-width: 1120px; margin: 0 auto; padding: 36px 24px 80px; }
     .hero { text-align: center; margin-bottom: 32px; }
@@ -121,7 +214,31 @@
     th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
     th { background: #f1f5f9; font-weight: 700; }
 
-    /* Toast Notification (แทน alert() ใน iframe) */
+    /* สไตล์เพิ่มเติมสำหรับ Lucky Draw & Meeting Summary */
+    .ld-wrap, .ms-wrap { width: 100%; }
+    .ld-grid, .ms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .ld-col, .ms-col { border: 1.5px solid var(--border); border-radius: 14px; padding: 14px; background: #f8fafc; }
+    .ld-title, .ms-title { font-size: 13.5px; font-weight: 800; color: var(--brand-dark); margin-bottom: 8px; }
+    .ld-col textarea, .ms-col textarea, .ms-col input[type="text"] {
+      width: 100%; padding: 9px 12px; border-radius: 10px; border: 1.5px solid var(--border-hover);
+      background: #fff; font: inherit; font-size: 13px; margin-bottom: 8px;
+    }
+    .ld-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 8px; font-size: 13px; }
+    .ld-actions, .ms-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .ld-sep { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+    .ld-stage { background: #fff; border: 1.5px solid var(--brand); border-radius: 12px; padding: 18px 12px; text-align: center; font-size: 20px; font-weight: 800; color: var(--brand-dark); }
+    .ld-sub { font-size: 12px; color: var(--muted); text-align: center; margin-top: 6px; }
+    .ld-history { max-height: 180px; overflow-y: auto; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; font-size: 12.5px; }
+    .ld-hist-item { padding: 4px 0; border-bottom: 1px dashed var(--border); }
+    .ld-time { color: var(--muted); font-size: 11.5px; }
+    .ld-empty { color: var(--muted); text-align: center; padding: 10px; }
+    .ld-groups { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; }
+    .ld-group-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; }
+    .ld-group-head { font-weight: 800; color: var(--brand-dark); margin-bottom: 4px; }
+    .ld-group-card ul { margin: 0; padding-left: 18px; }
+    .ms-media { margin-bottom: 10px; }
+    .ms-file-tag { font-size: 12px; font-weight: 700; color: var(--brand-dark); background: var(--brand-soft); padding: 6px 10px; border-radius: 8px; display: inline-block; margin-top: 6px; }
+
     #toastContainer { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
     .toast { background: #1e293b; color: #fff; padding: 12px 18px; border-radius: 12px; font-size: 13.5px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-left: 4px solid var(--brand); animation: slideIn 0.25s ease; }
     .toast.error { border-left-color: var(--danger); }
@@ -137,20 +254,34 @@
       <button type="button" class="brand" id="homeLogoBtn">
         <span class="brand-logo">U</span>
         <span class="brand-name">My Working Tools <span style="font-size: 14px; font-weight: 500;">Ultimate</span></span>
-        <span class="brand-badge">73 Tools Ready</span>
+        <span class="brand-badge">80 Tools Ready</span>
       </button>
-      <div style="font-size: 12.5px; font-weight: 700; color: var(--muted);">APW.Gasie &copy; 2026</div>
+      <div class="topbar-right">
+        <button type="button" class="menu-popup-btn" id="openMenuPopupBtn">☰ เมนูเครื่องมือทั้งหมด (76)</button>
+        <div style="font-size: 12.5px; font-weight: 700; color: var(--muted);">APW.Gasie &copy; 2026</div>
+      </div>
     </div>
   </header>
+
+  <div class="popup-overlay" id="menuPopupOverlay" role="dialog" aria-modal="true">
+    <div class="popup-box">
+      <div class="popup-header">
+        <div style="font-weight: 800; font-size: 16px; color: var(--brand-dark);">📂 เลือกเครื่องมือที่ต้องการใช้งาน</div>
+        <input type="search" id="popupSearchInput" class="input" style="max-width: 300px; padding: 7px 12px;" placeholder="พิมพ์ค้นหาในเมนู...">
+        <button type="button" class="btn btn-secondary" id="closeMenuPopupBtn" style="padding: 6px 14px;">✕ ปิด</button>
+      </div>
+      <div class="popup-body" id="popupMenuBody"></div>
+    </div>
+  </div>
 
   <main class="container">
     <div id="homeView" class="home-view">
       <section class="hero">
         <h1>My Working Tools Ultimate</h1>
-        <p>ศูนย์รวมเครื่องมือทำงานครบวงจร 73 รายการ ทั้งจัดการไฟล์ PDF, งานบัญชี-การเงิน, ปรับแต่งรูปภาพและวิดีโอโซเชียล, สูตร MS Office, งานเขียน E-Book และเครื่องมือสำนักงานออนไลน์ ใช้งานได้จริงครบทุกตัว</p>
+        <p>ศูนย์รวมเครื่องมือทำงานครบวงจร 80 รายการ ทั้งจัดการไฟล์ PDF, งานบัญชี-การเงิน, ปรับแต่งรูปภาพและวิดีโอโซเชียล, สูตร MS Office, งานเขียน E-Book, จับฉลากแบ่งกลุ่ม และสรุปรายงานประชุม</p>
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
-          <input type="search" id="searchInput" class="search-input" placeholder="ค้นหาเครื่องมือ เช่น นิยายออโต้, พร้อมเพย์, Excel, TikTok, PDF, ภาษี...">
+          <input type="search" id="searchInput" class="search-input" placeholder="ค้นหาเครื่องมือ เช่น นิยายออโต้, พร้อมเพย์, สุ่มแบ่งกลุ่ม, สรุปประชุม, PDF...">
         </div>
       </section>
 
@@ -179,7 +310,6 @@
       window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    /* ================= CORE HELPERS ================= */
     function notify(msg, type = 'success') {
       const box = document.getElementById('toastContainer');
       const el = document.createElement('div');
@@ -234,11 +364,10 @@
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
-    /* สร้างภาพหน้ากระดาษภาษาไทยผ่าน Canvas แล้วแปลงเป็น PDF (แก้ปัญหา pdf-lib ไม่รองรับฟอนต์ไทย) */
     async function createThaiTextPdf(lines, options = {}) {
       const { watermark = '', pageNumbers = false, fontSize = 26, title = '' } = options;
       const pdfDoc = await PDFLib.PDFDocument.create();
-      const W = 1240, H = 1754; // A4 @ 150 DPI
+      const W = 1240, H = 1754;
       const margin = 100;
       const maxWidth = W - margin * 2;
       const lineHeight = Math.round(fontSize * 1.65);
@@ -248,7 +377,6 @@
       canvas.height = H;
       const ctx = canvas.getContext('2d');
 
-      // ตัดบรรทัดตามความกว้างจริง
       ctx.font = `${fontSize}px "Noto Sans Thai", sans-serif`;
       const wrappedLines = [];
       if (title) {
@@ -311,7 +439,6 @@
       return await pdfDoc.save();
     }
 
-    /* บันทึกวิดีโอจาก Canvas + Audio แบบ Real-time ผ่าน MediaRecorder */
     function recordCanvasVideo(canvas, durationMs, drawFrameFn, audioFile = null) {
       return new Promise(async (resolve, reject) => {
         try {
@@ -358,16 +485,14 @@
       });
     }
 
-    /* สร้าง GIF เคลื่อนไหวแบบ Pure JS (LZW Encoder) */
     function encodeSimpleGif(framesImageData, width, height, delayCs = 30) {
-      // ใช้เทคนิค Quantize สี 256 สี + LZW มาตรฐาน GIF89a
       const out = [];
       const writeStr = s => { for (let i = 0; i < s.length; i++) out.push(s.charCodeAt(i)); };
       const writeU16 = v => { out.push(v & 0xff, (v >> 8) & 0xff); };
 
       writeStr('GIF89a');
       writeU16(width); writeU16(height);
-      out.push(0xf7, 0x00, 0x00); // Global Color Table 256 สี (3-3-2 RGB)
+      out.push(0xf7, 0x00, 0x00);
 
       for (let i = 0; i < 256; i++) {
         const r = ((i >> 5) & 7) * 36;
@@ -376,7 +501,6 @@
         out.push(r, g, b);
       }
 
-      // Netscape Loop Extension
       out.push(0x21, 0xff, 0x0b);
       writeStr('NETSCAPE2.0');
       out.push(0x03, 0x01, 0x00, 0x00, 0x00);
@@ -399,7 +523,6 @@
           pixels[p] = ((d[i] >> 5) << 5) | ((d[i + 1] >> 5) << 2) | (d[i + 2] >> 6);
         }
 
-        // Uncompressed-style valid LZW stream (ส่ง ClearCode ทุก 120 พิกเซลเพื่อไม่ต้องสร้างตารางขนาดใหญ่)
         const bytes = [];
         let bitBuf = 0, bitCnt = 0;
         const pushCode = (code, bits) => {
@@ -534,6 +657,8 @@
           { id: 'date-calc-pro', name: 'เครื่องคำนวณอายุ & วันทำงาน PRO', desc: 'คำนวณอายุเป๊ะและนับวันทำงานสุทธิโดยหักวันหยุดสุดสัปดาห์/นักขัตฤกษ์', icon: 'wordCount' },
           { id: 'pomodoro-timer', name: 'จับเวลาโฟกัส & เช็กลิสต์ (Pomodoro)', desc: 'ตัวจับเวลาโฟกัส 25/5 นาที พร้อมรายการ To-do List', icon: 'eye' },
           { id: 'meeting-notes', name: 'สรุปรายงานประชุมด่วน', desc: 'แบบฟอร์มบันทึกการประชุม ผู้เข้าร่วม มติ และดาวน์โหลดเอกสาร', icon: 'pencil' },
+          { id: 'meeting-summary', name: 'สรุปรายงานประชุม & คลิป/สคริปต์ (PRO)', desc: 'อัปโหลดไฟล์สคริปต์/ซับไตเติลหรือไฟล์เสียง/คลิปเพื่อสกัดประเด็น มติ และ Action Items', icon: 'wordCount' },
+          { id: 'lucky-draw', name: 'สุ่มจับฉลาก & สุ่มแบ่งกลุ่ม (PRO)', desc: 'สุ่มจับฉลากไม่ซ้ำ มีเอฟเฟกต์หมุนชื่อ เก็บประวัติ และสุ่มแบ่งกลุ่มพร้อมคัดลอก', icon: 'randomPick' },
           { id: 'pr-creator', name: 'สร้างข้อความ & ออกแบบข่าว PR', desc: 'สร้างแคปชันประชาสัมพันธ์และประกาศแจ้งลูกบ้าน/องค์กร', icon: 'pencil' },
           { id: 'password-gen', name: 'สุ่มรหัสผ่าน', desc: 'สร้างรหัสผ่านความปลอดภัยสูงด้วย Web Crypto API', icon: 'password' },
           { id: 'random-picker', name: 'สุ่มชื่อ / จับฉลาก', desc: 'สุ่มรายชื่อผู้โชคดีหรือแบ่งกลุ่มอัตโนมัติ', icon: 'randomPick' },
@@ -554,6 +679,7 @@
           { id: 'phrase-bank', name: 'คลังประโยคบรรยาย & บรรยากาศ', desc: 'คลังประโยคพรรณนาอารมณ์ ฉากต่อสู้ ธรรมชาติ และความรัก', icon: 'language' },
           { id: 'novel-writer', name: 'สตูดิโอแต่งนิยาย', desc: 'พื้นที่เขียนนิยายนับคำเรียลไทม์ จัดย่อหน้าอัตโนมัติ และบันทึกไฟล์', icon: 'wordCount' },
           { id: 'ebook-maker', name: 'สร้าง E-Book (ทำอีบุ๊ค)', desc: 'สร้าง E-Book ภาษาไทยพร้อมหน้าปกและส่งออกเป็น PDF / HTML', icon: 'imgToPdf' },
+          { id: 'ebook-builder', name: 'สร้าง E-Book Builder (ฉบับด่วน)', desc: 'ป้อนชื่อเรื่อง ผู้เขียน และเนื้อหาเพื่อสร้างไฟล์ E-Book PDF ภาษาไทยทันที', icon: 'imgToPdf' },
           { id: 'page-layout', name: 'จัดหน้ากระดาษ & Export ไฟล์', desc: 'จัดหน้ากระดาษ A4 ใส่เลขหน้าและส่งออกไฟล์ PDF ภาษาไทยสมบูรณ์', icon: 'pageNumPdf' }
         ]
       },
@@ -573,7 +699,6 @@
       }
     ];
 
-    /* Helper สร้างเครื่องมือประมวลผลวิดีโอที่ใช้ร่วมกัน */
     function buildCanvasVideoStudio(root, mode) {
       root.innerHTML = `
         <label class="dropzone">
@@ -704,7 +829,6 @@
     }
 
     const TOOL_BUILDERS = {
-      /* ================= 1. รูปภาพ & วิดีโอ (20 เครื่องมือ) ================= */
       'social-video-cutter': (root) => buildCanvasVideoStudio(root, 'social'),
       'video-trim': (root) => buildCanvasVideoStudio(root, 'trim'),
       'video-slideshow': (root) => buildCanvasVideoStudio(root, 'slideshow'),
@@ -811,7 +935,7 @@
           const ctx = new AudioContext();
           const src = ctx.createMediaElementSource(el);
           const filter = ctx.createBiquadFilter();
-          filter.type = 'highpass'; filter.frequency.value = 120; // ตัดเสียงฮัมพื้นหลัง
+          filter.type = 'highpass'; filter.frequency.value = 120;
           const gain = ctx.createGain();
           gain.gain.value = parseFloat(gainIn.value);
           src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
@@ -899,7 +1023,6 @@
           ctx.drawImage(currentImg, 0, 0);
           const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           const d = imgData.data;
-          // ดูดสีอ้างอิงจากมุมซ้ายบน (0,0)
           const r0 = d[0], g0 = d[1], b0 = d[2];
           const tol = parseInt(tolIn.value, 10);
           for (let i = 0; i < d.length; i += 4) {
@@ -943,7 +1066,6 @@
           const x = (cx - rect.left) * (c.width / rect.width);
           const y = (cy - rect.top) * (c.height / rect.height);
           const r = parseInt(root.querySelector('#inpSize').value, 10);
-          // ดึงพิกเซลรอบข้างมาถมทับพื้นที่
           ctx.save();
           ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.clip();
           ctx.filter = 'blur(8px)';
@@ -1171,7 +1293,6 @@
         draw();
       },
 
-      /* ================= 2. PDF (14 เครื่องมือ) ================= */
       'pdf-sign': (root) => {
         root.innerHTML = `
           <div class="controls-row">
@@ -1238,7 +1359,7 @@
             fullHtml += `<h3>หน้า ${i}</h3><p>${escapeHtml(txt)}</p><hr>`;
           }
           fullHtml += '</body></html>';
-          downloadBlob(new Blob(['\ufeff' + fullHtml], { type: 'application/msword' }), f.name.replace(/\.pdf$/i, '') + '.doc');
+          downloadBlob(new Blob(['\uFEFF' + fullHtml], { type: 'application/msword' }), f.name.replace(/\.pdf$/i, '') + '.doc');
           notify('แปลงเป็นไฟล์ Word (.DOC) สำเร็จ!');
         };
       },
@@ -1280,7 +1401,7 @@
               if (it.str.trim()) rows.push([i, `"${it.str.replace(/"/g, '""')}"`]);
             });
           }
-          downloadBlob(new Blob(['\ufeff' + rows.map(r => r.join(',')).join('\n')], { type: 'text/csv;charset=utf-8' }), f.name.replace(/\.pdf$/i, '') + '.csv');
+          downloadBlob(new Blob(['\uFEFF' + rows.map(r => r.join(',')).join('\n')], { type: 'text/csv;charset=utf-8' }), f.name.replace(/\.pdf$/i, '') + '.csv');
           notify('ส่งออกตาราง CSV สำเร็จ!');
         };
       },
@@ -1449,7 +1570,6 @@
           const f = root.querySelector('#pwmFile').files?.[0];
           if (!f) return notify('กรุณาเลือกไฟล์ PDF ก่อน', 'error');
           const txt = root.querySelector('#pwmTxt').value.trim();
-          // สร้างภาพลายน้ำโปร่งใสผ่าน Canvas เพื่อรองรับภาษาไทย 100%
           const wc = document.createElement('canvas'); wc.width = 600; wc.height = 300;
           const wctx = wc.getContext('2d');
           wctx.translate(300, 150); wctx.rotate(-0.45);
@@ -1507,12 +1627,12 @@
           const pass = root.querySelector('#plkPass').value;
           if (!f || !pass) return notify('กรุณาเลือกไฟล์ PDF และตั้งรหัสผ่าน', 'error');
           const b64 = btoa(String.fromCharCode(...new Uint8Array(await f.arrayBuffer())));
-          const lockedHtml = `<!doctype html><html><meta charset="utf-8"><body style="font-family:sans-serif;text-align:center;padding:50px;"><h2>🔒 เอกสารนี้ถูกป้องกันด้วยรหัสผ่าน</h2><input id="p" type="password" placeholder="กรอกรหัสผ่าน" style="padding:10px;"><button onclick="if(document.getElementById('p').value==='${escapeHtml(pass)}'){document.body.innerHTML='<iframe src=\\'data:application/pdf;base64,${b64}\\' style=\\'position:fixed;inset:0;width:100%;height:100%;border:0\\'></iframe>'}else{alert('รหัสผ่านไม่ถูกต้อง')}" style="padding:10px 18px;">เปิดเอกสาร</button></body></html>`;
+          const lockedHtml = `<!doctype html><html><meta charset="utf-8"><body style="font-family:sans-serif;text-align:center;padding:50px;"><h2>🔒 เอกสารนี้ถูกป้องกันด้วยรหัสผ่าน</h2><input id="p" type="password" placeholder="กรอกรหัสผ่าน" style="padding:10px;"><button onclick="var m=document.getElementById('msg');if(document.getElementById('p').value==='${escapeHtml(pass)}'){document.body.innerHTML='<iframe src=\\'data:application/pdf;base64,${b64}\\' style=\\'position:fixed;inset:0;width:100%;height:100%;border:0\\'></iframe>'}else{m.textContent='รหัสผ่านไม่ถูกต้อง'}" style="padding:10px 18px;">เปิดเอกสาร</button><div id="msg" style="color:#dc2626;margin-top:10px;font-weight:700;"></div></body></html>`;
           downloadBlob(new Blob([lockedHtml], { type: 'text/html;charset=utf-8' }), f.name.replace(/\.pdf$/i, '') + '_protected.html');
           notify('สร้างไฟล์เอกสารป้องกันด้วยรหัสผ่านสำเร็จ!');
         };
       },
-/* ================= 3. ลิงก์ & QR Code (3 เครื่องมือ) ================= */
+
       'qr-generator': (root) => {
         root.innerHTML = `
           <div class="controls-row">
@@ -1630,7 +1750,6 @@
         };
       },
 
-      /* ================= 4. ภาษา & การแปล (11 เครื่องมือ) ================= */
       'translator-tool': (root) => {
         root.innerHTML = `
           <div class="controls-row">
@@ -1766,7 +1885,6 @@
             root.querySelector('#tsOut').innerHTML = `<b>สรุปใจความ:</b><p>${escapeHtml(text)}</p>`;
             return;
           }
-          // ให้คะแนนประโยคจากความถี่คำสำคัญ
           const freq = {};
           const words = text.split(/\s+/);
           words.forEach(w => { if (w.length > 2) freq[w] = (freq[w] || 0) + 1; });
@@ -1916,7 +2034,7 @@
           root.querySelector('#wcWords').textContent = words.toLocaleString();
           root.querySelector('#wcChars').textContent = txt.length.toLocaleString();
           root.querySelector('#wcNoSpace').textContent = txt.replace(/\s/g, '').length.toLocaleString();
-          root.querySelector('#wcLines').textContent = txt ? txt.split(/\n/).length.toLocaleString() : '0';
+          root.querySelector('#wcLines').textContent = txt ? txt.split('\n').length.toLocaleString() : '0';
         };
       },
 
@@ -1953,7 +2071,6 @@
         };
       },
 
-      /* ================= 5. เครื่องมือช่วยทำงาน (11 เครื่องมือ) ================= */
       'office-formula-finder': (root) => {
         const formulas = [
           { title: 'XLOOKUP (ค้นหาข้อมูลสมัยใหม่)', code: '=XLOOKUP(A2, D:D, E:E, "ไม่พบข้อมูล")', desc: 'ค้นหาค่าจากคอลัมน์หรือแถวใดก็ได้ ยืดหยุ่นกว่า VLOOKUP' },
@@ -2073,7 +2190,7 @@
             <div class="field"><label>วันที่ประชุม</label><input type="date" id="mnDate" class="input" value="${new Date().toISOString().split('T')[0]}"></div>
           </div>
           <div class="field"><label>ผู้เข้าร่วมประชุม</label><input type="text" id="mnAtt" class="input" placeholder="รายชื่อผู้เข้าร่วมประชุม..."></div>
-          <div class="field" style="margin-top:10px;"><label>สรุปมติที่ประชุมและผู้รับผิดชอบ (Action Items)</label><textarea id="mnBody" class="textarea" placeholder="1. วาระที่ 1...&#10;2. วาระที่ 2..."></textarea></div>
+          <div class="field" style="margin-top:10px;"><label>สรุปมติที่ประชุมและผู้รับผิดชอบ (Action Items)</label><textarea id="mnBody" class="textarea" placeholder="1. วาระที่ 1...\n2. วาระที่ 2..."></textarea></div>
           <button type="button" class="btn btn-primary" id="mnDl" style="margin-top:12px;">📥 บันทึกรายงานการประชุม (.TXT)</button>
         `;
         root.querySelector('#mnDl').onclick = () => {
@@ -2129,7 +2246,7 @@
 
       'random-picker': (root) => {
         root.innerHTML = `
-          <textarea id="rpNames" class="textarea" placeholder="ใส่รายชื่อบรรทัดละ 1 ชื่อ...&#10;สมชาย&#10;สมหญิง&#10;วิชัย&#10;นภา"></textarea>
+          <textarea id="rpNames" class="textarea" placeholder="ใส่รายชื่อบรรทัดละ 1 ชื่อ...\nสมชาย\nสมหญิง\nวิชัย\nนภา"></textarea>
           <div class="controls-row" style="margin-top:10px;">
             <button type="button" class="btn btn-primary" id="rpPick">🎯 สุ่มผู้โชคดี 1 คน</button>
             <button type="button" class="btn btn-secondary" id="rpGroup">👥 แบ่งเป็น 2 กลุ่มอัตโนมัติ</button>
@@ -2238,7 +2355,6 @@
         };
       },
 
-      /* ================= 6. งานเขียน & E-Book (9 เครื่องมือ) ================= */
       'novel-auto-writer': (root) => {
         const savedKey = localStorage.getItem('my_tools_ai_api_key') || '';
         root.innerHTML = `
@@ -2298,7 +2414,6 @@
             } catch (_) {}
           }
 
-          // Fallback ออฟไลน์คุณภาพสูง
           out.textContent = `[แนวเรื่อง: ${genre} | โครงฉาก: ${idea}]\n\n        สายลมยามค่ำคืนพัดผ่านบานหน้าต่างไม้แกะสลัก พาเอาไอเย็นยะเยือกเข้ามาปะทะใบหน้า แสงเทียนบนโต๊ะสั่นไหววูบวาบตามแรงลม สะท้อนแววตาอันสงบนิ่งแต่แฝงไปด้วยความเด็ดเดี่ยวของผู้ที่ผ่านความเป็นความตายมาแล้วครั้งหนึ่ง\n\n        “ในเมื่อสวรรค์ให้โอกาสข้ากลับมาเริ่มต้นใหม่อีกครั้ง หนี้แค้นและคำลวงทั้งหมดในชาติก่อน ข้าจะทวงคืนกลับมาให้ครบทุกเม็ด” เสียงกระซิบแผ่วเบาทว่าหนักแน่นดุจคำสาบานดังก้องในความเงียบงัน\n\n        มือเรียวบรรจงพับจดหมายลับฉบับนั้นเก็บไว้ในอกเสื้อ ก่อนจะก้าวเดินออกจากเรือนพักมุ่งหน้าสู่โถงใหญ่ด้วยท่วงท่าสง่างาม พร้อมรับมือกับพายุลูกใหญ่ที่กำลังจะเปิดฉากขึ้นในอีกไม่กี่อึดใจข้างหน้า`;
           root.querySelector('#nawCopy').disabled = false;
           btn.disabled = false;
@@ -2460,6 +2575,35 @@
         };
       },
 
+      'ebook-builder': (root) => {
+        root.innerHTML = `
+          <div class="controls-row">
+            <div class="field"><label>ชื่อหนังสือ E-Book</label><input type="text" id="ebbTitle" class="input" value="บันทึกงานบริหารและไอเดียสร้างสรรค์"></div>
+            <div class="field"><label>ผู้เขียน / นามปากกา</label><input type="text" id="ebbAuthor" class="input" value="APW.Gasie"></div>
+          </div>
+          <textarea id="ebbBody" class="textarea" style="min-height:180px;" placeholder="พิมพ์หรือวางเนื้อหา E-Book ภาษาไทยที่ต้องการสร้าง..."></textarea>
+          <div class="controls-row" style="margin-top:12px;">
+            <button type="button" class="btn btn-primary" id="ebbPdf">📕 สร้างไฟล์ E-Book PDF</button>
+            <button type="button" class="btn btn-secondary" id="ebbTxt">📄 ดาวน์โหลดต้นฉบับ (.TXT)</button>
+          </div>
+        `;
+        root.querySelector('#ebbPdf').onclick = async () => {
+          const txt = root.querySelector('#ebbBody').value.trim();
+          if (!txt) return notify('กรุณาใส่เนื้อหา E-Book ก่อน', 'error');
+          const title = `${root.querySelector('#ebbTitle').value} — โดย ${root.querySelector('#ebbAuthor').value}`;
+          const bytes = await createThaiTextPdf(txt.split('\n'), { title, pageNumbers: true });
+          downloadBlob(new Blob([bytes], { type: 'application/pdf' }), 'ebook_builder.pdf');
+          notify('สร้างไฟล์ E-Book PDF เรียบร้อย!');
+        };
+        root.querySelector('#ebbTxt').onclick = () => {
+          const txt = root.querySelector('#ebbBody').value.trim();
+          if (!txt) return notify('กรุณาใส่เนื้อหา E-Book ก่อน', 'error');
+          const content = `${root.querySelector('#ebbTitle').value}\nผู้เขียน: ${root.querySelector('#ebbAuthor').value}\n\n${txt}`;
+          downloadBlob(new Blob(['\ufeff' + content], { type: 'text/plain;charset=utf-8' }), 'ebook_builder.txt');
+          notify('ดาวน์โหลดต้นฉบับ (.TXT) เรียบร้อย!');
+        };
+      },
+
       'page-layout': (root) => {
         root.innerHTML = `
           <textarea id="plTxt" class="textarea" style="min-height:180px;" placeholder="วางเนื้อหาที่ต้องการจัดหน้ากระดาษ A4..."></textarea>
@@ -2474,7 +2618,6 @@
         };
       },
 
-      /* ================= 7. บัญชี & การเงิน (9 เครื่องมือ) ================= */
       'vat-withholding': (root) => {
         root.innerHTML = `
           <div class="controls-row">
@@ -2568,7 +2711,6 @@
           let baht = '';
           if (parseInt(intPart, 10) === 0) baht = 'ศูนย์';
           else {
-            const millions = Math.floor(intPart.length / 6);
             let rem = intPart;
             while (rem.length > 0) {
               const chunkLen = rem.length % 6 || 6;
@@ -2694,7 +2836,6 @@
         calc();
       },
 
-      /* สร้าง QR พร้อมเพย์มาตรฐาน EMVCo + คำนวณ CRC16 แท้ 100% */
       'promptpay-gen': (root) => {
         root.innerHTML = `
           <div class="controls-row">
@@ -2747,7 +2888,6 @@
         render();
       },
 
-      /* สร้าง Dashboard กราฟจากข้อมูลจริงในไฟล์ CSV/JSON */
       'data-dashboard': (root) => {
         root.innerHTML = `
           <label class="dropzone"><input type="file" id="ddFile" accept=".csv,.json"><div class="dropzone-title">อัปโหลดไฟล์ CSV หรือ JSON เพื่อสร้างกราฟจากข้อมูลจริง</div></label>
@@ -2788,105 +2928,618 @@
           });
           notify(`วาดกราฟจากข้อมูลจริงจำนวน ${items.length} รายการสำเร็จ!`);
         };
+      },
+'lucky-draw': (root) => {
+        root.innerHTML = [
+          '<div class="ld-wrap">',
+            '<div class="ld-grid">',
+              '<div class="ld-col">',
+                '<div class="ld-title">รายชื่อ / ของรางวัล (1 รายการ ต่อ 1 บรรทัด)</div>',
+                '<textarea id="ldNames" rows="10" placeholder="พิมพ์รายชื่อหรือของรางวัลทีละบรรทัด..."></textarea>',
+                '<div class="ld-row">',
+                  '<label><input type="checkbox" id="ldNoRepeat" checked> ไม่จับซ้ำในรอบนี้</label>',
+                  '<label><input type="checkbox" id="ldSpin" checked> หมุนชื่อก่อนหยุด</label>',
+                '</div>',
+                '<div class="ld-actions">',
+                  '<button type="button" class="btn btn-primary" id="ldDrawOne">🎲 สุ่ม 1 รายการ</button>',
+                  '<button type="button" class="btn btn-secondary" id="ldResetPool">↺ รีเซ็ตกอง</button>',
+                '</div>',
+                '<hr class="ld-sep">',
+                '<div class="ld-title">สุ่มแบ่งกลุ่ม</div>',
+                '<div class="ld-row">',
+                  '<label>จำนวนกลุ่ม: <input type="number" id="ldGroupCount" class="input" style="width:90px;display:inline-block" min="2" max="50" value="2"></label>',
+                  '<button type="button" class="btn btn-primary" id="ldMakeGroups">👥 สุ่มแบ่งกลุ่ม</button>',
+                '</div>',
+              '</div>',
+              '<div class="ld-col">',
+                '<div class="ld-title">ผลลัพธ์การจับฉลาก</div>',
+                '<div id="ldStage" class="ld-stage">พร้อมสุ่ม...</div>',
+                '<div id="ldRemain" class="ld-sub"></div>',
+                '<div class="ld-title" style="margin-top:8px">ประวัติการจับฉลาก</div>',
+                '<div id="ldHistory" class="ld-history"></div>',
+                '<div class="ld-actions">',
+                  '<button type="button" class="btn btn-secondary" id="ldCopyHistory">📋 คัดลอกประวัติ</button>',
+                  '<button type="button" class="btn btn-danger" id="ldClearHistory">ล้างประวัติ</button>',
+                '</div>',
+              '</div>',
+              '<div class="ld-col">',
+                '<div class="ld-title">ผลลัพธ์การแบ่งกลุ่ม</div>',
+                '<div id="ldGroups" class="ld-groups"></div>',
+                '<div class="ld-actions">',
+                  '<button type="button" class="btn btn-secondary" id="ldCopyGroups">📋 คัดลอกผลแบ่งกลุ่ม</button>',
+                '</div>',
+              '</div>',
+            '</div>',
+          '</div>'
+        ].join('');
+
+        let usedSet = new Set();
+        let historyList = [];
+        let spinTimer = null;
+        let isSpinning = false;
+
+        const getItems = () => {
+          const raw = root.querySelector('#ldNames').value || '';
+          return raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+        };
+
+        const cryptoRandInt = (maxExclusive) => {
+          if (maxExclusive <= 0) return 0;
+          const arr = new Uint32Array(1);
+          crypto.getRandomValues(arr);
+          return arr[0] % maxExclusive;
+        };
+
+        const updateRemainInfo = () => {
+          const items = getItems();
+          const noRepeat = root.querySelector('#ldNoRepeat').checked;
+          const remainEl = root.querySelector('#ldRemain');
+          if (!noRepeat) {
+            remainEl.textContent = 'ทั้งหมด ' + items.length + ' รายการ (โหมดสุ่มซ้ำได้)';
+            return;
+          }
+          const availableCount = items.filter(name => !usedSet.has(name)).length;
+          remainEl.textContent = 'คงเหลือในกอง: ' + availableCount + ' / ' + items.length + ' รายการ';
+        };
+
+        const renderHistory = () => {
+          const histEl = root.querySelector('#ldHistory');
+          if (!historyList.length) {
+            histEl.innerHTML = '<div class="ld-empty">ยังไม่มีประวัติการสุ่ม</div>';
+            return;
+          }
+          histEl.innerHTML = historyList.map((entry, i) =>
+            '<div class="ld-hist-item">#' + (historyList.length - i) + ' <strong>' + escapeHtml(entry.winner) + '</strong> <span class="ld-time">(' + escapeHtml(entry.time) + ')</span></div>'
+          ).join('');
+        };
+
+        const copyTextSafe = async (text, successMsg) => {
+          if (!text) return notify('ไม่มีข้อมูลสำหรับคัดลอก', 'error');
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(text);
+              notify(successMsg);
+              return;
+            }
+          } catch (_) {}
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          notify(successMsg);
+        };
+
+        root.querySelector('#ldNames').oninput = () => {
+          const currentSet = new Set(getItems());
+          usedSet = new Set([...usedSet].filter(x => currentSet.has(x)));
+          updateRemainInfo();
+        };
+
+        root.querySelector('#ldNoRepeat').onchange = updateRemainInfo;
+
+        root.querySelector('#ldResetPool').onclick = () => {
+          usedSet.clear();
+          updateRemainInfo();
+          root.querySelector('#ldStage').textContent = 'รีเซ็ตกองเรียบร้อย พร้อมสุ่ม!';
+          notify('รีเซ็ตกองรายชื่อเรียบร้อย!');
+        };
+
+        root.querySelector('#ldDrawOne').onclick = () => {
+          if (isSpinning) return;
+          const items = getItems();
+          if (!items.length) return notify('กรุณากรอกรายชื่อหรือของรางวัลอย่างน้อย 1 รายการ', 'error');
+
+          const noRepeat = root.querySelector('#ldNoRepeat').checked;
+          const pool = noRepeat ? items.filter(name => !usedSet.has(name)) : items;
+          if (!pool.length) return notify('จับครบทุกรายการแล้ว กด "รีเซ็ตกอง" เพื่อเริ่มรอบใหม่', 'error');
+
+          const chosen = pool[cryptoRandInt(pool.length)];
+          const doSpin = root.querySelector('#ldSpin').checked;
+          const stageEl = root.querySelector('#ldStage');
+
+          const finalizeWinner = () => {
+            if (noRepeat) usedSet.add(chosen);
+            const nowTime = new Date().toLocaleTimeString('th-TH', { hour12: false });
+            historyList.unshift({ winner: chosen, time: nowTime });
+            stageEl.textContent = '🎉 ' + chosen;
+            updateRemainInfo();
+            renderHistory();
+            notify('จับได้: ' + chosen);
+          };
+
+          if (!doSpin) {
+            finalizeWinner();
+            return;
+          }
+
+          isSpinning = true;
+          let ticks = 0;
+          const maxTicks = 14;
+          spinTimer = setInterval(() => {
+            ticks += 1;
+            const previewName = pool[cryptoRandInt(pool.length)];
+            stageEl.textContent = 'กำลังสุ่ม... ' + previewName;
+            if (ticks >= maxTicks) {
+              clearInterval(spinTimer);
+              spinTimer = null;
+              isSpinning = false;
+              finalizeWinner();
+            }
+          }, 75);
+        };
+
+        root.querySelector('#ldClearHistory').onclick = () => {
+          historyList = [];
+          renderHistory();
+          notify('ล้างประวัติการสุ่มเรียบร้อย');
+        };
+
+        root.querySelector('#ldCopyHistory').onclick = () => {
+          const lines = [...historyList].reverse().map((h, idx) =>
+            'ลำดับที่ ' + (idx + 1) + ': ' + h.winner + ' (' + h.time + ')'
+          );
+          copyTextSafe(lines.join('\n'), 'คัดลอกประวัติการจับฉลากแล้ว!');
+        };
+
+        root.querySelector('#ldMakeGroups').onclick = () => {
+          const items = getItems();
+          if (!items.length) return notify('กรุณากรอกรายชื่อก่อนสุ่มแบ่งกลุ่ม', 'error');
+
+          const countInput = Number(root.querySelector('#ldGroupCount').value || 2);
+          if (items.length < 2) return notify('ต้องมีรายชื่ออย่างน้อย 2 รายการเพื่อแบ่งกลุ่ม', 'error');
+          const groupCount = Math.max(2, Math.min(items.length, countInput));
+
+          const shuffled = [...items];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = cryptoRandInt(i + 1);
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+
+          const groups = Array.from({ length: groupCount }, () => []);
+          shuffled.forEach((person, idx) => {
+            groups[idx % groupCount].push(person);
+          });
+
+          const groupsEl = root.querySelector('#ldGroups');
+          groupsEl.innerHTML = groups.map((members, gIdx) => [
+            '<div class="ld-group-card">',
+              '<div class="ld-group-head">กลุ่มที่ ' + (gIdx + 1) + ' (' + members.length + ' คน)</div>',
+              '<ul>' + members.map(m => '<li>' + escapeHtml(m) + '</li>').join('') + '</ul>',
+            '</div>'
+          ].join('')).join('');
+
+          groupsEl.dataset.plainText = groups.map((members, gIdx) =>
+            '=== กลุ่มที่ ' + (gIdx + 1) + ' (' + members.length + ' คน) ===\n' + members.map((m, i) => (i + 1) + '. ' + m).join('\n')
+          ).join('\n\n');
+
+          notify('สุ่มแบ่งเป็น ' + groupCount + ' กลุ่มเรียบร้อย!');
+        };
+
+        root.querySelector('#ldCopyGroups').onclick = () => {
+          const plain = root.querySelector('#ldGroups').dataset.plainText || '';
+          copyTextSafe(plain, 'คัดลอกผลแบ่งกลุ่มเรียบร้อย!');
+        };
+
+        updateRemainInfo();
+        renderHistory();
+      },
+
+      'meeting-summary': (root) => {
+        root.innerHTML = [
+          '<div class="ms-wrap">',
+            '<div class="ms-grid">',
+              '<div class="ms-col">',
+                '<div class="ms-title">ข้อมูลการประชุม & ไฟล์ต้นฉบับ</div>',
+                '<input type="text" id="msTopic" placeholder="หัวข้อการประชุม (เช่น ประชุมคณะกรรมการประจำเดือน)">',
+                '<input type="text" id="msDate" placeholder="วันที่ / เวลา (เช่น 20 พ.ย. 2569)">',
+                '<input type="text" id="msAttendees" placeholder="ผู้เข้าร่วมประชุม (คั่นด้วยจุลภาค ,)">',
+                '<label class="dropzone">',
+                  '<input type="file" id="msFile" accept=".txt,.md,.srt,.vtt,.mp3,.wav,.m4a,.mp4,.webm,text/*,audio/*,video/*">',
+                  '<div class="dropzone-title">เลือกไฟล์บันทึก/สคริปต์ (.txt/.srt/.vtt) หรือไฟล์เสียง/คลิป (.mp3/.mp4)</div>',
+                '</label>',
+                '<div id="msMediaPreview" class="ms-media"></div>',
+                '<div class="ms-title">ข้อความบันทึกการประชุม / คำถอดเสียง</div>',
+                '<textarea id="msTranscript" rows="9" placeholder="วางบันทึกการประชุม บทสนทนา หรือคำถอดเสียงจากคลิปที่นี่..."></textarea>',
+                '<div class="ms-actions">',
+                  '<button type="button" class="btn btn-primary" id="msRunSummary">⚡ สรุปรายงานประชุมด่วน</button>',
+                  '<button type="button" class="btn btn-secondary" id="msClear">ล้างข้อมูล</button>',
+                '</div>',
+              '</div>',
+              '<div class="ms-col">',
+                '<div class="ms-title">ร่างรายงานสรุปการประชุม</div>',
+                '<textarea id="msOutput" rows="18" placeholder="ผลลัพธ์รายงานสรุปจะแสดงที่นี่ สามารถแก้ไขเพิ่มเติมก่อนคัดลอกหรือดาวน์โหลดได้..."></textarea>',
+                '<div class="ms-actions">',
+                  '<button type="button" class="btn btn-secondary" id="msCopy">📋 คัดลอกรายงาน</button>',
+                  '<button type="button" class="btn btn-primary" id="msDownloadTxt">ดาวน์โหลด (.txt)</button>',
+                '</div>',
+              '</div>',
+            '</div>',
+          '</div>'
+        ].join('');
+
+        let lastMediaName = '';
+
+        const cleanSubtitleText = (raw) => {
+          return String(raw || '')
+            .replace(/^WEBVTT.*$/gim, '')
+            .replace(/^\d+\s*$/gm, '')
+            .replace(/\d{1,2}:\d{2}:\d{2}[.,]\d{3}\s*-->\s*\d{1,2}:\d{2}:\d{2}[.,]\d{3}.*$/gm, '')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/\r\n/g, '\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .trim();
+        };
+
+        const extractSentences = (text) => {
+          const normalized = String(text || '')
+            .replace(/\r\n/g, '\n')
+            .replace(/\n+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+          if (!normalized) return [];
+          return normalized
+            .split(/(?<=[.!?…。])\s+|\s+(?=(?:มติ|สรุป|ตกลง|มอบหมาย|ให้|ต้อง|นัด|กำหนด|ประเด็น))/g)
+            .map(s => s.trim())
+            .filter(s => s.length >= 8);
+        };
+
+        const buildQuickSummary = ({ topic, dateStr, attendees, transcript, mediaName }) => {
+          const lines = String(transcript || '')
+            .split(/\r?\n/)
+            .map(l => l.trim())
+            .filter(Boolean);
+
+          const actionKeywords = /(มอบหมาย|ต้อง|ให้|ดำเนินการ|จัดทำ|ตรวจสอบ|ส่ง|ภายใน|กำหนด|นัด|ติดตาม|สรุปผล|action|todo)/i;
+          const decisionKeywords = /(มติ|เห็นชอบ|อนุมัติ|ตกลง|สรุปว่า|ข้อตกลง|ยืนยัน)/i;
+
+          const actionItems = [];
+          const decisions = [];
+          const highlights = [];
+
+          for (const line of lines) {
+            if (actionKeywords.test(line) && actionItems.length < 12) {
+              actionItems.push(line);
+            }
+            if (decisionKeywords.test(line) && decisions.length < 10) {
+              decisions.push(line);
+            }
+          }
+
+          const sentences = extractSentences(transcript);
+          for (const s of sentences) {
+            if (highlights.length >= 8) break;
+            if (!highlights.includes(s)) highlights.push(s);
+          }
+
+          const headerLines = [
+            '========================================',
+            'สรุปรายงานการประชุมด่วน',
+            '========================================',
+            'หัวข้อ: ' + (topic || 'ไม่ระบุหัวข้อ'),
+            'วันที่/เวลา: ' + (dateStr || 'ไม่ระบุวันที่'),
+            'ผู้เข้าร่วม: ' + (attendees || 'ไม่ระบุรายชื่อ'),
+            mediaName ? ('ไฟล์สื่อที่แนบ: ' + mediaName) : '',
+            ''
+          ].filter(Boolean);
+
+          const sec1 = [
+            '1. ประเด็นสำคัญที่หารือ',
+            highlights.length
+              ? highlights.map((h, i) => '  - (' + (i + 1) + ') ' + h).join('\n')
+              : '  - ยังไม่มีข้อความบันทึกหรือคำถอดเสียง กรุณาเพิ่มเนื้อหาเพื่อสรุปอัตโนมัติ'
+          ].join('\n');
+
+          const sec2 = [
+            '2. มติ / ข้อตกลงในที่ประชุม',
+            decisions.length
+              ? decisions.map((d, i) => '  - [' + (i + 1) + '] ' + d).join('\n')
+              : '  - ไม่พบข้อความที่ระบุมติหรือข้อตกลงชัดเจน (สามารถเติมเพิ่มเติมได้)'
+          ].join('\n');
+
+          const sec3 = [
+            '3. รายการที่ต้องดำเนินการต่อ (Action Items)',
+            actionItems.length
+              ? actionItems.map((a, i) => '  - [ ] ' + a).join('\n')
+              : '  - ไม่พบรายการมอบหมายงานชัดเจน (สามารถเติมผู้รับผิดชอบและกำหนดส่งได้)'
+          ].join('\n');
+
+          return [
+            ...headerLines,
+            sec1,
+            '',
+            sec2,
+            '',
+            sec3,
+            '',
+            '----------------------------------------',
+            'หมายเหตุ: กรณีเป็นไฟล์เสียงหรือคลิปวิดีโอ หากมีคำถอดเสียง/บันทึกย่อสามารถวางลงช่องซ้ายเพื่อสรุปทันที หรือส่งไฟล์เข้าสู่ระบบถอดเสียง AI เพิ่มเติมได้'
+          ].join('\n');
+        };
+
+        const copyTextSafe = async (text, msg) => {
+          if (!text) return notify('ไม่มีข้อความสำหรับคัดลอก', 'error');
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(text);
+              notify(msg);
+              return;
+            }
+          } catch (_) {}
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          notify(msg);
+        };
+
+        root.querySelector('#msFile').onchange = async (e) => {
+          const f = e.target.files && e.target.files[0];
+          if (!f) return;
+
+          const previewEl = root.querySelector('#msMediaPreview');
+          const transcriptEl = root.querySelector('#msTranscript');
+          const topicEl = root.querySelector('#msTopic');
+
+          if (!topicEl.value.trim()) {
+            topicEl.value = f.name.replace(/\.[^.]+$/, '');
+          }
+
+          const isVideo = f.type.startsWith('video/') || /\.(mp4|webm|mov|mkv)$/i.test(f.name);
+          const isAudio = f.type.startsWith('audio/') || /\.(mp3|wav|m4a|ogg)$/i.test(f.name);
+
+          if (isVideo || isAudio) {
+            lastMediaName = f.name;
+            const url = URL.createObjectURL(f);
+            previewEl.innerHTML = isVideo
+              ? '<video controls src="' + url + '" style="width:100%;max-height:220px;border-radius:8px"></video><div class="ms-file-tag">ไฟล์คลิป: ' + escapeHtml(f.name) + '</div>'
+              : '<audio controls src="' + url + '" style="width:100%"></audio><div class="ms-file-tag">ไฟล์เสียง: ' + escapeHtml(f.name) + '</div>';
+            notify('แนบไฟล์ ' + f.name + ' แล้ว สามารถเปิดฟัง/ดูและวางคำถอดเสียงเพื่อสรุปด่วนได้');
+            return;
+          }
+
+          lastMediaName = '';
+          previewEl.innerHTML = '<div class="ms-file-tag">ไฟล์ข้อความ/สคริปต์: ' + escapeHtml(f.name) + '</div>';
+          const raw = await f.text();
+          const cleaned = /\.(srt|vtt)$/i.test(f.name) ? cleanSubtitleText(raw) : raw;
+          transcriptEl.value = cleaned;
+          notify('โหลดเนื้อหาจากไฟล์ ' + f.name + ' เรียบร้อย!');
+        };
+
+        root.querySelector('#msRunSummary').onclick = () => {
+          const topic = root.querySelector('#msTopic').value.trim();
+          const dateStr = root.querySelector('#msDate').value.trim();
+          const attendees = root.querySelector('#msAttendees').value.trim();
+          const transcript = root.querySelector('#msTranscript').value.trim();
+
+          if (!transcript && !topic && !lastMediaName) {
+            return notify('กรุณากรอกบันทึกการประชุม เลือกไฟล์ หรือระบุหัวข้อก่อน', 'error');
+          }
+
+          root.querySelector('#msOutput').value = buildQuickSummary({
+            topic,
+            dateStr,
+            attendees,
+            transcript,
+            mediaName: lastMediaName
+          });
+          notify('สร้างร่างรายงานสรุปการประชุมเรียบร้อย!');
+        };
+
+        root.querySelector('#msClear').onclick = () => {
+          root.querySelector('#msTopic').value = '';
+          root.querySelector('#msDate').value = '';
+          root.querySelector('#msAttendees').value = '';
+          root.querySelector('#msTranscript').value = '';
+          root.querySelector('#msOutput').value = '';
+          root.querySelector('#msMediaPreview').innerHTML = '';
+          root.querySelector('#msFile').value = '';
+          lastMediaName = '';
+          notify('ล้างข้อมูลเรียบร้อย');
+        };
+
+        root.querySelector('#msCopy').onclick = () => {
+          copyTextSafe(root.querySelector('#msOutput').value, 'คัดลอกรายงานสรุปแล้ว!');
+        };
+
+        root.querySelector('#msDownloadTxt').onclick = () => {
+          const outText = root.querySelector('#msOutput').value.trim();
+          if (!outText) return notify('ยังไม่มีรายงานสรุปให้ดาวน์โหลด', 'error');
+          const safeTopic = (root.querySelector('#msTopic').value.trim() || 'meeting-summary').replace(/[^\w\u0E00-\u0E7F-]+/g, '_');
+          const blob = new Blob(['\ufeff' + outText], { type: 'text/plain;charset=utf-8' });
+          downloadBlob(blob, safeTopic + '.txt');
+          notify('ดาวน์โหลดไฟล์ ' + safeTopic + '.txt แล้ว!');
+        };
       }
     };
 
-    /* ================= DIRECTORY & NAVIGATION ================= */
-    const categoriesContainer = document.getElementById('categoriesContainer');
-    const searchInput = document.getElementById('searchInput');
-    const emptySearch = document.getElementById('emptySearch');
+    const ALL_TOOLS = [];
+    CATEGORIES.forEach(cat => {
+      cat.tools.forEach(t => {
+        ALL_TOOLS.push({ ...t, category: cat.title });
+      });
+    });
+
     const homeView = document.getElementById('homeView');
     const workspaceView = document.getElementById('workspaceView');
-    const wsIcon = document.getElementById('wsIcon');
-    const wsTitle = document.getElementById('wsTitle');
-    const wsDesc = document.getElementById('wsDesc');
-    const wsBody = document.getElementById('wsBody');
+    const categoriesContainer = document.getElementById('categoriesContainer');
     const tabsList = document.getElementById('tabsList');
+    const searchInput = document.getElementById('searchInput');
+    const emptySearch = document.getElementById('emptySearch');
 
-    let activeTab = 'all';
+    let activeCategory = 'all';
+    let searchQuery = '';
 
-    function renderTabs() {
-      tabsList.innerHTML = '';
-      const tabs = [{ id: 'all', title: 'ทั้งหมด (73)' }, ...CATEGORIES.map(cat => ({ id: cat.title, title: `${cat.title} (${cat.tools.length})` }))];
-      tabs.forEach(t => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = `pill-btn ${activeTab === t.id ? 'active' : ''}`;
-        btn.textContent = t.title;
-        btn.onclick = () => { activeTab = t.id; renderTabs(); renderDirectory(searchInput.value); };
-        tabsList.appendChild(btn);
+    function renderCategoryTabs() {
+      const catNames = ['all', ...CATEGORIES.map(c => c.title)];
+      tabsList.innerHTML = catNames.map(cat => {
+        const label = cat === 'all' ? `ทั้งหมด (${ALL_TOOLS.length})` : cat;
+        return `<button type="button" class="pill-btn ${activeCategory === cat ? 'active' : ''}" data-cat="${escapeHtml(cat)}">${escapeHtml(label)}</button>`;
+      }).join('');
+
+      tabsList.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.onclick = () => {
+          activeCategory = btn.dataset.cat;
+          renderCategoryTabs();
+          renderHomeTools();
+        };
       });
     }
 
-    function renderDirectory(filterText = '') {
-      const q = filterText.trim().toLowerCase();
-      categoriesContainer.innerHTML = '';
-      let totalVisible = 0;
+    function renderHomeTools() {
+      const q = searchQuery.trim().toLowerCase();
+      let visibleCount = 0;
 
-      CATEGORIES.forEach(cat => {
-        if (activeTab !== 'all' && cat.title !== activeTab) return;
-        const matched = cat.tools.filter(t => !q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q));
-        if (!matched.length) return;
-        totalVisible += matched.length;
-
-        const sec = document.createElement('section');
-        sec.className = 'category-section';
-        sec.innerHTML = `<h2 class="category-title">${escapeHtml(cat.title)}</h2>`;
-
-        const grid = document.createElement('div');
-        grid.className = 'tool-grid';
-
-        matched.forEach(tool => {
-          const card = document.createElement('button');
-          card.type = 'button';
-          card.className = 'tool-card';
-          card.innerHTML = `
-            <div class="tool-card-content">
-              <span class="tool-icon">${ICONS[tool.icon] || ICONS.settings}</span>
-              <div class="tool-meta">
-                <div class="tool-name">${escapeHtml(tool.name)}</div>
-                <p class="tool-desc">${escapeHtml(tool.desc)}</p>
-              </div>
-            </div>
-          `;
-          card.onclick = () => openTool(tool);
-          grid.appendChild(card);
+      const html = CATEGORIES.map(cat => {
+        if (activeCategory !== 'all' && activeCategory !== cat.title) return '';
+        const matchingTools = cat.tools.filter(t => {
+          if (!q) return true;
+          return t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q) || cat.title.toLowerCase().includes(q);
         });
+        if (!matchingTools.length) return '';
+        visibleCount += matchingTools.length;
 
-        sec.appendChild(grid);
-        categoriesContainer.appendChild(sec);
+        return `
+          <section class="category-section">
+            <h2 class="category-title">${escapeHtml(cat.title)} (${matchingTools.length})</h2>
+            <div class="tool-grid">
+              ${matchingTools.map(t => `
+                <button type="button" class="tool-card" data-tool-id="${escapeHtml(t.id)}">
+                  <div class="tool-card-content">
+                    <div class="tool-icon">${ICONS[t.icon] || ICONS.settings}</div>
+                    <div class="tool-meta">
+                      <h3 class="tool-name">${escapeHtml(t.name)}</h3>
+                      <p class="tool-desc">${escapeHtml(t.desc)}</p>
+                    </div>
+                  </div>
+                </button>
+              `).join('')}
+            </div>
+          </section>
+        `;
+      }).join('');
+
+      categoriesContainer.innerHTML = html;
+      emptySearch.style.display = visibleCount === 0 ? 'block' : 'none';
+
+      categoriesContainer.querySelectorAll('.tool-card').forEach(card => {
+        card.onclick = () => openTool(card.dataset.toolId);
       });
-
-      emptySearch.style.display = totalVisible === 0 ? 'block' : 'none';
     }
 
-    searchInput.addEventListener('input', e => renderDirectory(e.target.value));
+    function openTool(toolId) {
+      const tool = ALL_TOOLS.find(t => t.id === toolId);
+      if (!tool) return notify('ไม่พบเครื่องมือที่เลือก', 'error');
 
-    function showHome() {
-      workspaceView.classList.remove('active');
-      homeView.classList.remove('hidden');
-      renderDirectory(searchInput.value);
-    }
-
-    document.getElementById('homeLogoBtn').onclick = showHome;
-    document.getElementById('backToHomeBtn').onclick = showHome;
-
-    function openTool(tool) {
+      closeMenuPopup();
       homeView.classList.add('hidden');
       workspaceView.classList.add('active');
-      wsIcon.innerHTML = ICONS[tool.icon] || ICONS.settings;
-      wsTitle.textContent = tool.name;
-      wsDesc.textContent = tool.desc;
-      wsBody.innerHTML = '';
 
-      if (TOOL_BUILDERS[tool.id]) {
-        TOOL_BUILDERS[tool.id](wsBody);
+      document.getElementById('wsIcon').innerHTML = ICONS[tool.icon] || ICONS.settings;
+      document.getElementById('wsTitle').textContent = tool.name;
+      document.getElementById('wsDesc').textContent = `${tool.category} — ${tool.desc}`;
+
+      const bodyEl = document.getElementById('wsBody');
+      bodyEl.innerHTML = '';
+
+      if (typeof TOOL_BUILDERS[tool.id] === 'function') {
+        TOOL_BUILDERS[tool.id](bodyEl);
+      } else {
+        bodyEl.innerHTML = `<div class="preview-box">กำลังเตรียมเครื่องมือ <b>${escapeHtml(tool.name)}</b></div>`;
       }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    renderTabs();
-    renderDirectory();
+    function goHome() {
+      workspaceView.classList.remove('active');
+      homeView.classList.remove('hidden');
+      document.getElementById('wsBody').innerHTML = '';
+    }
+
+    const menuPopupOverlay = document.getElementById('menuPopupOverlay');
+    const popupMenuBody = document.getElementById('popupMenuBody');
+    const popupSearchInput = document.getElementById('popupSearchInput');
+
+    function renderPopupMenu(filterText = '') {
+      const q = filterText.trim().toLowerCase();
+      const cardsHtml = CATEGORIES.map(cat => {
+        const items = cat.tools.filter(t => !q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q));
+        if (!items.length) return '';
+        return `
+          <div class="popup-cat-card">
+            <h3 class="popup-cat-title">${escapeHtml(cat.title)} (${items.length})</h3>
+            ${items.map(t => `<button type="button" class="popup-item-btn" data-tool-id="${escapeHtml(t.id)}">• ${escapeHtml(t.name)}</button>`).join('')}
+          </div>
+        `;
+      }).join('');
+
+      popupMenuBody.innerHTML = cardsHtml || '<div style="grid-column:1/-1; text-align:center; color:var(--muted); padding:24px;">ไม่พบเครื่องมือที่ค้นหา</div>';
+      popupMenuBody.querySelectorAll('.popup-item-btn').forEach(btn => {
+        btn.onclick = () => openTool(btn.dataset.toolId);
+      });
+    }
+
+    function openMenuPopup() {
+      popupSearchInput.value = '';
+      renderPopupMenu('');
+      menuPopupOverlay.classList.add('open');
+      popupSearchInput.focus();
+    }
+
+    function closeMenuPopup() {
+      menuPopupOverlay.classList.remove('open');
+    }
+
+    document.getElementById('homeLogoBtn').onclick = goHome;
+    document.getElementById('backToHomeBtn').onclick = goHome;
+    document.getElementById('openMenuPopupBtn').onclick = openMenuPopup;
+    document.getElementById('closeMenuPopupBtn').onclick = closeMenuPopup;
+
+    menuPopupOverlay.onclick = (e) => {
+      if (e.target === menuPopupOverlay) closeMenuPopup();
+    };
+    popupSearchInput.oninput = (e) => renderPopupMenu(e.target.value);
+    searchInput.oninput = (e) => {
+      searchQuery = e.target.value;
+      renderHomeTools();
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menuPopupOverlay.classList.contains('open')) {
+        closeMenuPopup();
+      }
+    });
+
+    renderCategoryTabs();
+    renderHomeTools();
   </script>
 </body>
 </html>
